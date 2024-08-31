@@ -1,0 +1,21 @@
+// Configs
+@import "./assets/sass/variables.scss";
+@import "./assets/sass/functions.scss";
+@import "./assets/sass/mixins.scss";
+
+// Externals
+@import "./assets/bootstrap/scss/bootstrap.scss";
+@import "./assets/fontawesome/css/all.min.css";
+
+
+// Components
+
+@import "./App/App.scss";
+@import "./App/Auth/Auth.scss";
+@import "./App/Auth/Signup/Signup.scss";
+@import "./App/Setup/Setup.scss";
+
+// Partials 
+@import "./partials/CodeInput/CodeInput.scss";
+@import "./partials/CornerButtons/CornerButtons.scss";
+@import "./partials/Modal/Modal.scss";
