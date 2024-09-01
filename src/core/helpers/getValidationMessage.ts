@@ -5,73 +5,87 @@
  * @returns Le message d'erreur trouvé ou null s'il n'y en a pas
  */
 const getValidationMessage = (type: string, value: string): string | null => {
-    let message = null;
-    let regexPattern = null;
+  let message = null;
+  let regexPattern = null;
 
-    switch (type) {
-        case "user.name":
-            regexPattern = /^[a-zéèâàäöïîôòìëêûüùç]{2,20}$/i;
-            if (!value) {
-                message = "Le nom est requis.";
-            } else if (value.length < 2) {
-                message = "Le nom doit contenir au moins 2 (deux) caractères.";
-            } else if (!regexPattern.test(value)) {
-                message = "Le nom doit contenir uniquement des caractères alphabétiques.";
-            }
+  switch (type) {
+    case "user.name":
+      regexPattern = /^[a-zéèâàäöïîôòìëêûüùç]{2,20}$/i;
+      if (!value) {
+        message = "The name field is required";
+      } else if (value.length < 2) {
+        message = "The name should contain at least 2 characters";
+      } else if (!regexPattern.test(value)) {
+        message = "The name should contain only alphabetic characters";
+      }
 
-            break;
+      break;
 
-        case "user.firstname":
-            regexPattern = /^[a-zéèâàäöïîôòìëêûüùç]{2,20}(\s[a-zéèâàäöïîôòìëêûüùç]{2,20}){0,2}$/i;
-            if (!value) {
-                message = "Le prénom est requis.";
-            } else if (value.length < 2) {
-                message = "Le prénom doit contenir au moins 2 (deux) caractères.";
-            } else if (!regexPattern.test(value)) {
-                message = "Le prénom doit contenir uniquement des caractères alphabétiques.";
-            }
+    case "account.name":
+      regexPattern = /^[a-zéèâàäöïîôòìëêûüùç]{2,20}$/i;
+      if (!value) {
+        message = "The name field is required";
+      } else if (value.length < 2) {
+        message = "The name should contain at least 2 characters";
+      } else if (!regexPattern.test(value)) {
+        message = "The name should contain only alphabetic characters";
+      }
 
-            break;
+      break;
 
-        case "user.email":
-            regexPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i;
+    case "account.balance":
+      const balance = parseFloat(value);
 
-            if (!value) {
-                message = "L'adresse email est requise.";
-            } else if (!regexPattern.test(value)) {
-                message = "Le format de l'email n'est pas valide.";
-            }
-            break;
+      if (isNaN(balance)) {
+        message = "The balance should be Numeric only";
+      }
 
-        case "user.password":
-            if (!value) {
-                message = "Le mot de passe est requis.";
-            } else if (value.length < 6) {
-                message = "Le mot de passe doit contenir au moins six caractères.";
-            }
-            break;
+      break;
 
-        case "user.current_password":
-            if (!value) {
-                message = "Le mot de passe est requis.";
-            } else if (value.length < 6) {
-                message = "Le mot de passe doit contenir au moins six caractères.";
-            }
-            break;
+    case "user.firstname":
+      regexPattern =
+        /^[a-zéèâàäöïîôòìëêûüùç]{2,20}(\s[a-zéèâàäöïîôòìëêûüùç]{2,20}){0,2}$/i;
+      if (!value) {
+        message = "The firstname is required";
+      } else if (value.length < 2) {
+        message = "The firstname should contain at least 2 characters";
+      } else if (!regexPattern.test(value)) {
+        message = "The firstname should contain only alphabetic characters";
+      }
 
-        case "password_confirmation":
-            if (!value) {
-                message = "The password is required";
-            } else if (value.length < 6) {
-                message = "The password length should be at least 6 caracters";
-            }
-            break;
+      break;
 
-        default:
-            break;
-    }
+    case "user.email":
+      regexPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i;
 
-    return message;
-}
+      if (!value) {
+        message = "The email adress is required";
+      } else if (!regexPattern.test(value)) {
+        message = "This email format is invalid";
+      }
+      break;
+
+    case "user.password":
+      if (!value) {
+        message = "The password is required";
+      } else if (value.length < 6) {
+        message = "The password length should be at least 6 caracters";
+      }
+      break;
+
+    case "password_confirmation":
+      if (!value) {
+        message = "The password is required";
+      } else if (value.length < 6) {
+        message = "The password length should be at least 6 caracters";
+      }
+      break;
+
+    default:
+      break;
+  }
+
+  return message;
+};
 
 export default getValidationMessage;

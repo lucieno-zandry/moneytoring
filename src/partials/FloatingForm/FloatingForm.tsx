@@ -1,4 +1,4 @@
-import { AnimatePresence, motion} from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import React from "react";
 import { FloatingLabel, Form, FormControlProps } from "react-bootstrap";
 import { FeedbackProps } from "react-bootstrap/esm/Feedback";
@@ -13,12 +13,16 @@ type Props = {
 
 const FloatingForm = React.memo((props: Props) => {
     const { id, label, labelClassName, className = '', error, ...formControlProps } = props;
-
     return <FloatingLabel
         controlId={id}
         label={label}
         className={`text-dark ${labelClassName}`}>
-        <Form.Control {...formControlProps} className={`text-dark ${className}`} isInvalid={Boolean(error)} as={motion.input} layout/>
+        <Form.Control
+            {...formControlProps}
+            className={`text-dark ${className}`}
+            isInvalid={Boolean(error)}
+            as={motion.input}
+            layout />
 
         <AnimatePresence mode="popLayout">
             {error &&
@@ -32,7 +36,6 @@ const FloatingForm = React.memo((props: Props) => {
                     {error}
                 </Form.Control.Feedback>}
         </AnimatePresence>
-
     </FloatingLabel>
 });
 

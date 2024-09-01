@@ -4,15 +4,13 @@ import Button from "../Button/Button";
 import Icon from "../Icon/Icon";
 import AccountsTable from "../AccountsTable/AccountsTable";
 import { Account } from "../../core/config/types/models";
-import { fakeAccount } from "../../core/config/constants/fakes";
 import { useModal } from "../Modal/Modal";
 import AccountCreationModal from "../AccountCreationModal/AccountCreationModal";
 
 const AccountCreation = React.memo(() => {
-    const accounts: Account[] = [fakeAccount, fakeAccount, fakeAccount];
-
     const [state, setState] = React.useState({
         showModal: false,
+        accounts: null as Account[] | null,
     });
 
     const Modal = useModal();
@@ -21,23 +19,28 @@ const AccountCreation = React.memo(() => {
         setState(s => ({ ...s, showModal: !s.showModal }));
     }, []);
 
+    const addAccount = React.useCallback((account: Account) => {
+        const newAccounts = state.accounts ? [...state.accounts, account] : [account];
+        setState(s => ({ ...s, accounts: newAccounts}));
+    }, [state.accounts]);
+
     return <>
         <div className="account-creation">
             <h3 className="display-6">Create A Budget Account</h3>
             <p className="text-muted">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Rerum accusamus veniam impedit deleniti quos, in, adipisci quo illum similique explicabo sequi ipsam rem, nostrum quis eum quisquam illo? Mollitia, eos.</p>
             <hr />
-            {accounts.length > 0 &&
-                <AccountsTable className="w-75" accounts={accounts} hideThead />}
+            {state.accounts && state.accounts.length > 0 &&
+                <AccountsTable className="w-75" accounts={state.accounts} hideThead />}
         </div>
 
         <CornerButtons>
             <Modal.Toggle
                 className="btn btn-secondary"
                 onClick={toggleModal}><Icon variant="plus" /> Account</Modal.Toggle>
-                
+
             <Button
                 variant="primary"
-                disabled={accounts.length < 1}>
+                disabled={!state.accounts || state.accounts.length < 1}>
                 Submit <Icon variant="arrow-right" />
             </Button>
         </CornerButtons>
@@ -45,7 +48,8 @@ const AccountCreation = React.memo(() => {
         <AccountCreationModal
             Modal={Modal}
             onClose={toggleModal}
-            show={state.showModal} />
+            show={state.showModal}
+            onSubmit={addAccount}/>
     </>
 });
 

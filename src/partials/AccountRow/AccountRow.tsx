@@ -16,4 +16,4 @@ export default function (props: Props) {
             <Amount>{balance}</Amount>
         </td>
     </tr>
-}
+}   

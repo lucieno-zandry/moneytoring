@@ -9,19 +9,33 @@
   justify-content: center;
   z-index: 2000;
   cursor: pointer;
-  transition: background-color 0.3s ease-in-out;
 }
 
-.modal.show {
-  background-color: rgba(#000, 0.5);
+.modal.end {
+  align-items: end;
+}
+
+.modal.start {
+  align-items: start;
+}
+
+.modal.sm > .modal-content {
+  max-width: rem(600);
+}
+
+.modal.md > .modal-content {
+  max-width: rem(800);
 }
 
 .modal-content {
   background-color: darken($secondary, 35%);
-  height: 70%;
   width: 90%;
-  min-height: rem(400);
   overflow-y: auto;
   overflow-x: hidden;
   cursor: auto;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
 }
