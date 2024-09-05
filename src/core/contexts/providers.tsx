@@ -10,7 +10,6 @@ export const AuthProvider = React.memo((props: PropsWithChildren) => {
         user,
         setUser
     }), [user]);
-    
 
     return <AuthContext.Provider value={value}>
         {props.children}

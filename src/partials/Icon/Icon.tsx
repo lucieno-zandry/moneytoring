@@ -4,11 +4,11 @@ type IconType = 'classic' | 'solid' | 'regular' | 'light' | 'thin' | 'brands';
 type Size = 1 | 2 | 3 | 4;
 type Variant = string;
 
-type Props = {
+export type IconProps = {
     variant: Variant,
     type?: IconType,
     size?: Size,
-} & React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>
+}
 
 const brands = [
     'linkedin',
@@ -16,7 +16,7 @@ const brands = [
     'facebook',
 ];
 
-const Icon = React.memo((props: Props) => {
+const Icon = React.memo((props: IconProps & React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>) => {
     const {
         type = brands.includes(props.variant) ? 'brands' : 'regular',
         size = 1,

@@ -9,18 +9,6 @@ const getValidationMessage = (type: string, value: string): string | null => {
   let regexPattern = null;
 
   switch (type) {
-    case "user.name":
-      regexPattern = /^[a-zéèâàäöïîôòìëêûüùç]{2,20}$/i;
-      if (!value) {
-        message = "The name field is required";
-      } else if (value.length < 2) {
-        message = "The name should contain at least 2 characters";
-      } else if (!regexPattern.test(value)) {
-        message = "The name should contain only alphabetic characters";
-      }
-
-      break;
-
     case "account.name":
       regexPattern = /^[a-zéèâàäöïîôòìëêûüùç]{2,20}$/i;
       if (!value) {
@@ -38,6 +26,18 @@ const getValidationMessage = (type: string, value: string): string | null => {
 
       if (isNaN(balance)) {
         message = "The balance should be Numeric only";
+      }
+
+      break;
+
+    case "user.name":
+      regexPattern = /^[a-zéèâàäöïîôòìëêûüùç]{2,20}$/i;
+      if (!value) {
+        message = "The name field is required";
+      } else if (value.length < 2) {
+        message = "The name should contain at least 2 characters";
+      } else if (!regexPattern.test(value)) {
+        message = "The name should contain only alphabetic characters";
       }
 
       break;
@@ -79,6 +79,27 @@ const getValidationMessage = (type: string, value: string): string | null => {
       } else if (value.length < 6) {
         message = "The password length should be at least 6 caracters";
       }
+      break;
+
+    case "category.name":
+      regexPattern = /^[a-zéèâàäöïîôòìëêûüùç]{2,20}$/i;
+      if (!value) {
+        message = "The name field is required";
+      } else if (value.length < 2) {
+        message = "The name should contain at least 2 characters";
+      } else if (!regexPattern.test(value)) {
+        message = "The name should contain only alphabetic characters";
+      }
+
+      break;
+
+    case "category.budget":
+      const budget = parseFloat(value);
+
+      if (isNaN(budget)) {
+        message = "The budget should be Numeric only";
+      }
+
       break;
 
     default:

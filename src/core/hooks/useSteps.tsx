@@ -2,11 +2,19 @@ import React from "react";
 import StepsContainer from "../../partials/StepsContainer/StepsContainer";
 import { motionStatic, slideNext, slidePrevious } from "../config/variants/variants";
 
+type HookOptions = {
+  defaultActive: number
+}
 
-export default function <T>(Steps: T[]) {
+const defaultOptions = {
+  defaultActive: 0
+}
+
+export default function <T>(Steps: T[], options: HookOptions = defaultOptions) {
+  const { defaultActive } = options;
 
   const [state, setState] = React.useState({
-    active: 0,
+    active: defaultActive,
     variants: motionStatic,
   });
 

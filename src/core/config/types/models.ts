@@ -1,4 +1,4 @@
-import { DateString } from "./variables";
+import { DateString, RecurrencePattern } from "./variables";
 
 export type User = {
   id: number;
@@ -15,6 +15,7 @@ export type Account = {
   user_id: number;
   name: string;
   balance: number;
+  icon: string;
   created_at: DateString;
   updated_at: DateString;
 };
@@ -23,7 +24,17 @@ export type Category = {
   id: number;
   user_id: number;
   name: string;
-  type: "Income" | "Expense";
+  icon: string;
+  budget: number;
+  created_at: DateString;
+  updated_at: DateString;
+};
+
+export type TransactionRecurrence = {
+  id: number;
+  transaction_id: number;
+  pattern: RecurrencePattern;
+  next_occurence: DateString | null;
   created_at: DateString;
   updated_at: DateString;
 };
@@ -34,34 +45,10 @@ export type Transaction = {
   account_id: number;
   category_id: number;
   amount: number;
-  description?: string;
-  date: DateString;
-  type: "Income" | "Expense" | "Transfer";
-  created_at: DateString;
-  updated_at: DateString;
-};
-
-export type Budget = {
-  id: number;
-  user_id: number;
-  category_id: number;
-  amount: number;
-  period: "Monthly" | "Weekly" | "Yearly";
-  start_date: DateString;
-  end_date: DateString;
-  created_at: DateString;
-  updated_at: DateString;
-};
-
-export type RecurringTransaction = {
-  id: number;
-  user_id: number;
-  account_id: number;
-  category_id: number;
-  amount: number;
-  description?: string;
-  recurrence_pattern: "Weekly" | "Monthly" | "Yearly";
-  next_occurrence: DateString;
+  description: string;
+  icon: string;
+  transaction_recurrence_id: number | null;
+  transaction_recurrence?: TransactionRecurrence;
   created_at: DateString;
   updated_at: DateString;
 };

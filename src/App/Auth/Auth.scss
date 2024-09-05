@@ -1,13 +1,18 @@
 .auth-page {
   min-height: auto;
   height: 100vh;
-  overflow-y: auto;
+  // overflow-y: auto;
+  overflow: hidden;
   .left-side,
   .right-side {
     height: 100%;
   }
 
-  .left-side{
+  .right-side {
+    text-align: center;
+  }
+
+  .left-side {
     @include set-background-image("./App/Auth/trees.png");
     position: relative;
     z-index: 1000;

@@ -11,7 +11,6 @@ import PasswordForgotten from "../App/Auth/PasswordForgotten/PasswordForgotten";
 import PasswordReset from "../App/Auth/PasswordReset/PasswordReset";
 import Member from "../partials/Member/Member";
 import Setup from "../App/Setup/Setup";
-import AccountCreation from "../partials/AccountCreation/AccountCreation";
 
 const AppRoutes = React.memo(() => {
     const location = useLocation();
@@ -31,9 +30,7 @@ const AppRoutes = React.memo(() => {
                     <Route element={<Auth />} path="auth">
                         <Route element={<Confirmation />} path="confirmation" />
                     </Route>
-                    <Route element={<Setup />} path="setup">
-                        <Route element={<AccountCreation />} path="accounts" />
-                    </Route>
+                    <Route element={<Setup />} path="setup/:step" />
                 </Route>
             </Routes>
         </AnimatePresence>

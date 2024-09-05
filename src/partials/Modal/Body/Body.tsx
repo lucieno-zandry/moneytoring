@@ -1,6 +1,8 @@
 import React from "react";
 
-const ModalBody = (props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>) => {
+export type ModalBodyProps = React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+
+const ModalBody = (props: ModalBodyProps) => {
     const { className = '', ...divProps } = props;
 
     return <div

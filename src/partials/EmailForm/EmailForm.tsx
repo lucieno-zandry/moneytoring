@@ -1,5 +1,5 @@
 import React from "react";
-import FloatingForm from "../FloatingForm/FloatingForm";
+import FloatingForm from "../FormFloating/FormFloating";
 import Icon from "../Icon/Icon";
 import { JsObject } from "../../core/config/types/variables";
 
@@ -10,12 +10,11 @@ type Props = {
 
 const EmailForm = React.memo((props: Props) => {
     return <>
-        <FloatingForm
+        <FloatingForm.Input
             id="user.email"
             name="email"
             autoComplete="email"
-            label={<><Icon variant="envelope" /> Email</>}
-            labelClassName="col-10 col-sm-8"
+            labelProps={{ label: <><Icon variant="envelope" /> Email</>, className: "col-10 col-sm-8" }}
             type="email"
             placeholder="username@example.com"
             error={props.errors?.email}

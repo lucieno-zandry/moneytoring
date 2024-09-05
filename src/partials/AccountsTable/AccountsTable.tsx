@@ -17,7 +17,7 @@ export default function (props: Props & React.DetailedHTMLProps<React.TableHTMLA
             </tr>
         </thead>}
         <tbody>
-            {accounts.map((account, key) => <AccountRow account={account} key={key} />)}
+            {accounts.map((account, key) => <AccountRow item={account} key={key} />)}
         </tbody>
     </table>
 }

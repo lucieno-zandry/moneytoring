@@ -13,6 +13,10 @@
 
 .modal.end {
   align-items: end;
+
+  .modal-footer{
+    padding-bottom: 1.5rem;
+  }
 }
 
 .modal.start {
@@ -33,9 +37,39 @@
   overflow-y: auto;
   overflow-x: hidden;
   cursor: auto;
+  padding: 0 1rem;
+  border-radius: $border-radius;
+}
+
+.modal-header,
+.modal-footer {
+  display: flex;
+}
+
+.modal-header,
+.modal-body,
+.modal-footer {
+  padding: 1rem 0;
 }
 
 .modal-header {
-  display: flex;
   justify-content: space-between;
+  align-items: center;
+}
+
+.modal-footer {
+  justify-content: end;
+  gap: 0.5rem;
+}
+
+.modal-body {
+  border-top: 1px solid rgba($light, 0.7);
+  border-bottom: 1px solid rgba($light, 0.7);
+}
+
+.modal-title {
+  font-size: 1.3rem;
+  margin: 0;
+  line-height: 1;
+  font-weight: 400;
 }

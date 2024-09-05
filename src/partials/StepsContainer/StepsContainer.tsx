@@ -21,7 +21,7 @@ const StepsContainer = React.memo((props: Props) => {
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-                    className="step d-flex align-items-center gap-3 col-12 flex-column text-align-center">
+                    className="step d-flex align-items-center gap-3 col-12 flex-column">
                     {getComponent(Step)}
                 </motion.div>
         })}

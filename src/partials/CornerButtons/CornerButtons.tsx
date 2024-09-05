@@ -1,9 +1,13 @@
 import React from "react";
 import { createPortal } from "react-dom";
 
-const CornerButtons = React.memo((props: React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>) => {
-    const { className = '', ...divProps } = props;
-    return createPortal(<div className={`corner-buttons d-flex gap-3 ${className}`} {...divProps} />, document.body)
+type CornerButtonsProps = {
+    position?: 'start' | 'end',
+} & React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+
+const CornerButtons = React.memo((props: CornerButtonsProps) => {
+    const { className = '', position = 'end', ...divProps } = props;
+    return <div className={`corner-buttons d-flex gap-3 ${className} ${position}`} {...divProps} />
 });
 
 export default CornerButtons;

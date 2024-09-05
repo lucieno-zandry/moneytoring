@@ -1,0 +1,28 @@
+.logo {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+
+  &:not(.static) {
+    position: absolute;
+    top: 1.5rem;
+  }
+
+  &::before {
+    display: block;
+    content: "";
+    height: 2rem;
+    width: 2rem;
+    background: center / contain no-repeat url(./partials/Logo/Logo.svg);
+  }
+
+  &::after {
+    content: "MoneyToring";
+    display: block;
+    font-weight: bold;
+    font-size: 1.2rem;
+    background: linear-gradient(to bottom right, $primary, $warning);
+    background-clip: text;
+    color: transparent;
+  }
+}
