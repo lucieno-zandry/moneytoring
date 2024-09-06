@@ -4,4 +4,4 @@ export type JsObject = {
 
 export type DateString = string;
 
-export type RecurrencePattern = "Weekly" | "Monthly" | "Yearly" | "Once";
+export type RecurrencePattern = "WEEKLY" | "MONTHLY" | "YEARLY" | "ONCE";

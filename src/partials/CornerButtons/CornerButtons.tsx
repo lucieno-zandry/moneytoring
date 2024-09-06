@@ -7,7 +7,7 @@ type CornerButtonsProps = {
 
 const CornerButtons = React.memo((props: CornerButtonsProps) => {
     const { className = '', position = 'end', ...divProps } = props;
-    return <div className={`corner-buttons d-flex gap-3 ${className} ${position}`} {...divProps} />
+    return createPortal(<div className={`corner-buttons gap-3 align-items-center ${className} ${position}`} {...divProps} />, document.body)
 });
 
 export default CornerButtons;

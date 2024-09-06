@@ -28,7 +28,7 @@ const defaultTransaction: Transaction = {
     description: '',
 }
 
-const recurrencePatterns: RecurrencePattern[] = ['Yearly', 'Monthly', 'Weekly'];
+const recurrencePatterns: RecurrencePattern[] = ['YEARLY', 'MONTHLY', 'WEEKLY'];
 
 const tomorrow = new Datum().addDays(1);
 const tomorrowIso = tomorrow.toISOString();

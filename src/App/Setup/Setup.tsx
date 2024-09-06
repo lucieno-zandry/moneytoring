@@ -13,7 +13,7 @@ export type StepProps = {
 const Steps = [
     { path: 'accounts', element: AccountCreation },
     { path: 'categories', element: CategoryCreation },
-    { path: 'tranactions', element: TransactionCreation },
+    { path: 'transactions', element: TransactionCreation },
 ]
 
 const Setup = () => {
@@ -21,17 +21,21 @@ const Setup = () => {
     const step = useParams().step!;
 
     const defaultActive: number = React.useMemo(() => {
-        const index = Steps.findIndex(step => step.path);
+        const index = Steps.findIndex(item => item.path === step);
         return index >= 0 ? index : 0
     }, [step]);
 
     const { Container, active, next } = useSteps(Steps, { defaultActive });
 
     const handleDone = React.useCallback(() => {
-        if (active < (Steps.length - 1)) next();
+        if (active < (Steps.length - 1)) {
+            next();
+            window.history.replaceState({}, '', `/setup/${Steps[active + 1].path}`);
+        };
     }, [active, next]);
 
-    return <div className="setup container d-flex flex-column justify-content-center">
+
+    return <div className="setup container">
         <Logo />
         <Container predicate={(Step) => <Step.element onDone={handleDone} />} />
     </div>

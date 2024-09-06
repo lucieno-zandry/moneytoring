@@ -54,6 +54,7 @@ export default function <T>(Steps: T[], options: HookOptions = defaultOptions) {
     active: state.active,
     next,
     prev,
-    Container
+    Container,
+    setActive
   };
 }

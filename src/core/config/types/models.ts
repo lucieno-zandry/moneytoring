@@ -47,6 +47,7 @@ export type Transaction = {
   amount: number;
   description: string;
   icon: string;
+  type: 'INCOME' | 'EXPENSE';
   transaction_recurrence_id: number | null;
   transaction_recurrence?: TransactionRecurrence;
   created_at: DateString;
