@@ -1,8 +1,18 @@
-import React from "react";
-import { AuthContext } from "../contexts/contexts";
+import { create } from "zustand";
+import { User } from "../config/types/models";
+import { fakeUser } from "../config/constants/fakes";
 
-const useAuth = () => {
-  return React.useContext(AuthContext);
-};
+type Auth = {
+    user: undefined | false | User;
+}
+
+type AuthActions = {
+    setAuth: (auth: false | User) => void;
+}
+
+const useAuth = create<Auth & AuthActions>(set => ({
+    user: fakeUser,
+    setAuth: (auth: false | User) => set({user: auth})
+}))
 
 export default useAuth;

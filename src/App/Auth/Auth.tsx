@@ -6,7 +6,7 @@ import useAuth from "../../core/hooks/useAuth";
 import Logo from "../../partials/Logo/Logo";
 
 const Auth = React.memo(() => {
-    const { user } = useAuth();
+    const { user } = useAuth(state => state);
 
     return <div className="auth-page d-flex flex-wrap flex-sm-nowrap">
         <div className="left-side col-12 col-sm-6 d-none d-sm-block"></div>

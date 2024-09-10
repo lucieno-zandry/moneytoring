@@ -11,7 +11,7 @@ const Confirmation = React.memo(() => {
         validationMessages: null as JsObject | null,
     });
 
-    const user = useAuth().user as User;
+    const user = useAuth(state => state.user) as User;
 
     const handleOnComplete = React.useCallback(() => {
 

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import useAuth from "./useAuth";
 import * as links from "../config/links/pages";
+import useAuth from "./useAuth";
 
 type SessionIntended = { target: null | boolean, path: string }
 const { authPage, emailConfirmation, loginPage } = links;
@@ -32,7 +32,7 @@ export function useRedirect(target: boolean): Function {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const { user } = useAuth();
+    const { user } = useAuth(state => state);
     const sessionIntended = getSessionIntended();
 
     const goToIntended = React.useCallback((path: string) => {
