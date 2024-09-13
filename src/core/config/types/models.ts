@@ -1,4 +1,4 @@
-import { DateString, RecurrencePattern } from "./variables";
+import { DateString } from "./variables";
 
 export type User = {
   id: number;
@@ -8,6 +8,7 @@ export type User = {
   created_at: DateString;
   updated_at: DateString;
   email_verified_at: string | null;
+  image: string;
 };
 
 export type Account = {
@@ -33,7 +34,7 @@ export type Category = {
 export type TransactionRecurrence = {
   id: number;
   transaction_id: number;
-  pattern: RecurrencePattern;
+  pattern: "YEARLY" | "MONTHLY" | "WEEKLY" | "ONCE";
   next_occurence: DateString | null;
   created_at: DateString;
   updated_at: DateString;
@@ -47,7 +48,7 @@ export type Transaction = {
   amount: number;
   description: string;
   icon: string;
-  type: 'INCOME' | 'EXPENSE';
+  type: "INCOME" | "EXPENSE";
   transaction_recurrence_id: number | null;
   transaction_recurrence?: TransactionRecurrence;
   created_at: DateString;
@@ -66,11 +67,17 @@ export type Goal = {
 };
 
 export type Notification = {
-  id: number;
-  user_id: number;
-  message: string;
-  type: "Budget Overlimit" | "Transaction Alert";
-  is_read: boolean;
+  id: string;
+  type: string;
+  notifiable_type: string;
+  notifiable_id: number;
+  data: {
+    title: string;
+    line: string;
+    icon: string;
+    action: string;
+  };
+  read_at: string | null;
   created_at: DateString;
   updated_at: DateString;
 };

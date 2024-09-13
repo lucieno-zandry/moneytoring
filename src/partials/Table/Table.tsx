@@ -4,17 +4,16 @@ import { Dropdown } from "react-bootstrap";
 import Button from "../Button/Button";
 import Icon from "../Icon/Icon";
 import { AnimatePresence, motion, Variants } from "framer-motion";
-
-type TDS<T> = (props: { item: T }) => React.JSX.Element
-type OnDelete<T> = (items: T[]) => void;
-type OnEdit<T> = (item: T) => void;
+import useSearch from "../../core/hooks/useSearch";
+import hasMatched from "../../core/hooks/hasMatched";
+import TablePlaceholder from "../TablePlaceholder/TablePlaceholder";
 
 type Props<T extends { id: number }> = {
-    items: T[],
+    items: T[] | null,
     headers: React.ReactNode[],
-    TDs: TDS<T>,
-    onDelete: OnDelete<T>,
-    onEdit: OnEdit<T>,
+    TDs: (props: { item: T }) => React.JSX.Element,
+    onDelete: (items: T[]) => void,
+    onEdit: (item: T) => void,
 } & React.DetailedHTMLProps<React.TableHTMLAttributes<HTMLTableElement>, HTMLTableElement>
 
 const variants = (key: number): Variants => {
@@ -37,6 +36,7 @@ const variants = (key: number): Variants => {
 
 export default function <T extends { id: number }>(props: Props<T>) {
     const { items, headers, TDs, onDelete, className = '', onEdit, ...tableProps } = props;
+    const { search } = useSearch();
 
     const [state, setState] = React.useState({
         selection: null as null | T[],
@@ -93,7 +93,11 @@ export default function <T extends { id: number }>(props: Props<T>) {
         onEdit && onEdit(item);
     }, [onEdit]);
 
-    return <div className="table-responsive">
+    if(!items){
+        return <TablePlaceholder />
+    }
+
+    return <div className="table-responsive rounded">
         <table
             className={`table table-stripped table-hover table-dark align-middle ${className}`}
             {...tableProps}>
@@ -102,7 +106,7 @@ export default function <T extends { id: number }>(props: Props<T>) {
                     {state.selection && <th className="col-1">
                         <Checkbox
                             label='All'
-                            checked={state.selection.length === items?.length}
+                            checked={state.selection.length === items.length}
                             onChange={handleSelectAll}
                         />
                     </th>}
@@ -129,8 +133,7 @@ export default function <T extends { id: number }>(props: Props<T>) {
                 <AnimatePresence>
                     {items.map((item: T, key) => {
                         const checked = selection?.some(selected => selected.id === item.id);
-
-                        return <motion.tr
+                        const element = <motion.tr
                             key={key}
                             variants={variants(key)}
                             initial="hidden"
@@ -160,6 +163,11 @@ export default function <T extends { id: number }>(props: Props<T>) {
                                 </Dropdown>
                             </td>
                         </motion.tr>
+
+                        if (!search) return element;
+
+                        const values: unknown[] = Object.values(item);
+                        if (hasMatched(values, search)) return element;
                     }
                     )}
                 </AnimatePresence>

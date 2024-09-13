@@ -1,3 +1,15 @@
-.table-responsive{
-    overflow: hidden;
+.table-container {
+  :focus-visible {
+    overflow-y: visible;
+  }
+
+  .table {
+    margin-bottom: 0;
+  }
+}
+
+@media screen and (max-width: $screen-sm) {
+  .table-container {
+    overflow-x: auto;
+  }
 }

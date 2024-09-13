@@ -5,9 +5,9 @@ import { ModalBody, ModalFooter, ModalHeader } from "../Modal/Modal"
 import FloatingForm from "../FormFloating/FormFloating";
 import React from "react";
 import formObservations from "../../core/helpers/formObservations";
-import { Transaction } from "../../core/config/types/models";
+import { Transaction, TransactionRecurrence } from "../../core/config/types/models";
 import { fakeTransaction, fakeTransactionRecurrence } from "../../core/config/constants/fakes";
-import { JsObject, RecurrencePattern } from "../../core/config/types/variables";
+import { JsObject } from "../../core/config/types/variables";
 import ModalContainer, { ModalContainerProps } from "../Modal/Container/Container";
 import IconsDrawer, { icons } from "../IconsDrawer/IconsDrawer";
 import IconButton from "../IconInput/IconInput";
@@ -28,7 +28,8 @@ const defaultTransaction: Transaction = {
     description: '',
 }
 
-const recurrencePatterns: RecurrencePattern[] = ['YEARLY', 'MONTHLY', 'WEEKLY'];
+const recurrencePatterns: TransactionRecurrence['pattern'][] = ['YEARLY', 'MONTHLY', 'WEEKLY'];
+const transactionTypes: Transaction['type'][] = ['INCOME', 'EXPENSE'];
 
 const tomorrow = new Datum().addDays(1);
 const tomorrowIso = tomorrow.toISOString();
@@ -48,10 +49,11 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
         paused: false,
         form: {
             icon: transaction.icon,
+            type: 'EXPENSE' as Transaction['type'],
             amount: 0,
             description: '',
             pattern: recurrencePatterns[0],
-            next_occurence: tomorrowIso
+            next_occurence: tomorrowIso,
         }
     });
 
@@ -64,6 +66,7 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
                 description: formData.description,
                 amount: parseInt(formData.amount),
                 icon: state.form.icon,
+                type: state.form.type,
                 transaction_recurrence: {
                     ...fakeTransactionRecurrence,
                     next_occurence: state.form.next_occurence,
@@ -107,7 +110,7 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
         return show;
     }, [state.paused, show]);
 
-    const handleBlur: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> = (e) => {
+    const handleBlur: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> = React.useCallback(e => {
         const { id, value } = e.target;
         const name = getName(id);
         const validationMessage = getValidationMessage(id, value)
@@ -115,7 +118,7 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
 
         const validationMessages = validationMessage ? { ...state.validationMessages, ...validationObject } : state.validationMessages
         setState(s => ({ ...s, form: { ...s.form, [getName(id)]: value, validationMessages } }));
-    }
+    }, [state.validationMessages]);
 
     return <>
         <ModalContainer
@@ -153,15 +156,23 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
                     />
                 </div>
 
-                <div className="d-flex my-3">
+                <div className="d-flex my-3 gap-3">
                     <FloatingForm.TextArea
                         id="transactions.description"
-                        labelProps={{ label: <><Icon variant="input-text" /> Description</>, className: "col" }}
+                        labelProps={{ label: <><Icon variant="input-text" /> Description</>, className: "col-8" }}
                         placeholder="Eg: Bank Transaction"
                         error={state.validationMessages?.description}
                         defaultValue={transaction.description}
                         onBlur={handleBlur}
                     />
+
+                    <FloatingForm.Select
+                        id="transactions.type"
+                        labelProps={{ label: <><Icon variant="categories" /> Type</>, className: 'col' }}
+                        options={transactionTypes}
+                        predicate={(option: Transaction['type']) => option}
+                        onBlur={handleBlur}
+                        defaultValue={transaction.type} />
                 </div>
 
                 <div className="d-flex gap-3 justify-content-between">
@@ -169,7 +180,7 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
                         id="transactions_recurrences.pattern"
                         labelProps={{ label: <><Icon variant="clock" /> Recurrence</>, className: 'col-6' }}
                         options={recurrencePatterns}
-                        predicate={(option: RecurrencePattern) => option}
+                        predicate={(option: TransactionRecurrence['pattern']) => option}
                         onBlur={handleBlur} />
 
                     <FloatingForm.Input

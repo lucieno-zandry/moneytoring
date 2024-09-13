@@ -4,18 +4,13 @@ import Button from "../../../partials/Button/Button";
 import Icon from "../../../partials/Icon/Icon";
 import { Account } from "../../../core/config/types/models";
 import AccountModal from "../../../partials/AccountModal/AccountModal";
-import { fakeAccount } from "../../../core/config/constants/fakes";
 import Table from "../../../partials/Table/Table";
 import generateArray from "../../../core/helpers/generateArray";
 import AccountRow from "../../../partials/AccountRow/AccountRow";
 import arrayUpdate from "../../../core/helpers/arrayUpdate";
-import randomNumber from "../../../core/helpers/randomNumber";
 import { StepProps } from "../Setup";
+import { defaultAccounts } from "../../../core/hooks/useAccounts";
 
-const defaultAccounts: Account[] = [
-    { ...fakeAccount, name: 'Bank', balance: 10_000_000, icon: 'bank', id: randomNumber() },
-    { ...fakeAccount, name: 'Local', balance: 2_000_000, icon: 'suitcase', id: randomNumber() },
-];
 
 const AccountCreation = React.memo((props: StepProps) => {
     const { onDone } = props;

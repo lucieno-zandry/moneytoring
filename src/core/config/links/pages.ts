@@ -1,5 +1,10 @@
-export const authPage = '/';
+export const dashboard = '/';
+export const authPage = dashboard;
 export const emailConfirmation = '/auth/confirmation';
 export const loginPage = '/auth/login';
 export const signupPage = '/auth/signup';
 export const passwordForgotter = '/auth/password-forgotten';
+export const profile = '/user/profile';
+export const transactions = '/transactions';
+export const categories = '/categories';
+export const accounts = '/accounts';

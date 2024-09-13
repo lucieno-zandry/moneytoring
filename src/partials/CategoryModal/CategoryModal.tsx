@@ -15,7 +15,6 @@ import IconButton from "../IconInput/IconInput";
 interface CategoryModalProps extends Omit<ModalContainerProps, 'onSubmit'> {
     onSubmit: (category: Category) => void,
     category?: Category,
-    editMode?: boolean,
 }
 
 const defaultCategory: Category = {
@@ -25,12 +24,10 @@ const defaultCategory: Category = {
     budget: 0,
 }
 
-
 const CategoryModal = (props: CategoryModalProps) => {
     const {
         onSubmit,
         category = defaultCategory,
-        editMode = false,
         show = false,
         ...modalProps
     } = props;
@@ -80,11 +77,13 @@ const CategoryModal = (props: CategoryModalProps) => {
         return show;
     }, [state.paused, show]);
 
+    const editMode = React.useMemo(() => Boolean(category.id), [category.id]);
+
     return <>
         <ModalContainer
             as="form"
             onSubmit={handleSubmit}
-            align="end"
+            align="center"
             show={isVisible}
             {...modalProps}>
 
@@ -102,7 +101,7 @@ const CategoryModal = (props: CategoryModalProps) => {
 
                 <FloatingForm.Input
                     id="category.name"
-                    labelProps={{label: <><Icon variant="input-text" /> Name</>}}
+                    labelProps={{ label: <><Icon variant="input-text" /> Name</> }}
                     placeholder="Eg: Bank Category"
                     error={state.validationMessages?.name}
                     defaultValue={category.name}
@@ -111,7 +110,7 @@ const CategoryModal = (props: CategoryModalProps) => {
                 <FloatingForm.Input
                     id="category.budget"
                     type="number"
-                    labelProps={{label: <><Icon variant="money-bill-simple" /> Budget</>}}
+                    labelProps={{ label: <><Icon variant="money-bill-simple" /> Budget</> }}
                     placeholder="Category budget"
                     error={state.validationMessages?.budget}
                     defaultValue={category.budget}

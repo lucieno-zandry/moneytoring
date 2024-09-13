@@ -1,0 +1,23 @@
+.backoffice {
+  aside {
+    height: 100vh;
+    padding: 0 1rem;
+  }
+
+  nav {
+    height: $navbar-height;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+  }
+
+  main {
+    background-color: darken($color: $secondary, $amount: 40%);
+    border-radius: $border-radius;
+    // width: calc(100% - 1rem);
+    width: 100%;
+    padding: 1rem;
+    height: calc(100vh - ($navbar-height + 1rem));
+    overflow-y: auto;
+  }
+}

@@ -14,3 +14,19 @@ export const signup = (payload: {
 }) => {
   return api.post(loginApi, payload);
 };
+
+export const allNotifications = () => {
+  return api.get('/notification/all');
+}
+
+export const unreadNotifications = () => {
+  return api.get('/notification/unread');
+}
+
+export const readNotification = (notification_id: string) => {
+  return api.put(`/notification/read/${notification_id}`);
+}
+
+export const getWstoken = () => {
+  return api.get('/wstoken/get');
+}

@@ -9,7 +9,7 @@ $warning: #f1c453;
 $danger: #e56d6d;
 
 $body-color: $white;
-$body-bg: $dark;
+$body-bg: darken($secondary, 40%);
 
 $screen-xs: 0;
 $screen-sm: 576px;
@@ -18,5 +18,10 @@ $screen-lg: 992px;
 $screen-xl: 1200px;
 $screen-xxl: 1400px;
 
-$border-radius: .5rem;
+$border-radius: 0.5rem;
 $paragraph-margin-bottom: 0;
+
+$dropdown-color: $secondary;
+$dropdown-link-color: $secondary;
+$dropdown-bg: darken($secondary, 35%);
+$navbar-height: 4rem;

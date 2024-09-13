@@ -17,6 +17,7 @@ export const fakeUser: User = {
   created_at: fakeDate,
   updated_at: fakeDate,
   email_verified_at: fakeDate,
+  image: '',
 };
 
 export const fakeAccount: Account = {
@@ -30,7 +31,7 @@ export const fakeAccount: Account = {
 };
 
 export const fakeCategory: Category = {
-  id: randomNumber(),
+  id: 0,
   budget: randomNumber(),
   name: "Bank",
   created_at: fakeDate,

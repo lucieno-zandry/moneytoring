@@ -1,0 +1,12 @@
+.table-placeholder-item{
+    height: 3rem;
+
+    .placeholder{
+        border-radius: $border-radius;
+    }
+
+    .placeholder:first-child{  
+        aspect-ratio: 1;
+        border-radius: 50%;
+    }
+}

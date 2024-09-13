@@ -9,41 +9,8 @@ import Table from "../../../partials/Table/Table";
 import generateArray from "../../../core/helpers/generateArray";
 import CategoryRow from "../../../partials/CategoryRow/CategoryRow";
 import arrayUpdate from "../../../core/helpers/arrayUpdate";
-import { fakeCategory } from "../../../core/config/constants/fakes";
 import { StepProps } from "../Setup";
-
-const defaultCategories = (accountBudget: number = 0) => {
-    return [
-        {
-            ...fakeCategory,
-            "budget": Math.floor(accountBudget / 4),
-            "name": "Transport",
-            "icon": "car",
-            id: randomNumber()
-        },
-        {
-            ...fakeCategory,
-            "budget": Math.floor(accountBudget / 8),
-            "name": "Entertainment",
-            "icon": "music",
-            id: randomNumber()
-        },
-        {
-            ...fakeCategory,
-            "budget": Math.floor(accountBudget / 4),
-            "name": "Bills",
-            "icon": "lightbulb",
-            id: randomNumber()
-        },
-        {
-            ...fakeCategory,
-            "budget": Math.floor(accountBudget / 4),
-            "name": "Food",
-            "icon": "leaf",
-            id: randomNumber()
-        }
-    ]
-};
+import { defaultCategories } from "../../../core/hooks/useCategories";
 
 const CategoryCreation = React.memo((props: StepProps) => {
     const { onDone } = props;
@@ -127,8 +94,7 @@ const CategoryCreation = React.memo((props: StepProps) => {
             onSubmit={editMode ? handleEditSubmit : addCategory}
             category={editingCategory}
             show={editMode || creationMode}
-            onClose={editMode ? disableEditMode : toggleCreationMode}
-            editMode={editMode} />
+            onClose={editMode ? disableEditMode : toggleCreationMode} />
     </>
 });
 

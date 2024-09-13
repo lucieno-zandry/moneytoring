@@ -14,6 +14,7 @@
 @import "./App/Auth/Auth.scss";
 @import "./App/Auth/Signup/Signup.scss";
 @import "./App/Setup/Setup.scss";
+@import "./App/Backoffice/Backoffice.scss";
 
 // Partials 
 @import "./partials/CodeInput/CodeInput.scss";
@@ -24,3 +25,9 @@
 @import "./partials/SmallText/SmallText.scss";
 @import "./partials/TransactionModal/TransactionModal.scss";
 @import "./partials/Table/Table.scss";
+@import "./partials/Notification/Notification.scss";
+@import "./partials/LogoutDialog/LogoutDialog.scss";
+@import "./partials/UserDropdown/UserDropdown.scss";
+@import "./partials/Navbar/Navbar.scss";
+@import "./partials/Sidebar/Sidebar.scss";
+@import "./partials/TablePlaceholder/TablePlaceholder.scss";

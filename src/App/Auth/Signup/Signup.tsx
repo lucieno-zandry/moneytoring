@@ -68,14 +68,18 @@ const Signup = React.memo(() => {
         const { formData, validationMessages } = formObservations(e);
 
         if (!validationMessages) {
-            setTimeout(() => {
-                next();
-                setState(s => ({ ...s, isLoading: false }));
-            });
+            if (isLastStep) {
+
+            } else {
+                setTimeout(() => {
+                    next();
+                    setState(s => ({ ...s, isLoading: false }));
+                });
+            }
         }
 
         setState(s => ({ ...s, form: { ...s.form, ...formData }, validationMessages, isLoading: !validationMessages }))
-    }, [active]);
+    }, [active, isLastStep]);
 
     return <AuthForm className="signup-page" onSubmit={handleSubmit}>
         <Container predicate={((step) => <step.component defaultValue={state.form} errors={state.validationMessages} />)} />
@@ -95,7 +99,7 @@ const Signup = React.memo(() => {
                 </Button.Static>}
 
             {isLastStep &&
-                <Button.Static>
+                <Button.Static type="submit">
                     Done <Icon variant="check" />
                 </Button.Static>}
 

@@ -11,6 +11,11 @@ import PasswordForgotten from "../App/Auth/PasswordForgotten/PasswordForgotten";
 import PasswordReset from "../App/Auth/PasswordReset/PasswordReset";
 import Member from "../partials/Member/Member";
 import Setup from "../App/Setup/Setup";
+import Backoffice from "../App/Backoffice/Backoffice";
+import Dashboard from "../App/Backoffice/Dashboard/Dashboard";
+import Transactions from "../App/Backoffice/Transactions/Transactions";
+import Categories from "../App/Backoffice/Categories/Categories";
+import Accounts from "../App/Backoffice/Accounts/Accounts";
 
 const AppRoutes = React.memo(() => {
     const location = useLocation();
@@ -27,6 +32,12 @@ const AppRoutes = React.memo(() => {
                     </Route>
                 </Route>
                 <Route element={<Member />}>
+                    <Route element={<Backoffice />}>
+                        <Route element={<Dashboard />} path="/" />
+                        <Route element={<Transactions />} path="transactions" />
+                        <Route element={<Categories />} path="categories" />
+                        <Route element={<Accounts />} path="accounts" />
+                    </Route>
                     <Route element={<Auth />} path="auth">
                         <Route element={<Confirmation />} path="confirmation" />
                     </Route>

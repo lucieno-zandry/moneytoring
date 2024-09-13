@@ -6,38 +6,11 @@ import { Transaction } from "../../../core/config/types/models";
 import randomNumber from "../../../core/helpers/randomNumber";
 import Table from "../../../partials/Table/Table";
 import arrayUpdate from "../../../core/helpers/arrayUpdate";
-import { fakeTransaction } from "../../../core/config/constants/fakes";
 import TransactionRow from "../../../partials/TransactionRow/TransactionRow";
 import TransactionModal from "../../../partials/TransactionModal/TransactionModal";
 import { StepProps } from "../Setup";
+import { defaultTransactions } from "../../../core/hooks/useTransactions";
 
-const defaultTransactions = (balance: number = 0): Transaction[] => [
-    {
-        ...fakeTransaction,
-        "amount": Math.floor(balance / 4),
-        "icon": "car",
-        id: randomNumber(),
-    },
-    {
-        ...fakeTransaction,
-        "amount": Math.floor(balance / 8),
-        "icon": "music",
-        id: randomNumber(),
-
-    },
-    {
-        ...fakeTransaction,
-        "amount": Math.floor(balance / 4),
-        "icon": "lightbulb",
-        id: randomNumber(),
-    },
-    {
-        ...fakeTransaction,
-        "amount": Math.floor(balance / 4),
-        "icon": "leaf",
-        id: randomNumber(),
-    }
-]
 
 const TransactionCreation = React.memo((props: StepProps) => {
     const { onDone } = props;
@@ -97,7 +70,7 @@ const TransactionCreation = React.memo((props: StepProps) => {
                 Setting up your transactions saves you from manually registering transactions that happen more than once.</p>
             {transactions && transactions.length > 0 &&
                 <Table
-                    headers={['', 'amount', 'description', 'next occurence', 'recurrence']}
+                    headers={['', 'amount', 'description', 'next occurence', 'recurrence', 'type']}
                     items={transactions}
                     TDs={TransactionRow}
                     onDelete={handleDelete}

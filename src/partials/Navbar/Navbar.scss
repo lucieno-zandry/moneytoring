@@ -1,0 +1,14 @@
+.navbar {
+    // margin: 0 2rem;
+    background-color: $dark;
+  .input-group {
+    .form-control {
+      background-color: rgba($dark, 0.6);
+      border: 1px solid $secondary;
+
+      &::placeholder{
+        color: $secondary;
+      }
+    }
+  }
+}

@@ -7,14 +7,14 @@ type LogoProps = {
 }
 
 const Logo = React.memo((props: LogoProps) => {
-    const { isStatic = false, className = '' } = props;
-    const element = React.useMemo(() => <i className={`logo ${className} ${isStatic && 'static'}`}></i>, [className, isStatic]);
+    const { isStatic = true, className = '' } = props;
+    const element = React.useMemo(() => <div className={`logo ${className} ${!isStatic && 'container logo-container'}`}><i className="logo-icon"/><span className="d-none d-md-block logo-text">MoneyToring</span></div>, [className, isStatic]);
 
     if (isStatic) {
         return element;
     }
 
-    return createPortal(<div className="container logo-container">{element}</div>, document.body);
+    return createPortal(element, document.body);
 });
 
 export default Logo;

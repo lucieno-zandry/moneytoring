@@ -1,0 +1,44 @@
+.sidebar-list {
+  margin: 0;
+  padding: 0;
+  border-right: 1px solid rgba($secondary, 0.5);
+  width: 100%;
+  position: relative;
+
+  .sidebar-item {
+    list-style: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    height: 3rem;
+    cursor: pointer;
+  }
+}
+
+.sidebar-cursor {
+  position: absolute;
+  right: 0;
+  top: 3rem;
+  list-style: none;
+  width: 3px;
+  background-color: $light;
+  height: 3rem;
+  border-radius: $border-radius;
+}
+
+.sidebar-logo {
+  height: $navbar-height;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar-item {
+  i {
+    font-size: 1.2rem;
+  }
+}
+
+.sidebar {
+  min-width: 5rem;
+  background-color: $dark;
+}

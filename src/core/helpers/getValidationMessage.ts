@@ -102,6 +102,17 @@ const getValidationMessage = (type: string, value: string): string | null => {
 
       break;
 
+    case "transactions.amount":
+      const amount = parseFloat(value);
+
+      if (isNaN(amount)) {
+        message = "The amount should be numeric only";
+      } else if (amount <= 0) {
+        message = "The amount must be greater than 0";
+      }
+
+      break;
+
     default:
       break;
   }
