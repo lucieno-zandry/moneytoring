@@ -7,6 +7,7 @@ import { AnimatePresence, motion, Variants } from "framer-motion";
 import useSearch from "../../core/hooks/useSearch";
 import hasMatched from "../../core/hooks/hasMatched";
 import TablePlaceholder from "../TablePlaceholder/TablePlaceholder";
+import ListEmpty from "../ListEmpty/ListEmpty";
 
 type Props<T extends { id: number }> = {
     items: T[] | null,
@@ -93,85 +94,83 @@ export default function <T extends { id: number }>(props: Props<T>) {
         onEdit && onEdit(item);
     }, [onEdit]);
 
-    if(!items){
-        return <TablePlaceholder />
-    }
+    if (!items) return <TablePlaceholder />
 
-    return <div className="table-responsive rounded">
-        <table
-            className={`table table-stripped table-hover table-dark align-middle ${className}`}
-            {...tableProps}>
-            <thead>
-                <tr>
-                    {state.selection && <th className="col-1">
-                        <Checkbox
-                            label='All'
-                            checked={state.selection.length === items.length}
-                            onChange={handleSelectAll}
-                        />
-                    </th>}
+    if (items.length === 0) return <ListEmpty />
 
-                    {headers.map((header, key) => <th key={key}>{header}</th>)}
+    return <table
+        className={`table table-stripped table-hover table-dark align-middle ${className}`}
+        {...tableProps}>
+        <thead>
+            <tr>
+                {state.selection && <th className="col-1">
+                    <Checkbox
+                        label='All'
+                        checked={state.selection.length === items.length}
+                        onChange={handleSelectAll}
+                    />
+                </th>}
 
-                    <th className="col-2 text-align-center">
-                        {state.selection ?
-                            <Button
-                                variant="danger"
-                                onClick={handleDeleteItems}
-                                disabled={state.selection?.length === 0}>
-                                <Icon variant="trash" /> Delete
-                            </Button> :
-                            <Button
-                                variant="outline-light"
-                                onClick={toggleSelect}>
-                                Select
-                            </Button>}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <AnimatePresence>
-                    {items.map((item: T, key) => {
-                        const checked = selection?.some(selected => selected.id === item.id);
-                        const element = <motion.tr
-                            key={key}
-                            variants={variants(key)}
-                            initial="hidden"
-                            animate="visible"
-                            exit="hidden">
-                            {selection && <td>
-                                <Checkbox
-                                    label=''
-                                    checked={checked}
-                                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSelection(e, item)}
-                                />
-                            </td>}
-                            <TDs item={item} />
-                            <td className="text-align-center">
-                                <Dropdown className="actions-dropdown">
-                                    <Dropdown.Toggle variant="">
-                                        <i className="fa fa-ellipsis-v"></i>
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu>
-                                        <Dropdown.Item onClick={() => handleEdit(item)}>
-                                            <Icon variant="pencil" /> Edit
-                                        </Dropdown.Item>
-                                        <Dropdown.Item className="text-danger" onClick={() => handleDeleteUnique(item)}>
-                                            <Icon variant="trash" /> Delete
-                                        </Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </td>
-                        </motion.tr>
+                {headers.map((header, key) => <th key={key}>{header}</th>)}
 
-                        if (!search) return element;
+                <th className="col-2 text-align-center">
+                    {state.selection ?
+                        <Button
+                            variant="danger"
+                            onClick={handleDeleteItems}
+                            disabled={state.selection?.length === 0}>
+                            <Icon variant="trash" /> Delete
+                        </Button> :
+                        <Button
+                            variant="outline-light"
+                            onClick={toggleSelect}>
+                            Select
+                        </Button>}
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            <AnimatePresence>
+                {items.map((item: T, key) => {
+                    const checked = selection?.some(selected => selected.id === item.id);
+                    const element = <motion.tr
+                        key={key}
+                        variants={variants(key)}
+                        initial="hidden"
+                        animate="visible"
+                        exit="hidden">
+                        {selection && <td>
+                            <Checkbox
+                                label=''
+                                checked={checked}
+                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSelection(e, item)}
+                            />
+                        </td>}
+                        <TDs item={item} />
+                        <td className="text-align-center">
+                            <Dropdown className="actions-dropdown">
+                                <Dropdown.Toggle variant="">
+                                    <i className="fa fa-ellipsis-v"></i>
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    <Dropdown.Item onClick={() => handleEdit(item)}>
+                                        <Icon variant="pencil" /> Edit
+                                    </Dropdown.Item>
+                                    <Dropdown.Item className="text-danger" onClick={() => handleDeleteUnique(item)}>
+                                        <Icon variant="trash" /> Delete
+                                    </Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
+                        </td>
+                    </motion.tr>
 
-                        const values: unknown[] = Object.values(item);
-                        if (hasMatched(values, search)) return element;
-                    }
-                    )}
-                </AnimatePresence>
-            </tbody>
-        </table>
-    </div>
+                    if (!search) return element;
+
+                    const values: unknown[] = Object.values(item);
+                    if (hasMatched(values, search)) return element;
+                }
+                )}
+            </AnimatePresence>
+        </tbody>
+    </table>
 }

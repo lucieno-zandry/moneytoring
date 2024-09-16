@@ -39,6 +39,16 @@
 }
 
 .sidebar {
-  min-width: 5rem;
   background-color: $dark;
+  transition: margin-left 0.3s ease-in-out;
+  margin-left: 0;
+}
+
+@media screen and (max-width: $screen-sm) {
+  .sidebar {
+    width: 5rem;
+    &.hidden {
+      margin-left: -5rem;
+    }
+  }
 }

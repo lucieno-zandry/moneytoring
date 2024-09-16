@@ -1,10 +1,18 @@
-import { DEFAULT_CURRENCY, DEFAULT_LOCALES } from "../../core/config/constants/constants";
+import React from "react";
+import useSetting from "../../core/hooks/useSetting";
 
 type Props = {
     children: number
 }
 
-export default function (props: Props) {
+export default React.memo((props: Props) => {
     const { children } = props;
-    return children.toLocaleString(DEFAULT_LOCALES, {currency: DEFAULT_CURRENCY})
-}
+    const { setting } = useSetting();
+
+    const format = React.useMemo(() => {
+        const instance = new Intl.NumberFormat(setting.language, { style: "currency", currency: setting.currency });
+        return instance.format;
+    }, [setting]);
+
+    return format(children)
+});

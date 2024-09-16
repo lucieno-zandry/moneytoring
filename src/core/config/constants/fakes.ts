@@ -2,6 +2,7 @@ import randomNumber from "../../helpers/randomNumber";
 import {
   Account,
   Category,
+  Setting,
   Transaction,
   TransactionRecurrence,
   User,
@@ -63,3 +64,12 @@ export const fakeTransactionRecurrence: TransactionRecurrence = {
   pattern: "ONCE",
   transaction_id: randomNumber(),
 };
+
+export const fakeSetting: Setting = {
+  id: randomNumber(),
+  created_at: fakeDate,
+  updated_at: fakeDate,
+  user_id: 0,
+  currency: "USD",
+  language: "fr-FR",
+}

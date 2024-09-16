@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import useAuth from "../../core/hooks/useAuth";
 import useLogout from "../../core/hooks/useLogout";
 import Button from "../Button/Button";
-import { profile } from "../../core/config/links/pages";
+import { settings } from "../../core/config/links/pages";
 import SmallText from "../SmallText/SmallText";
 import appImage from "../../core/helpers/appImage";
 import Icon from "../Icon/Icon";
@@ -13,7 +13,7 @@ const Actions = React.memo(() => {
     const logout = useLogout();
 
     return <>
-        <Dropdown.Item as={Link} to={profile} className="btn"><Icon variant="user"/> Profile</Dropdown.Item>
+        <Dropdown.Item as={Link} to={settings} className="btn"><Icon variant="cog"/> Settings</Dropdown.Item>
         <Dropdown.Item as={Button} onClick={logout.toggleLoggingOut}>
             <Icon variant="power-off"/> Log out
         </Dropdown.Item>

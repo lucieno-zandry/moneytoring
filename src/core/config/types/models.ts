@@ -85,8 +85,8 @@ export type Notification = {
 export type Setting = {
   id: number;
   user_id: number;
-  key: string;
-  value: string;
+  language: "fr-FR" | "en-EN" | "mg-MG";
+  currency: "EUR" | "USD" | "MGA";
   created_at: DateString;
   updated_at: DateString;
 };
