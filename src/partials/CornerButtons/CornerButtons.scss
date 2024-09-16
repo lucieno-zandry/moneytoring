@@ -3,17 +3,31 @@
   z-index: 500;
   bottom: 2rem;
   display: flex;
-  width: 100%;
   margin: 0 auto;
-  
+
   &.start {
-    left: 2rem;
     justify-content: flex-start;
   }
-  
+
   &.end {
-    right: 2rem;
     justify-content: end;
+  }
+
+  &.container {
+    left: 0.1%;
+    right: 0.1%;
+  }
+
+  &:not(.container) {
+    width: 100%;
+
+    &.start {
+      left: 2rem;
+    }
+
+    &.end {
+      right: 2rem;
+    }
   }
 }
 

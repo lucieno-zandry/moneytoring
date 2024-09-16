@@ -1,6 +1,7 @@
 import React from "react";
 import StepsContainer from "../../partials/StepsContainer/StepsContainer";
 import { motionStatic, slideNext, slidePrevious } from "../config/variants/variants";
+import { HTMLMotionProps } from "framer-motion";
 
 type HookOptions = {
   defaultActive: number
@@ -41,13 +42,15 @@ export default function <T>(Steps: T[], options: HookOptions = defaultOptions) {
 
   const Container = React.useCallback((props: {
     predicate: (Step: T) => React.JSX.Element
-  }) => {
-    const { predicate } = props;
+  } & HTMLMotionProps<'div'>) => {
+    const { predicate, ...divProps } = props;
+
     return <StepsContainer
       Steps={Steps}
       getComponent={predicate}
       active={state.active}
-      variants={state.variants} />
+      variants={state.variants}
+      {...divProps} />
   }, [state, Steps]);
 
   return {

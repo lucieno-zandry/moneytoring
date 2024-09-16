@@ -77,26 +77,27 @@ const TransactionCreation = React.memo((props: StepProps) => {
                     onEdit={setEditingTransaction} />}
         </div>
 
-        <CornerButtons position="start">
+        <CornerButtons position="start" className="container">
             <Button variant="outline-secondary" size="sm">
                 Skip <Icon variant="chevron-right" />
             </Button>
         </CornerButtons>
 
-        <CornerButtons>
+        <CornerButtons className="container">
             <Button
                 variant="secondary"
-                onClick={toggleCreationMode}><Icon variant="plus" /> Transaction</Button>
+                onClick={toggleCreationMode}
+                size="sm"><Icon variant="plus" /> Transaction</Button>
 
             <Button
                 variant="primary"
                 disabled={transactions.length < 1}
-                onClick={onDone}>
+                onClick={onDone}
+                size="sm">
                 Done <Icon variant="check-circle" />
             </Button>
         </CornerButtons>
-
-
+        
         <TransactionModal
             onSubmit={editMode ? handleEditSubmit : addTransaction}
             transaction={editingTransaction}

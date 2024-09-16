@@ -9,11 +9,11 @@
   }
 
   .right-side {
-    text-align: center;
+    text-align: center;    
   }
 
   .left-side {
-    @include set-background-image("./App/Auth/trees.png");
+    @include set-background-image("./App/Auth/Auth.jpg");
     position: relative;
     z-index: 1000;
   }

@@ -1,13 +1,20 @@
 .setup {
-  display: grid;
-  place-items: center; /* Centers content both horizontally and vertically */
-  height: 100vh; /* Ensures full height of the viewport */
-  width: 100vw; /* Ensures full width of the viewport */
+  // display: grid;
+  // place-items: center; /* Centers content both horizontally and vertically */
+  // height: 100vh; /* Ensures full height of the viewport */
+  // width: 100vw; /* Ensures full width of the viewport */
   overflow-y: auto;
-  overflow-x: hidden;
+  // overflow-x: hidden;
 
   > div {
     padding-top: 5rem;
     padding-bottom: 5rem;
+  }
+}
+
+@media screen and (max-width: $screen-sm) {
+  .step {
+    overflow-x: auto;
+    width: 100vw;
   }
 }

@@ -40,6 +40,38 @@ export const defaultTransactions = (balance: number = 0): Transaction[] => [
         id: randomNumber(),
         type: "INCOME",
         transaction_recurrence: fakeTransactionRecurrence
+    },
+    {
+        ...fakeTransaction,
+        "amount": Math.floor(balance / 4),
+        "icon": "leaf",
+        id: randomNumber(),
+        type: "INCOME",
+        transaction_recurrence: fakeTransactionRecurrence
+    },
+    {
+        ...fakeTransaction,
+        "amount": Math.floor(balance / 4),
+        "icon": "leaf",
+        id: randomNumber(),
+        type: "INCOME",
+        transaction_recurrence: fakeTransactionRecurrence
+    },
+    {
+        ...fakeTransaction,
+        "amount": Math.floor(balance / 4),
+        "icon": "leaf",
+        id: randomNumber(),
+        type: "INCOME",
+        transaction_recurrence: fakeTransactionRecurrence
+    },
+    {
+        ...fakeTransaction,
+        "amount": Math.floor(balance / 4),
+        "icon": "leaf",
+        id: randomNumber(),
+        type: "INCOME",
+        transaction_recurrence: fakeTransactionRecurrence
     }
 ]
 

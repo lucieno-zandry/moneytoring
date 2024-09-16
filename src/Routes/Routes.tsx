@@ -22,7 +22,7 @@ const AppRoutes = React.memo(() => {
     const location = useLocation();
 
     return <App>
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
             <Routes location={location} key={location.key}>
                 <Route element={<Guest />}>
                     <Route element={<Auth />} path="auth">

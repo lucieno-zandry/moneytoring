@@ -1,4 +1,4 @@
-import { AnimatePresence, motion, Variants } from "framer-motion";
+import { AnimatePresence, HTMLMotionProps, motion, Variants } from "framer-motion";
 import React from "react";
 import { motionStatic } from "../../core/config/variants/variants";
 
@@ -9,19 +9,20 @@ type Props = {
     variants: Variants
 }
 
-const StepsContainer = React.memo((props: Props) => {
-    const { Steps, getComponent, active, variants = motionStatic} = props;
+const StepsContainer = React.memo((props: Props & HTMLMotionProps<"div">) => {
+    const { Steps, getComponent, active, variants = motionStatic, className = "", ...divProps } = props;
 
     return <AnimatePresence mode="popLayout">
         {Steps.map((Step, key) => {
             return active === key &&
                 <motion.div
+                    {...divProps}
                     key={key}
                     variants={variants}
                     initial="hidden"
                     animate="visible"
                     exit="exit"
-                    className="step d-flex align-items-center gap-3 col-12 flex-column">
+                    className={`step ${className}`}>
                     {getComponent(Step)}
                 </motion.div>
         })}

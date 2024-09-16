@@ -35,9 +35,9 @@ const Setup = () => {
     }, [active, next]);
 
 
-    return <div className="setup container">
-        <Logo />
-        <Container predicate={(Step) => <Step.element onDone={handleDone} />} />
+    return <div className="setup">
+        <Logo isStatic={false}/>
+        <Container predicate={(Step) => <Step.element onDone={handleDone} />} className="container"/>
     </div>
 }
 

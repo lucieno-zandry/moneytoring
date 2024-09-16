@@ -80,17 +80,19 @@ const AccountCreation = React.memo((props: StepProps) => {
                 />}
         </div>
 
-        <CornerButtons>
+        <CornerButtons className="container">
             <Button
                 variant="secondary"
-                onClick={toggleCreationMode}>
+                onClick={toggleCreationMode}
+                size="sm">
                 <Icon variant="plus" /> Account
             </Button>
 
             <Button
                 variant="primary"
                 disabled={state.accounts.length < 1}
-                onClick={onDone}>
+                onClick={onDone}
+                size="sm">
                 Done <Icon variant="check-circle" />
             </Button>
         </CornerButtons>

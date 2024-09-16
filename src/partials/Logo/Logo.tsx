@@ -8,7 +8,14 @@ type LogoProps = {
 
 const Logo = React.memo((props: LogoProps) => {
     const { isStatic = true, className = '' } = props;
-    const element = React.useMemo(() => <div className={`logo ${className} ${!isStatic && 'container logo-container'}`}><i className="logo-icon"/><span className="d-none d-md-block logo-text">MoneyToring</span></div>, [className, isStatic]);
+
+    const element = React.useMemo(() => <div
+        className={`logo ${className} ${!isStatic && 'container logo-container'}`}>
+        <i className="logo-icon" />
+        <span className="d-none d-md-block logo-text">
+            MoneyToring
+        </span>
+    </div>, [className, isStatic]);
 
     if (isStatic) {
         return element;

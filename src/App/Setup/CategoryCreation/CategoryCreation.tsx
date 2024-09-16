@@ -77,7 +77,7 @@ const CategoryCreation = React.memo((props: StepProps) => {
                     onEdit={setEditingCategory} />}
         </div>
 
-        <CornerButtons>
+        <CornerButtons className="container">
             <Button
                 variant="secondary"
                 onClick={toggleCreationMode}><Icon variant="plus" /> Category</Button>

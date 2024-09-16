@@ -82,7 +82,8 @@ const Signup = React.memo(() => {
     }, [active, isLastStep]);
 
     return <AuthForm className="signup-page" onSubmit={handleSubmit}>
-        <Container predicate={((step) => <step.component defaultValue={state.form} errors={state.validationMessages} />)} />
+        <Container
+            predicate={((step) => <step.component defaultValue={state.form} errors={state.validationMessages} />)} className="d-flex align-items-center gap-3 col-12 flex-column" />
 
         <div className="d-flex justify-content-center gap-3 flex-wrap">
             {!isFirstStep &&
