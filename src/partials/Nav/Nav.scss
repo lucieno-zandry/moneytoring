@@ -1,0 +1,41 @@
+$nav-active-color: $light !default;
+$nav-color: rgba($nav-active-color, 0.6) !default;
+$border: 1px solid $nav-color;
+$border-radius: 0.25rem !default;
+
+.nav {
+  position: relative;
+  display: flex;
+  border-bottom: $border;
+
+  &.vertical {
+    border-right: $border;
+    border-bottom: unset;
+    flex-direction: column;
+
+    .nav-cursor {
+      right: 0;
+      bottom: unset;
+    }
+  }
+
+  .nav-cursor {
+    position: absolute;
+    bottom: 0;
+    background-color: $light;
+    border-radius: $border-radius;
+  }
+
+  .nav-item {
+    transition: color 0.3s ease-in-out;
+    text-decoration: none;
+    display: flex;
+    gap: 0.2rem;
+  }
+}
+
+@media screen and (max-width: $screen-sm) {
+  .nav-item {
+    font-size: 0.8rem;
+  }
+}

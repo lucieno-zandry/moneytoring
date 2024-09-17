@@ -8,3 +8,6 @@ export const settings = '/settings';
 export const transactions = '/transactions';
 export const categories = '/categories';
 export const accounts = '/accounts';
+export const accountSettings = `${settings}/account`;
+export const profileSettings = `${settings}/profile`;
+export const preferencesSettings = `${settings}/preferences`;

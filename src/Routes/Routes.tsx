@@ -17,6 +17,9 @@ import Transactions from "../App/Backoffice/Transactions/Transactions";
 import Categories from "../App/Backoffice/Categories/Categories";
 import Accounts from "../App/Backoffice/Accounts/Accounts";
 import Settings from "../App/Backoffice/Settings/Settings";
+import Preferences from "../App/Backoffice/Settings/Preferences/Preferences";
+import Profile from "../App/Backoffice/Settings/Profile/Profile";
+import Account from "../App/Backoffice/Settings/Account/Account";
 
 const AppRoutes = React.memo(() => {
     const location = useLocation();
@@ -38,7 +41,11 @@ const AppRoutes = React.memo(() => {
                         <Route element={<Transactions />} path="transactions" />
                         <Route element={<Categories />} path="categories" />
                         <Route element={<Accounts />} path="accounts" />
-                        <Route element={<Settings />} path="settings" />
+                        <Route element={<Settings />} path="settings">
+                            <Route element={<Account />} path="account" />
+                            <Route element={<Profile />} path="profile" />
+                            <Route element={<Preferences />} path="preferences" />
+                        </Route>
                     </Route>
                     <Route element={<Auth />} path="auth">
                         <Route element={<Confirmation />} path="confirmation" />

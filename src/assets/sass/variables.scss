@@ -25,3 +25,14 @@ $dropdown-color: $secondary;
 $dropdown-link-color: $secondary;
 $dropdown-bg: darken($secondary, 35%);
 $navbar-height: 4rem;
+
+$display-font-sizes: (
+  1: 5rem,
+  2: 4.5rem,
+  3: 4rem,
+  4: 3.5rem,
+  5: 3rem,
+  6: 2rem) !default;
+
+$display-font-weight: 400 !default;
+$variable-prefix: '' !default;

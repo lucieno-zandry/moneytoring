@@ -102,7 +102,7 @@ const getValidationMessage = (type: string, value: string): string | null => {
 
       break;
 
-    case "transactions.amount":
+    case "transaction.amount":
       const amount = parseFloat(value);
 
       if (isNaN(amount)) {

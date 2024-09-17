@@ -146,7 +146,7 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
                     </ButtonGroup>
 
                     <FloatingForm.Input
-                        id="transactions.amount"
+                        id="transaction.amount"
                         type="number"
                         labelProps={{ label: <><Icon variant="money-bill-simple" /> Amount</>, className: "col" }}
                         placeholder="Transaction amount"
@@ -158,7 +158,7 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
 
                 <div className="d-flex my-3 gap-3">
                     <FloatingForm.TextArea
-                        id="transactions.description"
+                        id="transaction.description"
                         labelProps={{ label: <><Icon variant="input-text" /> Description</>, className: "col-8" }}
                         placeholder="Eg: Bank Transaction"
                         error={state.validationMessages?.description}
@@ -167,7 +167,7 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
                     />
 
                     <FloatingForm.Select
-                        id="transactions.type"
+                        id="transaction.type"
                         labelProps={{ label: <><Icon variant="categories" /> Type</>, className: 'col' }}
                         options={transactionTypes}
                         predicate={(option: Transaction['type']) => option}
@@ -177,7 +177,7 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
 
                 <div className="d-flex gap-3 justify-content-between">
                     <FloatingForm.Select
-                        id="transactions_recurrences.pattern"
+                        id="transaction_recurrence.pattern"
                         labelProps={{ label: <><Icon variant="clock" /> Recurrence</>, className: 'col-6' }}
                         options={recurrencePatterns}
                         predicate={(option: TransactionRecurrence['pattern']) => option}
@@ -185,7 +185,7 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
 
                     <FloatingForm.Input
                         type="date"
-                        id="transactions_recurrences.next_occurence"
+                        id="transaction_recurrence.next_occurence"
                         labelProps={{ label: <><Icon variant="calendar" /> Next Occurence</>, className: "col" }}
                         placeholder="Next Occurence"
                         error={state.validationMessages?.first_occurence}
