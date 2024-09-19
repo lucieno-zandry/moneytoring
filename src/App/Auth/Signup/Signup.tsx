@@ -12,6 +12,8 @@ import AuthForm from "../../../partials/AuthForm/AuthForm";
 import useSteps from "../../../core/hooks/useSteps";
 import useAuth from "../../../core/hooks/useAuth";
 import { fakeUser } from "../../../core/config/constants/fakes";
+import storageTokenActions from "../../../core/helpers/storageTokenActions";
+import randomString from "../../../core/helpers/randomString";
 
 export type StepProps = {
     errors: JsObject | null,
@@ -72,7 +74,10 @@ const Signup = React.memo(() => {
 
         if (!validationMessages) {
             if (isLastStep) {
-                setAuth({ ...fakeUser, ...state.form });
+                const user = { ...fakeUser, ...state.form };
+                setAuth(user);
+                storageTokenActions.set(randomString());
+
             } else {
                 setTimeout(() => {
                     next();

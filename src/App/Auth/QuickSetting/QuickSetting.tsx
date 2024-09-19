@@ -39,7 +39,6 @@ export default React.memo(() => {
         setState(s => ({ ...s, validationMessages, show: Boolean(validationMessages) }))
     }, [setting]);
 
-    console.log(setting);
 
     return <>
         <CornerButtons top>
