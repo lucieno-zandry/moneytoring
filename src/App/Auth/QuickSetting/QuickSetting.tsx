@@ -9,6 +9,8 @@ import { ModalTitle } from "react-bootstrap";
 import Button from "../../../partials/Button/Button";
 import formObservations from "../../../core/helpers/formObservations";
 import { JsObject } from "../../../core/config/types/variables";
+import { Setting } from "../../../core/config/types/models";
+import sessionSettingActions from "../../../core/helpers/sessionSettingActions";
 
 export default React.memo(() => {
     const { Container, Toggle } = useModal();
@@ -30,10 +32,11 @@ export default React.memo(() => {
 
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = React.useCallback(e => {
         const { formData, validationMessages } = formObservations(e);
-        console.log(formData);
 
         if (!validationMessages) {
-            setSetting({ ...setting, language: formData.language, currency: formData.currency });
+            const newSetting = { ...setting, language: formData.language as Setting['language'], currency: formData.currency as Setting['currency'] }
+            sessionSettingActions.set(newSetting);
+            setSetting(newSetting);
         }
 
         setState(s => ({ ...s, validationMessages, show: Boolean(validationMessages) }))

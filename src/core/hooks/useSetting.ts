@@ -12,10 +12,7 @@ const defaultSetting = sessionSettingActions.get() || fakeSetting;
 
 const useSetting = create<SettingStore>((set) => ({
   setting: defaultSetting,
-  setSetting: (setting) => {
-    sessionSettingActions.set(setting);
-    set((state) => ({ ...state, setting }));
-  },
+  setSetting: (setting) => set((state) => ({ ...state, setting })),
 }));
 
 export default useSetting;

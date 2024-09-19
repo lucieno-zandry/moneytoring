@@ -9,10 +9,12 @@ import hasMatched from "../../core/helpers/hasMatched";
 import TablePlaceholder from "../TablePlaceholder/TablePlaceholder";
 import ListEmpty from "../ListEmpty/ListEmpty";
 
-type Props<T extends { id: number }> = {
+type TDS<T> = (props: { item: T }) => JSX.Element
+
+export type TableProps<T extends { id: number }> = {
     items: T[] | null,
     headers: React.ReactNode[],
-    TDs: ((props: { item: T }) => React.JSX.Element) | (React.MemoExoticComponent<(props: { item: T }) => JSX.Element>),
+    TDs: TDS<T> | React.MemoExoticComponent<TDS<T>>,
     onDelete?: (items: T[]) => void,
     onEdit?: (item: T) => void,
 } & React.DetailedHTMLProps<React.TableHTMLAttributes<HTMLTableElement>, HTMLTableElement>
@@ -41,7 +43,7 @@ const variants = (key: number): Variants => {
     }
 }
 
-export default function <T extends { id: number }>(props: Props<T>) {
+export default <T extends { id: number }>(props: TableProps<T>) => {
     const { items, headers, TDs, onDelete, className = '', onEdit, ...tableProps } = props;
     const { search } = useSearch();
 

@@ -3,27 +3,25 @@ import CornerButtons from "../../../partials/CornerButtons/CornerButtons";
 import Button from "../../../partials/Button/Button";
 import Icon from "../../../partials/Icon/Icon";
 import { Transaction } from "../../../core/config/types/models";
-import randomNumber from "../../../core/helpers/randomNumber";
-import Table from "../../../partials/Table/Table";
 import arrayUpdate from "../../../core/helpers/arrayUpdate";
-import TransactionRow from "../../../partials/TransactionRow/TransactionRow";
 import TransactionModal from "../../../partials/TransactionModal/TransactionModal";
 import { StepProps } from "../Setup";
-import useTransactions, { defaultTransactions } from "../../../core/hooks/useTransactions";
+import useTransactions from "../../../core/hooks/useTransactions";
 import useAccounts from "../../../core/hooks/useAccounts";
-import arraySum from "../../../core/helpers/arraySum";
+import TransactionsTable from "../../../partials/TransactionTables/TransactionsTable";
+import useCategories from "../../../core/hooks/useCategories";
+import generateTransactions from "../../../core/helpers/generateTransactions";
 
 const TransactionCreation = React.memo((props: StepProps) => {
     const { onDone } = props;
     const { setTransactions } = useTransactions();
 
     const { accounts } = useAccounts();
-
-    const balance = React.useMemo(() => accounts ? arraySum(accounts, (account) => account.balance) : randomNumber(3), [accounts]);
+    const { categories } = useCategories();
 
     const [state, setState] = React.useState({
         creationMode: false,
-        transactions: defaultTransactions(balance) as Transaction[],
+        transactions: generateTransactions(accounts!, categories!),
         editingTransaction: undefined as Transaction | undefined,
     });
 
@@ -79,13 +77,12 @@ const TransactionCreation = React.memo((props: StepProps) => {
             <p className="text-muted">
                 Optionally, you can configure recurring transactions to automate events like incomes or expenses. <br />
                 Setting up your transactions saves you from manually registering transactions that happen more than once.</p>
+
             {transactions && transactions.length > 0 &&
-                <Table
-                    headers={['', 'amount', 'description', 'next occurence', 'recurrence', 'type']}
-                    items={transactions}
-                    TDs={TransactionRow}
+                <TransactionsTable
                     onDelete={handleDelete}
-                    onEdit={setEditingTransaction} />}
+                    onEdit={setEditingTransaction}
+                    items={transactions} />}
         </div>
 
         <CornerButtons position="start" className="container">

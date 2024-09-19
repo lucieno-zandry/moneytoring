@@ -54,7 +54,8 @@ export const fakeTransaction: Transaction = {
   category_id: randomNumber(),
   transaction_recurrence_id: null,
   type: "EXPENSE",
-  account: fakeAccount
+  account: fakeAccount,
+  category: fakeCategory,
 };
 
 export const fakeTransactionRecurrence: TransactionRecurrence = {

@@ -9,8 +9,8 @@ import Button from "../../../partials/Button/Button";
 import AuthForm from "../../../partials/AuthForm/AuthForm";
 import useAuth from "../../../core/hooks/useAuth";
 import { fakeUser } from "../../../core/config/constants/fakes";
-import storageTokenActions from "../../../core/helpers/storageTokenActions";
 import randomString from "../../../core/helpers/randomString";
+import sessionAuthActions from "../../../core/helpers/sessionAuthActions";
 
 const Login = React.memo(() => {
     const [state, setState] = React.useState({
@@ -25,8 +25,8 @@ const Login = React.memo(() => {
 
         if (!validationMessages) {
             const user = { ...fakeUser, ...formData };
+            sessionAuthActions.store(user, randomString());
             setAuth(user);
-            storageTokenActions.set(randomString());
         }
 
         setState(s => ({ ...s, validationMessages, isLoading: !validationMessages }))

@@ -1,3 +1,4 @@
+import React from "react";
 import { fakeTransactionRecurrence } from "../../core/config/constants/fakes";
 import { Transaction } from "../../core/config/types/models"
 import capitalize from "../../core/helpers/capitalize";
@@ -9,8 +10,8 @@ type Props = {
     item: Transaction
 }
 
-export default function (props: Props) {
-    const { icon, amount, description, transaction_recurrence = fakeTransactionRecurrence, type, account } = props.item;
+export default React.memo((props: Props) => {
+    const { icon, amount, description, transaction_recurrence = fakeTransactionRecurrence, type, account, category } = props.item;
     const { next_occurence, pattern } = transaction_recurrence;
     const { toAmount } = useNumberFormat();
 
@@ -25,6 +26,9 @@ export default function (props: Props) {
             {account.icon && <Icon variant={account.icon} />} {account.name}
         </td>
         <td>
+            {category.icon && <Icon variant={category.icon} />} {category.name}
+        </td>
+        <td>
             <SmallText maxLength={30}>{description}</SmallText>
         </td>
         <td>
@@ -37,4 +41,4 @@ export default function (props: Props) {
             {capitalize(type)}
         </td>
     </>
-}
+})

@@ -4,15 +4,12 @@ import Button from "../../../partials/Button/Button";
 import Icon from "../../../partials/Icon/Icon";
 import { Category } from "../../../core/config/types/models";
 import CategoryModal from "../../../partials/CategoryModal/CategoryModal";
-import randomNumber from "../../../core/helpers/randomNumber";
-import Table from "../../../partials/Table/Table";
-import generateArray from "../../../core/helpers/generateArray";
-import CategoryRow from "../../../partials/CategoryRow/CategoryRow";
 import arrayUpdate from "../../../core/helpers/arrayUpdate";
 import { StepProps } from "../Setup";
-import useCategories, { defaultCategories } from "../../../core/hooks/useCategories";
+import useCategories from "../../../core/hooks/useCategories";
 import useAccounts from "../../../core/hooks/useAccounts";
-import arraySum from "../../../core/helpers/arraySum";
+import CategoriesTable from "../../../partials/CategoriesTable/CategoriesTable";
+import generateCategories from "../../../core/helpers/generateCategories";
 
 const CategoryCreation = React.memo((props: StepProps) => {
     const { onDone } = props;
@@ -20,11 +17,9 @@ const CategoryCreation = React.memo((props: StepProps) => {
 
     const { accounts } = useAccounts();
 
-    const balance = React.useMemo(() => accounts ? arraySum(accounts, (account) => account.balance) : randomNumber(3), [accounts]);
-
     const [state, setState] = React.useState({
         creationMode: false,
-        categories: defaultCategories(balance) as Category[],
+        categories: generateCategories(accounts!),
         editingCategory: undefined as Category | undefined,
     });
 
@@ -80,10 +75,8 @@ const CategoryCreation = React.memo((props: StepProps) => {
                 Categories allow you to configure a budget for a specific purpose.
                 The following list contains some of our suggested categories, the budgets are set according to your account balance.</p>
             {categories && categories.length > 0 &&
-                <Table
-                    headers={generateArray(3)}
+                <CategoriesTable
                     items={categories}
-                    TDs={CategoryRow}
                     onDelete={handleDelete}
                     onEdit={setEditingCategory} />}
         </div>

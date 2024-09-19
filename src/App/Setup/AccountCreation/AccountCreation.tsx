@@ -4,12 +4,10 @@ import Button from "../../../partials/Button/Button";
 import Icon from "../../../partials/Icon/Icon";
 import { Account } from "../../../core/config/types/models";
 import AccountModal from "../../../partials/AccountModal/AccountModal";
-import Table from "../../../partials/Table/Table";
-import generateArray from "../../../core/helpers/generateArray";
-import AccountRow from "../../../partials/AccountRow/AccountRow";
 import arrayUpdate from "../../../core/helpers/arrayUpdate";
 import { StepProps } from "../Setup";
 import useAccounts, { defaultAccounts } from "../../../core/hooks/useAccounts";
+import AccountsTable from "../../../partials/AccountsTable/AccountsTable";
 
 
 const AccountCreation = React.memo((props: StepProps) => {
@@ -27,11 +25,6 @@ const AccountCreation = React.memo((props: StepProps) => {
     const toggleCreationMode = React.useCallback(() => {
         setState(s => ({ ...s, creationMode: !s.creationMode }));
     }, []);
-
-    const addAccount = React.useCallback((account: Account) => {
-        const newAccounts = state.accounts ? [...state.accounts, account] : [account];
-        setState(s => ({ ...s, accounts: newAccounts }));
-    }, [state.accounts]);
 
     const handleDelete = React.useCallback((accounts: Account[]) => {
         if (!state.accounts.length || !accounts.length) return;
@@ -53,10 +46,13 @@ const AccountCreation = React.memo((props: StepProps) => {
         setState(s => ({ ...s, editingAccount: undefined, creationMode: false }));
     }, [])
 
-    const handleEditSubmit = React.useCallback((account: Account) => {
-        if (!editingAccount) return;
-        const newAccounts = arrayUpdate(accounts, account, (account) => account.id === editingAccount?.id);
-        setState(s => ({ ...s, accounts: newAccounts, editingAccount: undefined }));
+    const handleModalSubmit = React.useCallback((account: Account) => {
+        if (editingAccount) {
+            const newAccounts = arrayUpdate(accounts, account, (account) => account.id === editingAccount.id);
+            setState(s => ({ ...s, accounts: newAccounts, editingAccount: undefined }));
+        } else {
+            setState(s => ({ ...s, accounts: [...s.accounts, account] }));
+        }
     }, [editingAccount]);
 
     const editMode = React.useMemo(() => Boolean(editingAccount), [editingAccount]);
@@ -78,10 +74,8 @@ const AccountCreation = React.memo((props: StepProps) => {
 
             </p>
             {state.accounts && state.accounts.length > 0 &&
-                <Table
-                    headers={generateArray(3)}
+                <AccountsTable
                     items={state.accounts}
-                    TDs={AccountRow}
                     onDelete={handleDelete}
                     onEdit={setEditingAccount}
                 />}
@@ -105,7 +99,7 @@ const AccountCreation = React.memo((props: StepProps) => {
         </CornerButtons>
 
         <AccountModal
-            onSubmit={editMode ? handleEditSubmit : addAccount}
+            onSubmit={handleModalSubmit}
             account={editingAccount}
             show={editMode || creationMode}
             onClose={editMode ? disableEditMode : toggleCreationMode}

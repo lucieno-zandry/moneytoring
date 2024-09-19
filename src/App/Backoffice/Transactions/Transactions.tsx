@@ -1,6 +1,4 @@
 import React from "react";
-import Table from "../../../partials/Table/Table";
-import TransactionRow from "../../../partials/TransactionRow/TransactionRow";
 import { Transaction } from "../../../core/config/types/models";
 import CornerButtons from "../../../partials/CornerButtons/CornerButtons";
 import Button from "../../../partials/Button/Button";
@@ -9,8 +7,8 @@ import useTransactions from "../../../core/hooks/useTransactions";
 import TransactionModal from "../../../partials/TransactionModal/TransactionModal";
 import Motion from "../../../partials/Motion/Motion";
 import DeleteDialogue from "../../../partials/DeleteDialogue/DeleteDialogue";
+import TransactionsTable from "../../../partials/TransactionTables/TransactionsTable";
 
-const tableHeaders = ['', 'amount', 'account', 'description', 'next_occurence', 'recurrence', 'type'];
 
 const Transactions = React.memo(() => {
     const { setTransactions, transactions } = useTransactions(state => state);
@@ -54,9 +52,7 @@ const Transactions = React.memo(() => {
     return <Motion.Main className="transactions">
         <div className="display-6 mb-3">Transactions</div>
 
-        <Table
-            headers={tableHeaders}
-            TDs={TransactionRow}
+        <TransactionsTable
             items={transactions}
             onDelete={setDeleting}
             onEdit={handleEdit} />
@@ -72,16 +68,11 @@ const Transactions = React.memo(() => {
             transaction={state.editing} />
 
         <DeleteDialogue
-            body={<Table
-                headers={tableHeaders}
-                TDs={TransactionRow}
-                items={state.deleting}
-            />}
+            body={<TransactionsTable items={state.deleting} />}
             onSubmit={handleDelete}
             show={state.deleting.length > 0}
             onClose={() => setDeleting([])}
-            size="lg"
-        />
+            size="lg" />
     </Motion.Main>
 })
 

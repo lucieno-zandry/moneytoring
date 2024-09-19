@@ -13,7 +13,8 @@ const notApplicablePaths = [
     authPage,
     emailConfirmation,
     links.accountsSetup,
-    links.categoriesSetup
+    links.categoriesSetup,
+    links.transactionsSetup,
 ];
 
 function setSessionIntended(pathname: string, target: boolean) {
@@ -88,9 +89,8 @@ export function useRedirect(target: boolean): Function {
 
         if (!!user !== target) {
             redirect();
-            return;
         }
-    }, [user, location.pathname, customRedirections]);
+    }, [user, location.pathname, customRedirections, redirect]);
 
     return redirect;
 }

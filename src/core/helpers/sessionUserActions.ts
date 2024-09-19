@@ -8,7 +8,7 @@ export function get(): null | User {
   if (!userString) return null;
 
   const user: User = JSON.parse(userString);
-  return validateObject(user, ["id", "email", "firstname", "name"])
+  return validateObject(user, ["email", "firstname", "name"])
     ? user
     : null;
 }

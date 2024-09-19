@@ -5,7 +5,7 @@ import { ModalBody, ModalFooter, ModalHeader } from "../Modal/Modal"
 import FloatingForm from "../FormFloating/FormFloating";
 import React from "react";
 import formObservations from "../../core/helpers/formObservations";
-import { Account, Transaction, TransactionRecurrence } from "../../core/config/types/models";
+import { Account, Category, Transaction, TransactionRecurrence } from "../../core/config/types/models";
 import { fakeTransaction, fakeTransactionRecurrence } from "../../core/config/constants/fakes";
 import { JsObject } from "../../core/config/types/variables";
 import ModalContainer, { ModalContainerProps } from "../Modal/Container/Container";
@@ -18,6 +18,7 @@ import { HTMLTag } from "../HTMLElement/HTMLElement";
 import useNumberFormat from "../../core/hooks/useNumberFormat";
 import useSetting from "../../core/hooks/useSetting";
 import useAccounts from "../../core/hooks/useAccounts";
+import useCategories from "../../core/hooks/useCategories";
 
 interface TransactionModalProps extends Omit<ModalContainerProps<HTMLTag>, 'onSubmit'> {
     onSubmit: (transaction: Transaction) => void,
@@ -41,6 +42,7 @@ const tomorrowIso = tomorrow.toISOString();
 
 const TransactionModal = React.memo((props: TransactionModalProps) => {
     const { accounts } = useAccounts();
+    const { categories } = useCategories();
 
     const {
         onSubmit,
@@ -73,8 +75,17 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
         const account_id = parseInt(formData.account_id);
         const account = accounts!.find(account => account.id === account_id);
 
+        const category_id = parseInt(formData.category_id);
+        const category = categories!.find(category => category.id === category_id);
+
         if (!account) {
-            validationMessages = validationMessages ? { ...validationMessages } : { account_id: "this account does not exist" };
+            const accountMessage = { account_id: "this account does not exist" }
+            validationMessages = validationMessages ? { ...validationMessages, ...accountMessage } : accountMessage;
+        }
+
+        if (!category) {
+            const categoryMessage = { category_id: "this category does not exit" };
+            validationMessages = validationMessages ? { ...validationMessages, ...categoryMessage } : categoryMessage;
         }
 
         if (!validationMessages) {
@@ -84,6 +95,7 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
                 amount: toNumber(formData.amount),
                 account_id: account!.id,
                 account: account!,
+                category: category!,
                 icon: state.form.icon,
                 type: state.form.type,
                 transaction_recurrence: {
@@ -194,15 +206,25 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
                         defaultValue={transaction.type} />
                 </div>
 
-                <FloatingForm.Select
-                    id="transaction.account_id"
-                    labelProps={{ label: <><Icon variant="book" /> Account</>, className: 'col-12 col-sm-6 mb-3' }}
-                    options={accounts!}
-                    predicate={(account: Account) => ({ title: account.name, value: account.id })}
-                    defaultValue={transaction.account?.id}
-                    error={state.validationMessages?.account_id} />
-
                 <div className="d-flex gap-3 justify-content-between flex-wrap">
+                    <FloatingForm.Select
+                        id="transaction.account_id"
+                        labelProps={{ label: <><Icon variant="book" /> Account</>, className: 'col-12 col-sm-6' }}
+                        options={accounts!}
+                        predicate={(account: Account) => ({ title: account.name, value: account.id })}
+                        defaultValue={transaction.account?.id}
+                        error={state.validationMessages?.account_id} />
+
+                    <FloatingForm.Select
+                        id="transaction.category_id"
+                        labelProps={{ label: <><Icon variant="stream" /> Category</>, className: 'col' }}
+                        options={categories!}
+                        predicate={(category: Category) => ({ title: category.name, value: category.id })}
+                        defaultValue={transaction.category_id}
+                        error={state.validationMessages?.category_id} />
+                </div>
+
+                <div className="d-flex gap-3 justify-content-between flex-wrap mt-3">
                     <FloatingForm.Select
                         id="transaction_recurrence.pattern"
                         labelProps={{ label: <><Icon variant="clock" /> Recurrence</>, className: 'col-12 col-sm-6' }}

@@ -1,6 +1,4 @@
 import React from "react";
-import Table from "../../../partials/Table/Table";
-import CategoryRow from "../../../partials/CategoryRow/CategoryRow";
 import { Category } from "../../../core/config/types/models";
 import CornerButtons from "../../../partials/CornerButtons/CornerButtons";
 import Button from "../../../partials/Button/Button";
@@ -9,8 +7,7 @@ import CategoryModal from "../../../partials/CategoryModal/CategoryModal";
 import Motion from "../../../partials/Motion/Motion";
 import useCategories from "../../../core/hooks/useCategories";
 import DeleteDialogue from "../../../partials/DeleteDialogue/DeleteDialogue";
-
-const tableHeaders = ['', 'name', 'budget'];
+import CategoriesTable from "../../../partials/CategoriesTable/CategoriesTable";
 
 const Categories = React.memo(() => {
     const { setCategories, categories } = useCategories(state => state);
@@ -53,9 +50,7 @@ const Categories = React.memo(() => {
     return <Motion.Main className="categories">
         <div className="display-6 mb-3">Categories</div>
 
-        <Table
-            headers={tableHeaders}
-            TDs={CategoryRow}
+        <CategoriesTable
             items={categories}
             onDelete={setDeleting}
             onEdit={handleEdit} />
@@ -71,9 +66,7 @@ const Categories = React.memo(() => {
             category={state.editing} />
 
         <DeleteDialogue
-            body={<Table
-                headers={tableHeaders}
-                TDs={CategoryRow}
+            body={<CategoriesTable
                 items={state.deleting} />}
 
             onClose={() => setDeleting([])}

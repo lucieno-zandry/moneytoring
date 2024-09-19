@@ -54,6 +54,7 @@ export type Transaction = {
   created_at: DateString;
   updated_at: DateString;
   account: Account,
+  category: Category,
   transaction_recurrence?: TransactionRecurrence;
 };
 

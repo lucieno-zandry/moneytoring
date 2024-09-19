@@ -18,7 +18,7 @@ const sidebarItems: NavItemProps[] = [
         href: transactions,
     },
     {
-        icon: "tasks",
+        icon: "stream",
         children: <span className="d-none d-md-block">Categories</span>,
         href: categories,
     },

@@ -18,7 +18,6 @@ const Steps = [
 ]
 
 const Setup = () => {
-
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -38,7 +37,7 @@ const Setup = () => {
         }
     }, [active, next]);
 
-
+    
     return <div className="setup">
         <Logo isStatic={false} />
         <Container predicate={(Step) => <Step.element onDone={handleDone} />} className="container" />

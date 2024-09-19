@@ -1,6 +1,4 @@
 import React from "react";
-import Table from "../../../partials/Table/Table";
-import AccountRow from "../../../partials/AccountRow/AccountRow";
 import { Account } from "../../../core/config/types/models";
 import CornerButtons from "../../../partials/CornerButtons/CornerButtons";
 import Button from "../../../partials/Button/Button";
@@ -9,8 +7,7 @@ import AccountModal from "../../../partials/AccountModal/AccountModal";
 import Motion from "../../../partials/Motion/Motion";
 import useAccounts from "../../../core/hooks/useAccounts";
 import DeleteDialogue from "../../../partials/DeleteDialogue/DeleteDialogue";
-
-const tableHeaders = ['', 'name', 'balance'];
+import AccountsTable from "../../../partials/AccountsTable/AccountsTable";
 
 const Accounts = React.memo(() => {
     const { setAccounts, accounts } = useAccounts(state => state);
@@ -52,9 +49,8 @@ const Accounts = React.memo(() => {
 
     return <Motion.Main className="accounts">
         <div className="display-6 mb-3">Accounts</div>
-        <Table
-            headers={tableHeaders}
-            TDs={AccountRow}
+
+        <AccountsTable
             items={accounts}
             onDelete={setDeleting}
             onEdit={handleEdit} />
@@ -74,10 +70,7 @@ const Accounts = React.memo(() => {
             onSubmit={handleDelete}
             onClose={() => setDeleting([])}
             size="sm"
-            body={<Table
-                headers={tableHeaders}
-                TDs={AccountRow}
-                items={state.deleting} />}
+            body={<AccountsTable items={state.deleting} />}
         />
     </Motion.Main>
 })
