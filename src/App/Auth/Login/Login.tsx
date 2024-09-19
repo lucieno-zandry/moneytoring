@@ -11,6 +11,7 @@ import useAuth from "../../../core/hooks/useAuth";
 import { fakeUser } from "../../../core/config/constants/fakes";
 import randomString from "../../../core/helpers/randomString";
 import sessionAuthActions from "../../../core/helpers/sessionAuthActions";
+import toast from "react-hot-toast";
 
 const Login = React.memo(() => {
     const [state, setState] = React.useState({
@@ -26,6 +27,7 @@ const Login = React.memo(() => {
         if (!validationMessages) {
             const user = { ...fakeUser, ...formData };
             sessionAuthActions.store(user, randomString());
+            toast.success('Log in success');
             setAuth(user);
         }
 
