@@ -8,6 +8,9 @@ import Icon from "../../../partials/Icon/Icon";
 import CategoryModal from "../../../partials/CategoryModal/CategoryModal";
 import Motion from "../../../partials/Motion/Motion";
 import useCategories from "../../../core/hooks/useCategories";
+import DeleteDialogue from "../../../partials/DeleteDialogue/DeleteDialogue";
+
+const tableHeaders = ['', 'name', 'budget'];
 
 const Categories = React.memo(() => {
     const { setCategories, categories } = useCategories(state => state);
@@ -15,15 +18,13 @@ const Categories = React.memo(() => {
     const [state, setState] = React.useState({
         editing: undefined as Category | undefined,
         creating: false,
+        deleting: [] as Category[],
     });
 
     const handleEdit = React.useCallback((editing: Category) => {
         setState(s => ({ ...s, editing, creating: false }));
     }, []);
 
-    const handleDelete = React.useCallback((categories: Category[]) => {
-        console.log(categories);
-    }, []);
 
     const handleSubmit = React.useCallback((category: Category) => {
         if (state.creating) {
@@ -41,12 +42,22 @@ const Categories = React.memo(() => {
         setState(s => ({ ...s, creating: false, editing: undefined }));
     }, []);
 
+    const setDeleting = React.useCallback((categories: Category[]) => {
+        setState(s => ({ ...s, deleting: categories }));
+    }, []);
+
+    const handleDelete = React.useCallback(() => {
+        if (state.deleting.length === 0) return;
+    }, [state.deleting]);
+
     return <Motion.Main className="categories">
+        <div className="display-6 mb-3">Categories</div>
+
         <Table
-            headers={['', 'name', 'budget']}
+            headers={tableHeaders}
             TDs={CategoryRow}
             items={categories}
-            onDelete={handleDelete}
+            onDelete={setDeleting}
             onEdit={handleEdit} />
 
         <CornerButtons>
@@ -58,6 +69,17 @@ const Categories = React.memo(() => {
             onSubmit={handleSubmit}
             onClose={handleClose}
             category={state.editing} />
+
+        <DeleteDialogue
+            body={<Table
+                headers={tableHeaders}
+                TDs={CategoryRow}
+                items={state.deleting} />}
+
+            onClose={() => setDeleting([])}
+            show={state.deleting.length > 0}
+            onSubmit={handleDelete}
+        />
     </Motion.Main>
 })
 

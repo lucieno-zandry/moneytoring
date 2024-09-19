@@ -9,13 +9,17 @@ import arrayUpdate from "../../../core/helpers/arrayUpdate";
 import TransactionRow from "../../../partials/TransactionRow/TransactionRow";
 import TransactionModal from "../../../partials/TransactionModal/TransactionModal";
 import { StepProps } from "../Setup";
-import { defaultTransactions } from "../../../core/hooks/useTransactions";
-
+import useTransactions, { defaultTransactions } from "../../../core/hooks/useTransactions";
+import useAccounts from "../../../core/hooks/useAccounts";
+import arraySum from "../../../core/helpers/arraySum";
 
 const TransactionCreation = React.memo((props: StepProps) => {
     const { onDone } = props;
+    const { setTransactions } = useTransactions();
 
-    const balance = React.useMemo(() => randomNumber(6), []);
+    const { accounts } = useAccounts();
+
+    const balance = React.useMemo(() => accounts ? arraySum(accounts, (account) => account.balance) : randomNumber(3), [accounts]);
 
     const [state, setState] = React.useState({
         creationMode: false,
@@ -56,11 +60,18 @@ const TransactionCreation = React.memo((props: StepProps) => {
 
     const handleEditSubmit = React.useCallback((transaction: Transaction) => {
         if (!editingTransaction) return;
+        console.log(editingTransaction);
         const newTransactions = arrayUpdate(transactions, transaction, (transaction) => transaction.id === editingTransaction?.id);
         setState(s => ({ ...s, transactions: newTransactions, editingTransaction: undefined }));
     }, [editingTransaction]);
 
     const editMode = React.useMemo(() => Boolean(editingTransaction), [editingTransaction]);
+
+    const handleSubmit = React.useCallback(() => {
+        if (state.transactions.length === 0) return;
+        setTransactions(state.transactions);
+        onDone();
+    }, [setTransactions, onDone, state.transactions]);
 
     return <>
         <div className="transaction-creation col-12">
@@ -92,12 +103,12 @@ const TransactionCreation = React.memo((props: StepProps) => {
             <Button
                 variant="primary"
                 disabled={transactions.length < 1}
-                onClick={onDone}
+                onClick={handleSubmit}
                 size="sm">
                 Done <Icon variant="check-circle" />
             </Button>
         </CornerButtons>
-        
+
         <TransactionModal
             onSubmit={editMode ? handleEditSubmit : addTransaction}
             transaction={editingTransaction}

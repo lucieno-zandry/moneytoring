@@ -8,6 +8,9 @@ import Icon from "../../../partials/Icon/Icon";
 import useTransactions from "../../../core/hooks/useTransactions";
 import TransactionModal from "../../../partials/TransactionModal/TransactionModal";
 import Motion from "../../../partials/Motion/Motion";
+import DeleteDialogue from "../../../partials/DeleteDialogue/DeleteDialogue";
+
+const tableHeaders = ['', 'amount', 'account', 'description', 'next_occurence', 'recurrence', 'type'];
 
 const Transactions = React.memo(() => {
     const { setTransactions, transactions } = useTransactions(state => state);
@@ -15,15 +18,13 @@ const Transactions = React.memo(() => {
     const [state, setState] = React.useState({
         editing: undefined as Transaction | undefined,
         creating: false,
+        deleting: [] as Transaction[],
     });
 
     const handleEdit = React.useCallback((editing: Transaction) => {
         setState(s => ({ ...s, editing, creating: false }));
     }, []);
 
-    const handleDelete = React.useCallback((transactions: Transaction[]) => {
-        console.log(transactions);
-    }, []);
 
     const handleSubmit = React.useCallback((transaction: Transaction) => {
         if (state.creating) {
@@ -41,12 +42,23 @@ const Transactions = React.memo(() => {
         setState(s => ({ ...s, creating: false, editing: undefined }));
     }, []);
 
+    const setDeleting = React.useCallback((accounts: Transaction[]) => {
+        setState(s => ({ ...s, deleting: accounts }));
+    }, []);
+
+    const handleDelete = React.useCallback(() => {
+        if (state.deleting.length === 0) return;
+
+    }, [state.deleting]);
+
     return <Motion.Main className="transactions">
+        <div className="display-6 mb-3">Transactions</div>
+
         <Table
-            headers={['', 'amount', 'description', 'next_occurence', 'recurrence', 'type']}
+            headers={tableHeaders}
             TDs={TransactionRow}
             items={transactions}
-            onDelete={handleDelete}
+            onDelete={setDeleting}
             onEdit={handleEdit} />
 
         <CornerButtons>
@@ -58,6 +70,18 @@ const Transactions = React.memo(() => {
             onSubmit={handleSubmit}
             onClose={handleClose}
             transaction={state.editing} />
+
+        <DeleteDialogue
+            body={<Table
+                headers={tableHeaders}
+                TDs={TransactionRow}
+                items={state.deleting}
+            />}
+            onSubmit={handleDelete}
+            show={state.deleting.length > 0}
+            onClose={() => setDeleting([])}
+            size="lg"
+        />
     </Motion.Main>
 })
 

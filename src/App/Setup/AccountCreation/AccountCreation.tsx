@@ -9,11 +9,12 @@ import generateArray from "../../../core/helpers/generateArray";
 import AccountRow from "../../../partials/AccountRow/AccountRow";
 import arrayUpdate from "../../../core/helpers/arrayUpdate";
 import { StepProps } from "../Setup";
-import { defaultAccounts } from "../../../core/hooks/useAccounts";
+import useAccounts, { defaultAccounts } from "../../../core/hooks/useAccounts";
 
 
 const AccountCreation = React.memo((props: StepProps) => {
     const { onDone } = props;
+    const { setAccounts } = useAccounts();
 
     const [state, setState] = React.useState({
         creationMode: false,
@@ -60,6 +61,12 @@ const AccountCreation = React.memo((props: StepProps) => {
 
     const editMode = React.useMemo(() => Boolean(editingAccount), [editingAccount]);
 
+    const handleSubmit = React.useCallback(() => {
+        if (state.accounts.length === 0) return;
+        setAccounts(state.accounts);
+        onDone();
+    }, [state.accounts, onDone]);
+
     return <>
         <div className="account-creation col-12">
             <h3 className="display-6">Establish your balance.</h3>
@@ -91,7 +98,7 @@ const AccountCreation = React.memo((props: StepProps) => {
             <Button
                 variant="primary"
                 disabled={state.accounts.length < 1}
-                onClick={onDone}
+                onClick={handleSubmit}
                 size="sm">
                 Done <Icon variant="check-circle" />
             </Button>

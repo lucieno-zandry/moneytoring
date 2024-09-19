@@ -7,6 +7,7 @@ import { ModalContainerProps } from "../Modal/Container/Container";
 import ModalContainer, { ModalBody, ModalFooter, ModalHeader } from "../Modal/Modal";
 import { ModalTitle } from "react-bootstrap";
 import SearchInput from "../SearchInput/SearchInput";
+import { HTMLTag } from "../HTMLElement/HTMLElement";
 
 export const icons = [
     "heart",
@@ -116,7 +117,7 @@ export const icons = [
     'bank'
 ];
 
-interface IconsDrawerProps extends Omit<ModalContainerProps, 'onSubmit'> {
+interface IconsDrawerProps extends Omit<ModalContainerProps<HTMLTag>, 'onSubmit'> {
     modalBodyProps?: ModalBodyProps,
     defaultSelected?: string,
     onSubmit: (selected?: string) => void,
@@ -153,11 +154,11 @@ export default function (props: IconsDrawerProps) {
     }, [defaultSelected]);
 
     return <ModalContainer {...modalContainerProps} as="form" onSubmit={handleSubmit}>
-        <ModalHeader>
+        <ModalHeader className="flex-wrap gap-3">
             <ModalTitle>Choose an Icon</ModalTitle>
             <SearchInput
                 onChange={handleSearch}
-                containerProps={{ className: 'col-5' }} />
+                containerProps={{ className: 'col-12 col-sm-5' }} />
         </ModalHeader>
         <ModalBody className="d-flex flex-wrap gap-2" {...modalBodyProps}>
             {icons.map((icon, key) => {

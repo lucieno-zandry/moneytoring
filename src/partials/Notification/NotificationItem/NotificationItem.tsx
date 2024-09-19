@@ -54,8 +54,8 @@ const NotificationItem = React.memo((props: Props) => {
 export const NotificationItemPlaceHolder = React.memo(() => {
     return <Dropdown.ItemText
         className="placeholder-glow notification-item">
-        <div className="info placeholder"></div>
-        <div className="content placeholder"></div>
+        <div className="info placeholder col-6"></div>
+        <div className="content placeholder col-12"></div>
     </Dropdown.ItemText>
 });
 

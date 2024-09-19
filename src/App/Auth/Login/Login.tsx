@@ -7,6 +7,8 @@ import { JsObject } from "../../../core/config/types/variables";
 import formObservations from "../../../core/helpers/formObservations";
 import Button from "../../../partials/Button/Button";
 import AuthForm from "../../../partials/AuthForm/AuthForm";
+import useAuth from "../../../core/hooks/useAuth";
+import { fakeUser } from "../../../core/config/constants/fakes";
 
 const Login = React.memo(() => {
     const [state, setState] = React.useState({
@@ -14,13 +16,14 @@ const Login = React.memo(() => {
         isLoading: false,
     });
 
+    const { setAuth } = useAuth();
+
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = React.useCallback((e) => {
         const { formData, validationMessages } = formObservations(e);
 
         if (!validationMessages) {
-
+            setAuth({ ...fakeUser, ...formData })
         }
-
 
         setState(s => ({ ...s, validationMessages, isLoading: !validationMessages }))
     }, []);

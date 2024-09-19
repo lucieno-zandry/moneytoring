@@ -9,13 +9,13 @@ type UseAccounts = {
 }
 
 export const defaultAccounts: Account[] = [
-    { ...fakeAccount, name: 'Bank', balance: 10_000_000, icon: 'bank', id: randomNumber() },
-    // { ...fakeAccount, name: 'Local', balance: 2_000_000, icon: 'suitcase', id: randomNumber() },
+    { ...fakeAccount, name: 'Bank', icon: 'bank', id: randomNumber() },
+    { ...fakeAccount, name: 'Local', balance: 2_000, icon: 'suitcase', id: randomNumber() },
 ];
 
 const useAccounts = create<UseAccounts>(set => ({
-    accounts: defaultAccounts,
-    setAccounts: (accounts) => set(state => ({ ...state, accounts }))
+    accounts: [],
+    setAccounts: (accounts) => set(state => ({ ...state, accounts })),
 }))
 
 export default useAccounts;

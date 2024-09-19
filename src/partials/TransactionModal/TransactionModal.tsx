@@ -5,7 +5,7 @@ import { ModalBody, ModalFooter, ModalHeader } from "../Modal/Modal"
 import FloatingForm from "../FormFloating/FormFloating";
 import React from "react";
 import formObservations from "../../core/helpers/formObservations";
-import { Transaction, TransactionRecurrence } from "../../core/config/types/models";
+import { Account, Transaction, TransactionRecurrence } from "../../core/config/types/models";
 import { fakeTransaction, fakeTransactionRecurrence } from "../../core/config/constants/fakes";
 import { JsObject } from "../../core/config/types/variables";
 import ModalContainer, { ModalContainerProps } from "../Modal/Container/Container";
@@ -14,34 +14,44 @@ import IconButton from "../IconInput/IconInput";
 import getValidationMessage from "../../core/helpers/getValidationMessage";
 import getName from "../../core/helpers/getName";
 import Datum from "../../core/helpers/Datum";
+import { HTMLTag } from "../HTMLElement/HTMLElement";
+import useNumberFormat from "../../core/hooks/useNumberFormat";
+import useSetting from "../../core/hooks/useSetting";
+import useAccounts from "../../core/hooks/useAccounts";
 
-interface TransactionModalProps extends Omit<ModalContainerProps, 'onSubmit'> {
+interface TransactionModalProps extends Omit<ModalContainerProps<HTMLTag>, 'onSubmit'> {
     onSubmit: (transaction: Transaction) => void,
     transaction?: Transaction,
     editMode?: boolean,
 }
 
-const defaultTransaction: Transaction = {
+const getDefaultTransaction = (account: Account): Transaction => ({
     ...fakeTransaction,
     id: 0,
     icon: '',
     description: '',
-}
+    account,
+})
 
-const recurrencePatterns: TransactionRecurrence['pattern'][] = ['YEARLY', 'MONTHLY', 'WEEKLY'];
+const recurrencePatterns: TransactionRecurrence['pattern'][] = ['YEARLY', 'MONTHLY', 'WEEKLY', 'ONCE'];
 const transactionTypes: Transaction['type'][] = ['INCOME', 'EXPENSE'];
 
 const tomorrow = new Datum().addDays(1);
 const tomorrowIso = tomorrow.toISOString();
 
 const TransactionModal = React.memo((props: TransactionModalProps) => {
+    const { accounts } = useAccounts();
+
     const {
         onSubmit,
-        transaction = defaultTransaction,
+        transaction = getDefaultTransaction(accounts![0]),
         editMode = false,
         show = false,
         ...modalProps
     } = props;
+
+    const { toNumber, toString } = useNumberFormat();
+    const { setting } = useSetting();
 
     const [state, setState] = React.useState({
         validationMessages: null as JsObject | null,
@@ -58,20 +68,29 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
     });
 
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = React.useCallback((e) => {
-        const { formData, validationMessages } = formObservations(e);
+        let { formData, validationMessages } = formObservations(e);
+
+        const account_id = parseInt(formData.account_id);
+        const account = accounts!.find(account => account.id === account_id);
+
+        if (!account) {
+            validationMessages = validationMessages ? { ...validationMessages } : { account_id: "this account does not exist" };
+        }
 
         if (!validationMessages) {
             const newTransaction: Transaction = {
                 ...transaction,
                 description: formData.description,
-                amount: parseInt(formData.amount),
+                amount: toNumber(formData.amount),
+                account_id: account!.id,
+                account: account!,
                 icon: state.form.icon,
                 type: state.form.type,
                 transaction_recurrence: {
                     ...fakeTransactionRecurrence,
                     next_occurence: state.form.next_occurence,
                     pattern: state.form.pattern,
-                }
+                },
             }
 
             onSubmit(newTransaction);
@@ -79,7 +98,7 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
         }
 
         setState(s => ({ ...s, validationMessages }));
-    }, [onSubmit, props.onClose, state.form, transaction]);
+    }, [onSubmit, props.onClose, state.form, transaction, toNumber, accounts]);
 
     const handleIconSubmit = React.useCallback((selected: string = '') => {
         setState(s => ({ ...s, form: { ...s.form, icon: selected }, showIconDrawer: false, paused: false }));
@@ -124,7 +143,6 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
         <ModalContainer
             as="form"
             onSubmit={handleSubmit}
-            align="center"
             show={isVisible}
             size="md"
             className="transaction-modal"
@@ -134,32 +152,33 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
                 <ModalTitle>{editMode ? 'Edit' : 'Create'} transaction</ModalTitle>
             </ModalHeader>
 
-            <ModalBody className="px-5">
-                <div className="d-flex gap-3 align-items-center justify-content-between">
+            <ModalBody>
+                <div className="d-flex gap-3 align-items-center justify-content-between flex-wrap">
                     <ButtonGroup
-                        className="col-4">
+                        className="col-12 col-sm-4">
                         <IconButton
                             iconProps={{ variant: state.form.icon || icons[0] }}
                             labelProps={{ className: 'choose-icon-label' }}
                         />
-                        <Button onClick={toggleIconsDrawer} variant="primary">{state.form.icon || 'Choose Icon'}</Button>
+                        <Button onClick={toggleIconsDrawer} variant={state.form.icon ? "primary" : "secondary"}>{state.form.icon || 'Choose Icon'}</Button>
                     </ButtonGroup>
 
                     <FloatingForm.Input
                         id="transaction.amount"
                         type="number"
-                        labelProps={{ label: <><Icon variant="money-bill-simple" /> Amount</>, className: "col" }}
+                        labelProps={{ label: <><Icon variant="money-bill-simple" /> Amount ({setting.currency})</>, className: "col" }}
                         placeholder="Transaction amount"
                         error={state.validationMessages?.amount}
-                        defaultValue={transaction.amount}
+                        defaultValue={toString(transaction.amount)}
                         onBlur={handleBlur}
+
                     />
                 </div>
 
-                <div className="d-flex my-3 gap-3">
+                <div className="d-flex my-3 gap-3 flex-wrap">
                     <FloatingForm.TextArea
                         id="transaction.description"
-                        labelProps={{ label: <><Icon variant="input-text" /> Description</>, className: "col-8" }}
+                        labelProps={{ label: <><Icon variant="input-text" /> Description</>, className: "col-12 col-sm-8" }}
                         placeholder="Eg: Bank Transaction"
                         error={state.validationMessages?.description}
                         defaultValue={transaction.description}
@@ -175,23 +194,33 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
                         defaultValue={transaction.type} />
                 </div>
 
-                <div className="d-flex gap-3 justify-content-between">
+                <FloatingForm.Select
+                    id="transaction.account_id"
+                    labelProps={{ label: <><Icon variant="book" /> Account</>, className: 'col-12 col-sm-6 mb-3' }}
+                    options={accounts!}
+                    predicate={(account: Account) => ({ title: account.name, value: account.id })}
+                    defaultValue={transaction.account?.id}
+                    error={state.validationMessages?.account_id} />
+
+                <div className="d-flex gap-3 justify-content-between flex-wrap">
                     <FloatingForm.Select
                         id="transaction_recurrence.pattern"
-                        labelProps={{ label: <><Icon variant="clock" /> Recurrence</>, className: 'col-6' }}
+                        labelProps={{ label: <><Icon variant="clock" /> Recurrence</>, className: 'col-12 col-sm-6' }}
                         options={recurrencePatterns}
                         predicate={(option: TransactionRecurrence['pattern']) => option}
-                        onBlur={handleBlur} />
-
-                    <FloatingForm.Input
-                        type="date"
-                        id="transaction_recurrence.next_occurence"
-                        labelProps={{ label: <><Icon variant="calendar" /> Next Occurence</>, className: "col" }}
-                        placeholder="Next Occurence"
-                        error={state.validationMessages?.first_occurence}
                         onBlur={handleBlur}
-                        min={tomorrowIso}
-                        defaultValue={tomorrowIso} />
+                        defaultValue={transaction.transaction_recurrence?.pattern || 'ONCE'} />
+
+                    {state.form.pattern !== 'ONCE' &&
+                        <FloatingForm.Input
+                            type="date"
+                            id="transaction_recurrence.next_occurence"
+                            labelProps={{ label: <><Icon variant="calendar" /> Next Occurence</>, className: "col" }}
+                            placeholder="Next Occurence"
+                            error={state.validationMessages?.first_occurence}
+                            onBlur={handleBlur}
+                            min={tomorrowIso}
+                            defaultValue={tomorrowIso} />}
                 </div>
             </ModalBody>
 
@@ -204,7 +233,8 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
                 </Button>
                 <Button
                     variant="primary"
-                    type="submit">
+                    type="submit"
+                    size="sm">
                     <Icon variant="check-circle" /> Done
                 </Button>
             </ModalFooter>

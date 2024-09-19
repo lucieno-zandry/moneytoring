@@ -2,6 +2,8 @@ import React, { useCallback, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import * as links from "../config/links/pages";
 import useAuth from "./useAuth";
+import useAccounts from "./useAccounts";
+import useCategories from "./useCategories";
 
 type SessionIntended = { target: null | boolean, path: string }
 const { authPage, emailConfirmation, loginPage } = links;
@@ -10,6 +12,8 @@ const notApplicablePaths = [
     loginPage,
     authPage,
     emailConfirmation,
+    links.accountsSetup,
+    links.categoriesSetup
 ];
 
 function setSessionIntended(pathname: string, target: boolean) {
@@ -32,7 +36,25 @@ export function useRedirect(target: boolean): Function {
     const location = useLocation();
     const navigate = useNavigate();
 
-    const { user } = useAuth(state => state);
+    const { user } = useAuth();
+    const { accounts } = useAccounts();
+    const { categories } = useCategories();
+
+    const customRedirections = React.useMemo(() => [
+        {
+            condition: user && user.email_verified_at === null,
+            pathname: emailConfirmation,
+        },
+        {
+            condition: accounts && accounts.length === 0,
+            pathname: links.accountsSetup,
+        },
+        {
+            condition: categories && categories.length === 0,
+            pathname: links.categoriesSetup,
+        }
+    ], [user, accounts, categories]);
+
     const sessionIntended = getSessionIntended();
 
     const goToIntended = React.useCallback((path: string) => {
@@ -56,14 +78,9 @@ export function useRedirect(target: boolean): Function {
 
     useEffect(() => {
         if (user) {
-            if (user.email_verified_at === null) {
-                if (location.pathname !== emailConfirmation) {
-                    navigate(emailConfirmation);
-                    return;
-                }
-            } else {
-                if (location.pathname === emailConfirmation) {
-                    redirect();
+            for (let customRedirection of customRedirections) {
+                if (customRedirection.condition && location.pathname !== customRedirection.pathname) {
+                    navigate(customRedirection.pathname);
                     return;
                 }
             }
@@ -73,7 +90,7 @@ export function useRedirect(target: boolean): Function {
             redirect();
             return;
         }
-    }, [user, location.pathname, target, redirect]);
+    }, [user, location.pathname, customRedirections]);
 
     return redirect;
 }

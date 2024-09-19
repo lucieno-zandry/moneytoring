@@ -1,5 +1,5 @@
 import { Category } from "../../core/config/types/models"
-import Amount from "../Amount/Amount";
+import useNumberFormat from "../../core/hooks/useNumberFormat";
 import Icon from "../Icon/Icon";
 
 type Props = {
@@ -8,6 +8,7 @@ type Props = {
 
 export default function (props: Props) {
     const { name, budget, icon } = props.item;
+    const { toAmount } = useNumberFormat();
 
     return <>
         <td>
@@ -17,7 +18,7 @@ export default function (props: Props) {
             {name}
         </td>
         <td>
-            <Amount>{budget}</Amount>
+            {toAmount(budget)}
         </td>
     </>
 }   

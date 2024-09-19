@@ -11,8 +11,11 @@ import { JsObject } from "../../core/config/types/variables";
 import ModalContainer, { ModalContainerProps } from "../Modal/Container/Container";
 import IconsDrawer, { icons } from "../IconsDrawer/IconsDrawer";
 import IconButton from "../IconInput/IconInput";
+import { HTMLTag } from "../HTMLElement/HTMLElement";
+import useNumberFormat from "../../core/hooks/useNumberFormat";
+import useSetting from "../../core/hooks/useSetting";
 
-interface CategoryModalProps extends Omit<ModalContainerProps, 'onSubmit'> {
+interface CategoryModalProps extends Omit<ModalContainerProps<HTMLTag>, 'onSubmit'> {
     onSubmit: (category: Category) => void,
     category?: Category,
 }
@@ -32,6 +35,9 @@ const CategoryModal = (props: CategoryModalProps) => {
         ...modalProps
     } = props;
 
+    const { toNumber, toString } = useNumberFormat();
+    const { setting } = useSetting();
+
     const [state, setState] = React.useState({
         validationMessages: null as JsObject | null,
         showIconDrawer: false,
@@ -48,7 +54,7 @@ const CategoryModal = (props: CategoryModalProps) => {
             const newCategory: Category = {
                 ...category,
                 name: formData.name,
-                budget: parseInt(formData.budget),
+                budget: toNumber(formData.budget),
                 icon: state.form.icon,
             }
 
@@ -57,7 +63,7 @@ const CategoryModal = (props: CategoryModalProps) => {
         }
 
         setState(s => ({ ...s, validationMessages }));
-    }, [onSubmit, props.onClose, state.form.icon, category]);
+    }, [onSubmit, props.onClose, state.form.icon, category, toNumber]);
 
     const handleIconSubmit = React.useCallback((selected: string = '') => {
         setState(s => ({ ...s, form: { icon: selected }, showIconDrawer: false, paused: false }));
@@ -83,7 +89,6 @@ const CategoryModal = (props: CategoryModalProps) => {
         <ModalContainer
             as="form"
             onSubmit={handleSubmit}
-            align="center"
             show={isVisible}
             {...modalProps}>
 
@@ -91,17 +96,17 @@ const CategoryModal = (props: CategoryModalProps) => {
                 <ModalTitle>{editMode ? 'Edit' : 'Create'} category</ModalTitle>
             </ModalHeader>
 
-            <ModalBody className="d-flex gap-3 justify-content-center">
-                <ButtonGroup className="align-self-center">
+            <ModalBody className="d-flex gap-3 justify-content-center flex-wrap align-items-start">
+                <ButtonGroup className="col-12 col-sm-3">
                     <IconButton
                         iconProps={{ variant: state.form.icon || icons[0] }}
                     />
-                    <Button onClick={toggleIconsDrawer}>{state.form.icon || 'Choose Icon'}</Button>
+                    <Button onClick={toggleIconsDrawer} variant={state.form.icon ? 'primary' : 'secondary'}>{state.form.icon || 'Choose Icon'}</Button>
                 </ButtonGroup>
 
                 <FloatingForm.Input
                     id="category.name"
-                    labelProps={{ label: <><Icon variant="input-text" /> Name</> }}
+                    labelProps={{ label: <><Icon variant="input-text" /> Name</>, className: "col-12 col-sm-3" }}
                     placeholder="Eg: Bank Category"
                     error={state.validationMessages?.name}
                     defaultValue={category.name}
@@ -110,10 +115,10 @@ const CategoryModal = (props: CategoryModalProps) => {
                 <FloatingForm.Input
                     id="category.budget"
                     type="number"
-                    labelProps={{ label: <><Icon variant="money-bill-simple" /> Budget</> }}
+                    labelProps={{ label: <><Icon variant="money-bill-simple" /> Budget ({setting.currency})</>, className: "col-12 col-sm-3" }}
                     placeholder="Category budget"
                     error={state.validationMessages?.budget}
-                    defaultValue={category.budget}
+                    defaultValue={toString(category.budget)}
                 />
             </ModalBody>
 
@@ -121,12 +126,13 @@ const CategoryModal = (props: CategoryModalProps) => {
                 <Button
                     variant="secondary"
                     size="sm"
-                    onClick={props.onClose as React.MouseEventHandler<HTMLButtonElement>}>
+                    onClick={props.onClose}>
                     Cancel
                 </Button>
                 <Button
                     variant="primary"
-                    type="submit">
+                    type="submit"
+                    size="sm">
                     <Icon variant="check-circle" /> Done
                 </Button>
             </ModalFooter>

@@ -1,9 +1,16 @@
 .corner-buttons {
   position: fixed;
   z-index: 500;
-  bottom: 2rem;
   display: flex;
   margin: 0 auto;
+
+  &.top {
+    top: 1rem;
+  }
+
+  &.bottom {
+    bottom: 2rem;
+  }
 
   &.start {
     justify-content: flex-start;
@@ -30,33 +37,3 @@
     }
   }
 }
-
-// @media screen and (min-width: $screen-sm) and (max-width: $screen-md) {
-//   .corner-buttons {
-//     width: 540px;
-//   }
-// }
-
-// @media screen and (min-width: $screen-md) and (max-width: $screen-lg) {
-//   .corner-buttons {
-//     width: 720px;
-//   }
-// }
-
-// @media screen and (min-width: $screen-lg) and (max-width: $screen-xl) {
-//   .corner-buttons {
-//     width: 960px;
-//   }
-// }
-
-// @media screen and (min-width: $screen-xl) and (max-width: $screen-xxl) {
-//   .corner-buttons {
-//     width: 1140px;
-//   }
-// }
-
-// @media screen and (min-width: $screen-xxl) {
-//   .corner-buttons {
-//     width: 1320px;
-//   }
-// }

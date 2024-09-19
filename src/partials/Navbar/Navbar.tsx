@@ -23,7 +23,12 @@ export default function () {
                 onClick={toggle}>
                 <Icon variant="arrow-right" />
             </Button>}
-        <SearchInput onChange={handleSearch} value={search} />
+            
+        <SearchInput
+            onChange={handleSearch}
+            value={search}
+            containerProps={{ className: "col-4" }} />
+
         <Notification />
         <UserDropdown />
     </nav>

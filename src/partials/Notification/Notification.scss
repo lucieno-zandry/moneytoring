@@ -3,6 +3,7 @@
   .dropdown-menu{
     max-height: calc(100vh - 8rem);
     overflow: auto;
+    width: min(80vw, 20rem);
   }
 
   .notification-item {
@@ -10,13 +11,9 @@
   }
 
   .notification-item.placeholder-glow {
-    .info {
-      width: 5rem;
-    }
 
     .content {
       margin-top: 0.5rem;
-      width: 20rem;
       height: 1rem;
     }
   }

@@ -2,9 +2,10 @@ import { create } from "zustand";
 import { fakeTransaction, fakeTransactionRecurrence } from "../config/constants/fakes";
 import randomNumber from "../helpers/randomNumber";
 import { Transaction } from "../config/types/models";
+import { defaultAccounts } from "./useAccounts";
 
 type UseTransactions = {
-    transactions: Transaction[],
+    transactions: null | Transaction[],
     setTransactions: (transactions: Transaction[]) => void,
 }
 
@@ -15,7 +16,8 @@ export const defaultTransactions = (balance: number = 0): Transaction[] => [
         "icon": "car",
         id: randomNumber(),
         type: "EXPENSE",
-        transaction_recurrence: fakeTransactionRecurrence
+        transaction_recurrence: fakeTransactionRecurrence,
+        account: defaultAccounts[0]
     },
     {
         ...fakeTransaction,
@@ -23,7 +25,8 @@ export const defaultTransactions = (balance: number = 0): Transaction[] => [
         "icon": "music",
         id: randomNumber(),
         type: "EXPENSE",
-        transaction_recurrence: fakeTransactionRecurrence
+        transaction_recurrence: fakeTransactionRecurrence,
+        account: defaultAccounts[0]
     },
     {
         ...fakeTransaction,
@@ -31,7 +34,8 @@ export const defaultTransactions = (balance: number = 0): Transaction[] => [
         "icon": "lightbulb",
         id: randomNumber(),
         type: "EXPENSE",
-        transaction_recurrence: fakeTransactionRecurrence
+        transaction_recurrence: fakeTransactionRecurrence,
+        account: defaultAccounts[1]
     },
     {
         ...fakeTransaction,
@@ -39,42 +43,10 @@ export const defaultTransactions = (balance: number = 0): Transaction[] => [
         "icon": "leaf",
         id: randomNumber(),
         type: "INCOME",
-        transaction_recurrence: fakeTransactionRecurrence
+        transaction_recurrence: fakeTransactionRecurrence,
+        account: defaultAccounts[0]
     },
-    {
-        ...fakeTransaction,
-        "amount": Math.floor(balance / 4),
-        "icon": "leaf",
-        id: randomNumber(),
-        type: "INCOME",
-        transaction_recurrence: fakeTransactionRecurrence
-    },
-    {
-        ...fakeTransaction,
-        "amount": Math.floor(balance / 4),
-        "icon": "leaf",
-        id: randomNumber(),
-        type: "INCOME",
-        transaction_recurrence: fakeTransactionRecurrence
-    },
-    {
-        ...fakeTransaction,
-        "amount": Math.floor(balance / 4),
-        "icon": "leaf",
-        id: randomNumber(),
-        type: "INCOME",
-        transaction_recurrence: fakeTransactionRecurrence
-    },
-    {
-        ...fakeTransaction,
-        "amount": Math.floor(balance / 4),
-        "icon": "leaf",
-        id: randomNumber(),
-        type: "INCOME",
-        transaction_recurrence: fakeTransactionRecurrence
-    }
 ]
-
 
 const useTransactions = create<UseTransactions>(set => ({
     transactions: defaultTransactions(randomNumber()),

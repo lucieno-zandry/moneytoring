@@ -87,7 +87,7 @@ const Notification = React.memo(() => {
                         {unread?.length}
                     </small>}
                 </Dropdown.Toggle>
-                <Dropdown.Menu align='end' className="mt-2">
+                <Dropdown.Menu align='end' className="mt-2 col-12">
                     {Boolean(all?.length)
                         && all?.map((notification, key) => <NotificationItem
                             notification={notification}

@@ -1,13 +1,15 @@
+import React from "react";
 import { Account } from "../../core/config/types/models"
-import Amount from "../Amount/Amount";
+import useNumberFormat from "../../core/hooks/useNumberFormat";
 import Icon from "../Icon/Icon";
 
 type Props = {
     item: Account
 }
 
-export default function (props: Props) {
+export default React.memo((props: Props) => {
     const { balance, name, icon } = props.item;
+    const { toAmount } = useNumberFormat();
 
     return <>
         <td>
@@ -17,7 +19,7 @@ export default function (props: Props) {
             {name}
         </td>
         <td>
-            <Amount>{balance}</Amount>
+            {toAmount(balance)}
         </td>
     </>
-}
+})

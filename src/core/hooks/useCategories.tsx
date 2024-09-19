@@ -4,7 +4,7 @@ import randomNumber from "../helpers/randomNumber";
 import { Category } from "../config/types/models";
 
 type UseCategories = {
-    categories: Category[],
+    categories: Category[] | null,
     setCategories: (categories: Category[]) => void,
 }
 

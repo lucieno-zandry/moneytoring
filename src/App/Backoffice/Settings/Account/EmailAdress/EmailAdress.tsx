@@ -52,9 +52,11 @@ export default React.memo(() => {
             as="form"
             onSubmit={handleSubmit}
             align="center"
-            onClose={() => setState(defaultState)}>
-            <ModalHeader>
+            onClose={() => setState(defaultState)}
+            size="sm">
+            <ModalHeader className="d-block">
                 <ModalTitle>Email changing</ModalTitle>
+                <small className="text-muted">You will have to verify your email again after you change it.</small>
             </ModalHeader>
             <ModalBody className="d-flex flex-column gap-3 align-items-center">
                 <FormFloating.Input

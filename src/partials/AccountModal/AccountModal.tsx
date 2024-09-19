@@ -11,8 +11,10 @@ import { JsObject } from "../../core/config/types/variables";
 import ModalContainer, { ModalContainerProps } from "../Modal/Container/Container";
 import IconsDrawer, { icons } from "../IconsDrawer/IconsDrawer";
 import IconButton from "../IconInput/IconInput";
+import useNumberFormat from "../../core/hooks/useNumberFormat";
+import useSetting from "../../core/hooks/useSetting";
 
-interface AccountModalProps extends Omit<ModalContainerProps, 'onSubmit'> {
+interface AccountModalProps extends Omit<ModalContainerProps<'form'>, 'onSubmit'> {
     onSubmit: (account: Account) => void,
     account?: Account,
     editMode?: boolean,
@@ -34,6 +36,9 @@ const AccountModal = (props: AccountModalProps) => {
         ...modalProps
     } = props;
 
+    const { toString, toNumber } = useNumberFormat();
+    const { setting } = useSetting();
+
     const [state, setState] = React.useState({
         validationMessages: null as JsObject | null,
         showIconDrawer: false,
@@ -50,7 +55,7 @@ const AccountModal = (props: AccountModalProps) => {
             const newAccount: Account = {
                 ...account,
                 name: formData.name,
-                balance: parseInt(formData.balance),
+                balance: toNumber(formData.balance),
                 icon: state.form.icon,
             }
 
@@ -59,10 +64,10 @@ const AccountModal = (props: AccountModalProps) => {
         }
 
         setState(s => ({ ...s, validationMessages }));
-    }, [onSubmit, props.onClose, state.form.icon, account]);
+    }, [onSubmit, props.onClose, state.form.icon, account, toNumber]);
 
     const handleIconSubmit = React.useCallback((selected: string = '') => {
-        setState(s => ({ ...s, form: { icon: selected }, showIconDrawer: false, paused: false }));
+        setState(s => ({ ...s, form: { ...s.form, icon: selected }, showIconDrawer: false, paused: false }));
     }, [props.onClose]);
 
     const toggleIconsDrawer = React.useCallback(() => {
@@ -70,8 +75,8 @@ const AccountModal = (props: AccountModalProps) => {
     }, []);
 
     React.useEffect(() => {
-        if (!account.name) return;
-        setState(s => ({ ...s, form: { icon: account.icon } }));
+        if (!account.id) return;
+        setState(s => ({ ...s, form: { ...s.form, icon: account.icon } }));
     }, [account]);
 
     const isVisible = React.useMemo(() => {
@@ -83,7 +88,6 @@ const AccountModal = (props: AccountModalProps) => {
         <ModalContainer
             as="form"
             onSubmit={handleSubmit}
-            align="end"
             show={isVisible}
             {...modalProps}>
 
@@ -91,17 +95,17 @@ const AccountModal = (props: AccountModalProps) => {
                 <ModalTitle>{editMode ? 'Edit' : 'Create'} account</ModalTitle>
             </ModalHeader>
 
-            <ModalBody className="d-flex gap-3 justify-content-center">
-                <ButtonGroup className="align-self-center">
+            <ModalBody className="d-flex gap-3 justify-content-center flex-wrap align-items-start">
+                <ButtonGroup className="col-12 col-sm-9 col-md-3">
                     <IconButton
                         iconProps={{ variant: state.form.icon || icons[0] }}
                     />
-                    <Button onClick={toggleIconsDrawer}>{state.form.icon || 'Choose Icon'}</Button>
+                    <Button onClick={toggleIconsDrawer} variant={state.form.icon ? "primary" : "secondary"}>{state.form.icon || 'Choose Icon'}</Button>
                 </ButtonGroup>
 
                 <FloatingForm.Input
                     id="account.name"
-                    labelProps={{label: <><Icon variant="input-text" /> Name</>}}
+                    labelProps={{ label: <><Icon variant="input-text" /> Name</>, className: "col-12 col-sm-9 col-md-3" }}
                     placeholder="Eg: Bank Account"
                     error={state.validationMessages?.name}
                     defaultValue={account.name}
@@ -110,10 +114,10 @@ const AccountModal = (props: AccountModalProps) => {
                 <FloatingForm.Input
                     id="account.balance"
                     type="number"
-                    labelProps={{label: <><Icon variant="money-bill-simple" /> Budget</>}}
+                    labelProps={{ label: <><Icon variant="money-bill-simple" /> Budget ({setting.currency})</>, className: "col-12 col-sm-9 col-md-3" }}
                     placeholder="Account balance"
                     error={state.validationMessages?.balance}
-                    defaultValue={account.balance}
+                    defaultValue={toString(account.balance)}
                 />
             </ModalBody>
 
@@ -126,7 +130,8 @@ const AccountModal = (props: AccountModalProps) => {
                 </Button>
                 <Button
                     variant="primary"
-                    type="submit">
+                    type="submit"
+                    size="sm">
                     <Icon variant="check-circle" /> Done
                 </Button>
             </ModalFooter>

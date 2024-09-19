@@ -1,6 +1,8 @@
 import React from "react";
 import Button from "../../../../../partials/Button/Button";
 import Icon from "../../../../../partials/Icon/Icon";
+import { User } from "../../../../../core/config/types/models";
+import useAuth from "../../../../../core/hooks/useAuth";
 import { ModalBody, ModalFooter, ModalHeader, useModal } from "../../../../../partials/Modal/Modal";
 import FormFloating from "../../../../../partials/FormFloating/FormFloating";
 import formObservations from "../../../../../core/helpers/formObservations";
@@ -13,6 +15,7 @@ const defaultState = {
 }
 
 export default React.memo(() => {
+    const user = useAuth().user as User;
     const [state, setState] = React.useState(defaultState);
 
     const { editing, validationMessages } = state;
@@ -34,12 +37,14 @@ export default React.memo(() => {
 
     return <>
         <div className="d-flex justify-content-between align-items-center mt-3">
-            <p>Password</p>
-            <Modal.Toggle
-                onClick={() => setEditing(true)}
-                className="btn">
-                <Icon variant="chevron-right" />
-            </Modal.Toggle>
+            <p>Firstname</p>
+            <div className="text-muted d-flex align-items-center gap-2">
+                {user.firstname} <Modal.Toggle
+                    onClick={() => setEditing(true)}
+                    className="btn">
+                    <Icon variant="chevron-right" />
+                </Modal.Toggle>
+            </div>
         </div>
 
         <Modal.Container
@@ -50,34 +55,15 @@ export default React.memo(() => {
             onClose={() => setState(defaultState)}
             size="sm">
             <ModalHeader>
-                <ModalTitle>Password Changing</ModalTitle>
+                <ModalTitle>Change your firstname</ModalTitle>
             </ModalHeader>
             <ModalBody className="d-flex flex-column gap-3 align-items-center">
                 <FormFloating.Input
-                    id="user.password"
-                    name="password"
-                    labelProps={{ label: <><Icon variant="lock" /> Current password</>, className: "col-10 col-sm-6" }}
-                    error={validationMessages?.password}
-                    autoComplete="password"
-                    type="password" />
-
-                <FormFloating.Input
-                    id="user.new_password"
-                    name="password"
-                    type="password"
-                    labelProps={{ label: <><Icon variant="user-lock" /> New password</>, className: "col-10 col-sm-6" }}
-                    error={validationMessages?.new_password}
-                    autoComplete="new_password"
-                />
-
-                <FormFloating.Input
-                    id="user.password_confirm"
-                    name="password"
-                    type="password"
-                    labelProps={{ label: <><Icon variant="user-lock" /> Confirm your password</>, className: "col-10 col-sm-6" }}
-                    error={validationMessages?.password_confirm}
-                />
-
+                    id="user.firstname"
+                    name="firstname"
+                    labelProps={{ label: <><Icon variant="enveloppe" /> Firstname</>, className: "col-10 col-sm-6" }}
+                    error={validationMessages?.firstname}
+                    defaultValue={user.firstname} />
             </ModalBody>
             <ModalFooter>
                 <Button variant="secondary" size="sm" onClick={() => setState(defaultState)}>cancel</Button>

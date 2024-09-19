@@ -10,6 +10,8 @@ import formObservations from "../../../core/helpers/formObservations";
 import { JsObject } from "../../../core/config/types/variables";
 import AuthForm from "../../../partials/AuthForm/AuthForm";
 import useSteps from "../../../core/hooks/useSteps";
+import useAuth from "../../../core/hooks/useAuth";
+import { fakeUser } from "../../../core/config/constants/fakes";
 
 export type StepProps = {
     errors: JsObject | null,
@@ -59,6 +61,7 @@ const Signup = React.memo(() => {
     });
 
     const { active, next, prev, Container } = useSteps(Steps);
+    const { setAuth } = useAuth();
 
     const isFirstStep = React.useMemo(() => active === 0, [active]);
     const isLastStep = React.useMemo(() => active === (Steps.length - 1), [active]);
@@ -69,7 +72,7 @@ const Signup = React.memo(() => {
 
         if (!validationMessages) {
             if (isLastStep) {
-
+                setAuth({ ...fakeUser, ...state.form });
             } else {
                 setTimeout(() => {
                     next();
@@ -85,7 +88,7 @@ const Signup = React.memo(() => {
         <Container
             predicate={((step) => <step.component defaultValue={state.form} errors={state.validationMessages} />)} className="d-flex align-items-center gap-3 col-12 flex-column" />
 
-        <div className="d-flex justify-content-center gap-3 flex-wrap">
+        <div className="d-flex justify-content-center gap-3 flex-wrap-reverse">
             {!isFirstStep &&
                 <Button.Static variant="outline-secondary" onClick={prev}>
                     <Icon variant="arrow-left" /> Previous
@@ -95,12 +98,13 @@ const Signup = React.memo(() => {
                 <Button.Static
                     variant="primary"
                     type="submit"
-                    isLoading={state.isLoading}>
+                    isLoading={state.isLoading}
+                    className="col-6 col-sm-4">
                     Next <Icon variant="arrow-right" />
                 </Button.Static>}
 
             {isLastStep &&
-                <Button.Static type="submit">
+                <Button.Static type="submit" variant="primary" isLoading={state.isLoading}>
                     Done <Icon variant="check" />
                 </Button.Static>}
 

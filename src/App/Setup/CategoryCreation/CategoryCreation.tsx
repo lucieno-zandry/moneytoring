@@ -10,12 +10,17 @@ import generateArray from "../../../core/helpers/generateArray";
 import CategoryRow from "../../../partials/CategoryRow/CategoryRow";
 import arrayUpdate from "../../../core/helpers/arrayUpdate";
 import { StepProps } from "../Setup";
-import { defaultCategories } from "../../../core/hooks/useCategories";
+import useCategories, { defaultCategories } from "../../../core/hooks/useCategories";
+import useAccounts from "../../../core/hooks/useAccounts";
+import arraySum from "../../../core/helpers/arraySum";
 
 const CategoryCreation = React.memo((props: StepProps) => {
     const { onDone } = props;
+    const { setCategories } = useCategories();
 
-    const balance = React.useMemo(() => randomNumber(6), []);
+    const { accounts } = useAccounts();
+
+    const balance = React.useMemo(() => accounts ? arraySum(accounts, (account) => account.balance) : randomNumber(3), [accounts]);
 
     const [state, setState] = React.useState({
         creationMode: false,
@@ -62,6 +67,12 @@ const CategoryCreation = React.memo((props: StepProps) => {
 
     const editMode = React.useMemo(() => Boolean(editingCategory), [editingCategory]);
 
+    const handleSubmit = React.useCallback(() => {
+        if (state.categories.length === 0) return;
+        setCategories(state.categories);
+        onDone();
+    }, [setCategories, onDone]);
+
     return <>
         <div className="category-creation col-12">
             <h3 className="display-6">Setup your categories</h3>
@@ -85,7 +96,7 @@ const CategoryCreation = React.memo((props: StepProps) => {
             <Button
                 variant="primary"
                 disabled={!categories || categories.length < 1}
-                onClick={onDone}>
+                onClick={handleSubmit}>
                 Done <Icon variant="check-circle" />
             </Button>
         </CornerButtons>

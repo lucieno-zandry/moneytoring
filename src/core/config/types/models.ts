@@ -1,3 +1,4 @@
+import { CURRENCIES, LANGUAGES } from "../constants/constants";
 import { DateString } from "./variables";
 
 export type User = {
@@ -50,9 +51,10 @@ export type Transaction = {
   icon: string;
   type: "INCOME" | "EXPENSE";
   transaction_recurrence_id: number | null;
-  transaction_recurrence?: TransactionRecurrence;
   created_at: DateString;
   updated_at: DateString;
+  account: Account,
+  transaction_recurrence?: TransactionRecurrence;
 };
 
 export type Goal = {
@@ -85,8 +87,8 @@ export type Notification = {
 export type Setting = {
   id: number;
   user_id: number;
-  language: "fr-FR" | "en-EN" | "mg-MG";
-  currency: "EUR" | "USD" | "MGA";
+  language: keyof typeof LANGUAGES;
+  currency: keyof typeof CURRENCIES;
   created_at: DateString;
   updated_at: DateString;
 };

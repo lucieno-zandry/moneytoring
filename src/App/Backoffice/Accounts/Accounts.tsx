@@ -8,6 +8,9 @@ import Icon from "../../../partials/Icon/Icon";
 import AccountModal from "../../../partials/AccountModal/AccountModal";
 import Motion from "../../../partials/Motion/Motion";
 import useAccounts from "../../../core/hooks/useAccounts";
+import DeleteDialogue from "../../../partials/DeleteDialogue/DeleteDialogue";
+
+const tableHeaders = ['', 'name', 'balance'];
 
 const Accounts = React.memo(() => {
     const { setAccounts, accounts } = useAccounts(state => state);
@@ -15,14 +18,15 @@ const Accounts = React.memo(() => {
     const [state, setState] = React.useState({
         editing: undefined as Account | undefined,
         creating: false,
+        deleting: [] as Account[],
     });
 
     const handleEdit = React.useCallback((editing: Account) => {
         setState(s => ({ ...s, editing, creating: false }));
     }, []);
 
-    const handleDelete = React.useCallback((accounts: Account[]) => {
-        console.log(accounts);
+    const setDeleting = React.useCallback((accounts: Account[]) => {
+        setState(s => ({ ...s, deleting: accounts }));
     }, []);
 
     const handleSubmit = React.useCallback((account: Account) => {
@@ -41,12 +45,18 @@ const Accounts = React.memo(() => {
         setState(s => ({ ...s, creating: false, editing: undefined }));
     }, []);
 
+    const handleDelete = React.useCallback(() => {
+        if (state.deleting.length === 0) return;
+
+    }, [state.deleting]);
+
     return <Motion.Main className="accounts">
+        <div className="display-6 mb-3">Accounts</div>
         <Table
-            headers={['', 'name', 'budget']}
+            headers={tableHeaders}
             TDs={AccountRow}
             items={accounts}
-            onDelete={handleDelete}
+            onDelete={setDeleting}
             onEdit={handleEdit} />
 
         <CornerButtons>
@@ -58,6 +68,17 @@ const Accounts = React.memo(() => {
             onSubmit={handleSubmit}
             onClose={handleClose}
             account={state.editing} />
+
+        <DeleteDialogue
+            show={state.deleting.length > 0}
+            onSubmit={handleDelete}
+            onClose={() => setDeleting([])}
+            size="sm"
+            body={<Table
+                headers={tableHeaders}
+                TDs={AccountRow}
+                items={state.deleting} />}
+        />
     </Motion.Main>
 })
 

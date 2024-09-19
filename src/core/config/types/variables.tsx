@@ -1,5 +1,5 @@
 export type JsObject = {
-    [key: string]: any,
-}
+  [key: string]: any;
+};
 
 export type DateString = string;

@@ -3,14 +3,14 @@ import randomString from "../../../core/helpers/randomString";
 import { AnimatePresence, motion, Variants } from "framer-motion";
 import { createPortal } from "react-dom";
 import { defaultPosition, ModalContext, Position } from "../Modal";
+import HTMLElement, { HTMLElementProps, HTMLTag } from "../../HTMLElement/HTMLElement";
 
-export type ModalContainerProps = {
+export interface ModalContainerProps<T extends HTMLTag> extends HTMLElementProps<T> {
     show?: boolean,
-    onClose?: Function,
-    as?: 'div' | 'form',
+    onClose?: () => void,
     size?: 'sm' | 'md' | 'lg',
     align?: 'center' | 'end' | 'start',
-} & React.DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement | HTMLFormElement>, any>
+}
 
 interface Target extends EventTarget {
     id: string,
@@ -75,19 +75,17 @@ const getVariants: (x: number, y: number) => Variants = (x, y) => ({
     }
 });
 
-const ModalContainer = (props: ModalContainerProps & { position?: Position }) => {
+const ModalContainer = <T extends HTMLTag>(props: ModalContainerProps<T> & { position?: Position }) => {
     const {
         show = false,
         onClose,
         position,
         className = '',
-        as = 'div',
         size = 'md',
         align = 'center',
         ...elementProps } = props;
 
     const modalId = React.useMemo(() => randomString(6, 'modal'), []);
-    const Element = React.useMemo(() => as, [as]);
 
     const handleClick: React.MouseEventHandler<HTMLDivElement> = React.useCallback((e) => {
         const target = e.target as Target;
@@ -135,10 +133,10 @@ const ModalContainer = (props: ModalContainerProps & { position?: Position }) =>
         animate="visible"
         exit="hidden"
         tabIndex={-1}>
-        <Element className={`modal-content ${className}`} {...elementProps} />
+        <HTMLElement className={`modal-content ${className}`} {...elementProps} />
     </motion.div>, [handleClick, Element, modalId, show, variants, className, elementProps]);
 
-    const contextValue: ModalContainerProps = React.useMemo(() => ({
+    const contextValue: ModalContainerProps<'div'> = React.useMemo(() => ({
         show,
         onClose
     }), [show, onClose]);

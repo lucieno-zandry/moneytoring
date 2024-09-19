@@ -1,37 +1,32 @@
 import React from "react";
 import { Form, FormControlProps } from "react-bootstrap";
 import { motion } from 'framer-motion';
+import useNumberFormat from "../../../core/hooks/useNumberFormat";
 
 export default React.memo((props: FormControlProps) => {
     const { type = 'text', className = '', onChange, ...formControlProps } = props;
 
-    const handleNumberChange = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-        let formatedValue = e.target.value;
-
-        if (formatedValue) {
-            formatedValue = formatedValue.replace(/[^0-9]/g, '');
-        }
-
-        if (!isNaN(parseInt(formatedValue))) {
-            e.target.value = formatedValue;
-            onChange && onChange(e);
-        }
-    }, [onChange]);
+    const { toNumber, toString } = useNumberFormat();
 
     const handleChange: React.ChangeEventHandler<HTMLInputElement> = React.useCallback((e) => {
-        if (!onChange) return;
 
-        if (type === 'number') return handleNumberChange(e);
-        
-        onChange(e);
+        if (type === "number") {
+            const { value } = e.target;
+            const numberValue = toNumber(value);
 
-    }, [type, onChange, handleNumberChange]);
+            e.target.value = isNaN(numberValue) ? "0" : toString(numberValue);
+        }
+
+        onChange && onChange(e);
+    }, [type, onChange, toNumber, toString]);
+
+    const inputType = React.useMemo(() => type === "number" ? "text" : type, [type]);
 
     return <Form.Control
         {...formControlProps}
         className={`text-dark ${className}`}
         as={motion.input}
-        type={type}
+        type={inputType}
         onChange={handleChange}
         layout />
 });

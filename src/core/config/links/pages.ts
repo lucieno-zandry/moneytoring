@@ -11,3 +11,6 @@ export const accounts = '/accounts';
 export const accountSettings = `${settings}/account`;
 export const profileSettings = `${settings}/profile`;
 export const preferencesSettings = `${settings}/preferences`;
+export const accountsSetup = '/setup/accounts';
+export const categoriesSetup = '/setup/categories';
+export const transactionsSetup = '/setup/transactions';

@@ -46,7 +46,7 @@ const SmallText = React.memo((props: Props) => {
         {toggleable && <Button
             type="button"
             className={"smalltext-button"}
-            onClick={toggleHidden}>voir {hidden ? 'plus' : 'moins'}</Button>}
+            onClick={toggleHidden}>show {hidden ? 'more' : 'less'}</Button>}
     </>
 });
 

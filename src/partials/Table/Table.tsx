@@ -5,32 +5,38 @@ import Button from "../Button/Button";
 import Icon from "../Icon/Icon";
 import { AnimatePresence, motion, Variants } from "framer-motion";
 import useSearch from "../../core/hooks/useSearch";
-import hasMatched from "../../core/hooks/hasMatched";
+import hasMatched from "../../core/helpers/hasMatched";
 import TablePlaceholder from "../TablePlaceholder/TablePlaceholder";
 import ListEmpty from "../ListEmpty/ListEmpty";
 
 type Props<T extends { id: number }> = {
     items: T[] | null,
     headers: React.ReactNode[],
-    TDs: (props: { item: T }) => React.JSX.Element,
-    onDelete: (items: T[]) => void,
-    onEdit: (item: T) => void,
+    TDs: ((props: { item: T }) => React.JSX.Element) | (React.MemoExoticComponent<(props: { item: T }) => JSX.Element>),
+    onDelete?: (items: T[]) => void,
+    onEdit?: (item: T) => void,
 } & React.DetailedHTMLProps<React.TableHTMLAttributes<HTMLTableElement>, HTMLTableElement>
+
+const fadeAnimationDuration = .6;
 
 const variants = (key: number): Variants => {
     return {
         hidden: {
-            x: '100%',
+            y: '-3rem',
             opacity: 0,
         },
         visible: {
-            x: 0,
+            y: 0,
             opacity: 1,
             transition: {
-                delay: .2 * key,
+                delay: (.2 * key) + fadeAnimationDuration,
                 type: 'spring',
                 duration: .3
             }
+        },
+        exit: {
+            y: '3rem',
+            opacity: 0,
         }
     }
 }
@@ -94,6 +100,7 @@ export default function <T extends { id: number }>(props: Props<T>) {
         onEdit && onEdit(item);
     }, [onEdit]);
 
+    const hasActions = React.useMemo(() => Boolean(onDelete || onEdit), [onDelete, onEdit]);
     if (!items) return <TablePlaceholder />
 
     if (items.length === 0) return <ListEmpty />
@@ -102,8 +109,8 @@ export default function <T extends { id: number }>(props: Props<T>) {
         className={`table table-stripped table-hover table-dark align-middle ${className}`}
         {...tableProps}>
         <thead>
-            <tr>
-                {state.selection && <th className="col-1">
+            <tr className="rounded">
+                {(hasActions && state.selection) && <th className="col-1">
                     <Checkbox
                         label='All'
                         checked={state.selection.length === items.length}
@@ -113,20 +120,25 @@ export default function <T extends { id: number }>(props: Props<T>) {
 
                 {headers.map((header, key) => <th key={key}>{header}</th>)}
 
-                <th className="col-2 text-align-center">
-                    {state.selection ?
-                        <Button
-                            variant="danger"
-                            onClick={handleDeleteItems}
-                            disabled={state.selection?.length === 0}>
-                            <Icon variant="trash" /> Delete
-                        </Button> :
-                        <Button
-                            variant="outline-light"
-                            onClick={toggleSelect}>
-                            Select
-                        </Button>}
-                </th>
+                {hasActions &&
+                    <th className="col-2 text-align-center">
+                        {state.selection ?
+                            <Button
+                                variant="danger"
+                                onClick={handleDeleteItems}
+                                disabled={state.selection?.length === 0}
+                                size="sm"
+                                className="d-flex d-md-inline gap-1 flex-nowrap align-items-center">
+                                <Icon variant="trash" /> Delete
+                            </Button> :
+                            <Button
+                                variant="outline-light"
+                                onClick={toggleSelect}
+                                size="sm"
+                                className="d-flex d-md-inline gap-1 flex-nowrap align-items-center">
+                                <Icon variant="tasks" /> Select
+                            </Button>}
+                    </th>}
             </tr>
         </thead>
         <tbody>
@@ -138,7 +150,8 @@ export default function <T extends { id: number }>(props: Props<T>) {
                         variants={variants(key)}
                         initial="hidden"
                         animate="visible"
-                        exit="hidden">
+                        exit="exit">
+
                         {selection && <td>
                             <Checkbox
                                 label=''
@@ -146,22 +159,25 @@ export default function <T extends { id: number }>(props: Props<T>) {
                                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSelection(e, item)}
                             />
                         </td>}
+
                         <TDs item={item} />
-                        <td className="text-align-center">
-                            <Dropdown className="actions-dropdown">
-                                <Dropdown.Toggle variant="">
-                                    <i className="fa fa-ellipsis-v"></i>
-                                </Dropdown.Toggle>
-                                <Dropdown.Menu>
-                                    <Dropdown.Item onClick={() => handleEdit(item)}>
-                                        <Icon variant="pencil" /> Edit
-                                    </Dropdown.Item>
-                                    <Dropdown.Item className="text-danger" onClick={() => handleDeleteUnique(item)}>
-                                        <Icon variant="trash" /> Delete
-                                    </Dropdown.Item>
-                                </Dropdown.Menu>
-                            </Dropdown>
-                        </td>
+
+                        {hasActions &&
+                            <td className="text-align-center">
+                                <Dropdown className="actions-dropdown">
+                                    <Dropdown.Toggle variant="">
+                                        <i className="fa fa-ellipsis-v"></i>
+                                    </Dropdown.Toggle>
+                                    <Dropdown.Menu>
+                                        <Dropdown.Item onClick={() => handleEdit(item)}>
+                                            <Icon variant="pencil" /> Edit
+                                        </Dropdown.Item>
+                                        <Dropdown.Item className="text-danger" onClick={() => handleDeleteUnique(item)}>
+                                            <Icon variant="trash" /> Delete
+                                        </Dropdown.Item>
+                                    </Dropdown.Menu>
+                                </Dropdown>
+                            </td>}
                     </motion.tr>
 
                     if (!search) return element;

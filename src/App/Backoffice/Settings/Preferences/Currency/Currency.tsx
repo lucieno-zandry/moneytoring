@@ -6,6 +6,8 @@ import FormFloating from "../../../../../partials/FormFloating/FormFloating";
 import formObservations from "../../../../../core/helpers/formObservations";
 import { JsObject } from "../../../../../core/config/types/variables";
 import { ModalTitle } from "react-bootstrap";
+import useSetting from "../../../../../core/hooks/useSetting";
+import { CURRENCIES } from "../../../../../core/config/constants/constants";
 
 const defaultState = {
     editing: false,
@@ -14,6 +16,7 @@ const defaultState = {
 
 export default React.memo(() => {
     const [state, setState] = React.useState(defaultState);
+    const { setting } = useSetting();
 
     const { editing, validationMessages } = state;
 
@@ -34,12 +37,14 @@ export default React.memo(() => {
 
     return <>
         <div className="d-flex justify-content-between align-items-center mt-3">
-            <p>Password</p>
-            <Modal.Toggle
-                onClick={() => setEditing(true)}
-                className="btn">
-                <Icon variant="chevron-right" />
-            </Modal.Toggle>
+            <p>Currency</p>
+            <div className="text-muted d-flex align-items-center gap-2">
+                {CURRENCIES[setting.currency]} <Modal.Toggle
+                    onClick={() => setEditing(true)}
+                    className="btn">
+                    <Icon variant="chevron-right" />
+                </Modal.Toggle>
+            </div>
         </div>
 
         <Modal.Container
@@ -49,35 +54,18 @@ export default React.memo(() => {
             align="center"
             onClose={() => setState(defaultState)}
             size="sm">
-            <ModalHeader>
-                <ModalTitle>Password Changing</ModalTitle>
+            <ModalHeader className="d-block">
+                <ModalTitle>Currency</ModalTitle>
+                <small className="text-muted">Choose in which language the application should display.</small>
             </ModalHeader>
             <ModalBody className="d-flex flex-column gap-3 align-items-center">
-                <FormFloating.Input
-                    id="user.password"
-                    name="password"
-                    labelProps={{ label: <><Icon variant="lock" /> Current password</>, className: "col-10 col-sm-6" }}
-                    error={validationMessages?.password}
-                    autoComplete="password"
-                    type="password" />
-
-                <FormFloating.Input
-                    id="user.new_password"
-                    name="password"
-                    type="password"
-                    labelProps={{ label: <><Icon variant="user-lock" /> New password</>, className: "col-10 col-sm-6" }}
-                    error={validationMessages?.new_password}
-                    autoComplete="new_password"
-                />
-
-                <FormFloating.Input
-                    id="user.password_confirm"
-                    name="password"
-                    type="password"
-                    labelProps={{ label: <><Icon variant="user-lock" /> Confirm your password</>, className: "col-10 col-sm-6" }}
-                    error={validationMessages?.password_confirm}
-                />
-
+                <FormFloating.Select
+                    id="setting.language"
+                    labelProps={{ label: <><Icon variant="language" /> Currency</>, className: "col-10 col-sm-7" }}
+                    options={Object.keys(CURRENCIES)}
+                    predicate={(option: keyof typeof CURRENCIES) => ({ title: CURRENCIES[option], value: option })}
+                    error={validationMessages?.language}
+                    defaultValue={setting.currency} />
             </ModalBody>
             <ModalFooter>
                 <Button variant="secondary" size="sm" onClick={() => setState(defaultState)}>cancel</Button>
