@@ -5,6 +5,7 @@ import classList from "../../core/helpers/classList";
 import Nav from "../Nav/Nav";
 import { NavItemProps } from "../NavItem/NavItem";
 import { accounts, categories, dashboard, transactions } from "../../core/config/links/pages";
+import { MODELS_DATA } from "../../core/config/constants/constants";
 
 const sidebarItems: NavItemProps[] = [
     {
@@ -13,17 +14,17 @@ const sidebarItems: NavItemProps[] = [
         href: dashboard,
     },
     {
-        icon: "cash-register",
+        icon: MODELS_DATA.transactions.icon,
         children: <span className="d-none d-md-block">Transactions</span>,
         href: transactions,
     },
     {
-        icon: "stream",
+        icon: MODELS_DATA.categories.icon,
         children: <span className="d-none d-md-block">Categories</span>,
         href: categories,
     },
     {
-        icon: "book",
+        icon: MODELS_DATA.accounts.icon,
         children: <span className="d-none d-md-block">Accounts</span>,
         href: accounts,
     },

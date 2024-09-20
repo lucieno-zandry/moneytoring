@@ -1,4 +1,4 @@
-import axios, { AxiosError, AxiosInstance, AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { getUserApi, loginApi, signupApi } from "../config/links/api";
 import { loginPage } from "../config/links/pages";
 import { API_URL } from "../config/constants/constants";
@@ -61,10 +61,10 @@ const getHeaders = (): Headers => ({
   Authorization: `${AUTHORIZATION_TOKEN_PREFIX}${authorizationToken()}`,
 });
 
-function get(url: string) {
+function get(url: string, options?: AxiosRequestConfig<any>) {
   const headers = getHeaders();
   const instance = createInstance(headers);
-  return execute(() => instance.get(url), url);
+  return execute(() => instance.get(url, options), url);
 }
 
 function post(url: string, payload?: unknown) {

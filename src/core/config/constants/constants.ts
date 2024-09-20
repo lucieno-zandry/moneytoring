@@ -15,3 +15,15 @@ export const CURRENCIES = {
   MGA: "Ariary",
   USD: "Usd",
 };
+
+export const MODELS_DATA = {
+  categories: {
+    icon: 'stream',
+  },
+  accounts: {
+    icon: 'book',
+  },
+  transactions: {
+    icon: 'cash-register',
+  }
+}

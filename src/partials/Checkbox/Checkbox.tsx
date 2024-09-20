@@ -1,11 +1,11 @@
 import React from "react";
 import randomString from "../../core/helpers/randomString";
 
-type Props = {
+export type CheckboxProps = {
     label:  React.ReactNode,
 } & React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
 
-const Checkbox = React.forwardRef((props: Props, ref?: React.LegacyRef<HTMLDivElement>) => {
+const Checkbox = React.forwardRef((props: CheckboxProps, ref?: React.LegacyRef<HTMLDivElement>) => {
     const { label, className = '', id = '', ...inputProps} = props;
     const randomId = React.useMemo(() => randomString(6, 'checkbox'), []);
     

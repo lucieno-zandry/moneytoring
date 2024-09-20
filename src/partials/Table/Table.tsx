@@ -8,10 +8,11 @@ import useSearch from "../../core/hooks/useSearch";
 import hasMatched from "../../core/helpers/hasMatched";
 import TablePlaceholder from "../TablePlaceholder/TablePlaceholder";
 import ListEmpty from "../ListEmpty/ListEmpty";
+import { Model } from "../../core/config/types/models";
 
 type TDS<T> = (props: { item: T }) => JSX.Element
 
-export type TableProps<T extends { id: number }> = {
+export type TableProps<T extends Model> = {
     items: T[] | null,
     headers: React.ReactNode[],
     TDs: TDS<T> | React.MemoExoticComponent<TDS<T>>,
@@ -43,7 +44,7 @@ const variants = (key: number): Variants => {
     }
 }
 
-export default <T extends { id: number }>(props: TableProps<T>) => {
+export default <T extends Model>(props: TableProps<T>) => {
     const { items, headers, TDs, onDelete, className = '', onEdit, ...tableProps } = props;
     const { search } = useSearch();
 

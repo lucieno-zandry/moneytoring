@@ -1,48 +1,41 @@
 import { CURRENCIES, LANGUAGES } from "../constants/constants";
 import { DateString } from "./variables";
 
-export type User = {
-  id: number;
+export type Model = {
+  id: number | string,
+  created_at: DateString,
+  updated_at: DateString,
+}
+
+export interface User extends Model{
   email: string;
   name: string;
   firstname: string;
-  created_at: DateString;
-  updated_at: DateString;
   email_verified_at: string | null;
   image: string;
 };
 
-export type Account = {
-  id: number;
+export interface Account extends Model {
   user_id: number;
   name: string;
   balance: number;
   icon: string;
-  created_at: DateString;
-  updated_at: DateString;
 };
 
-export type Category = {
-  id: number;
+export interface Category extends Model {
   user_id: number;
   name: string;
   icon: string;
   budget: number;
-  created_at: DateString;
-  updated_at: DateString;
 };
 
-export type TransactionRecurrence = {
-  id: number;
+export interface TransactionRecurrence extends Model {
   transaction_id: number;
   pattern: "YEARLY" | "MONTHLY" | "WEEKLY" | "ONCE";
   next_occurence: DateString | null;
-  created_at: DateString;
-  updated_at: DateString;
 };
 
-export type Transaction = {
-  id: number;
+export interface Transaction extends Model {
   user_id: number;
   account_id: number;
   category_id: number;
@@ -51,26 +44,20 @@ export type Transaction = {
   icon: string;
   type: "INCOME" | "EXPENSE";
   transaction_recurrence_id: number | null;
-  created_at: DateString;
-  updated_at: DateString;
   account: Account,
   category: Category,
   transaction_recurrence?: TransactionRecurrence;
 };
 
-export type Goal = {
-  id: number;
+export interface Goal extends Model {
   user_id: number;
   name: string;
   target_amount: number;
   current_amount: number;
   due_date: DateString;
-  created_at: DateString;
-  updated_at: DateString;
 };
 
-export type Notification = {
-  id: string;
+export interface Notification extends Model {
   type: string;
   notifiable_type: string;
   notifiable_id: number;
@@ -81,15 +68,10 @@ export type Notification = {
     action: string;
   };
   read_at: string | null;
-  created_at: DateString;
-  updated_at: DateString;
 };
 
-export type Setting = {
-  id: number;
+export interface Setting extends Model {
   user_id: number;
   language: keyof typeof LANGUAGES;
   currency: keyof typeof CURRENCIES;
-  created_at: DateString;
-  updated_at: DateString;
 };

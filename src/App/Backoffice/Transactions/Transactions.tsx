@@ -8,10 +8,15 @@ import TransactionModal from "../../../partials/TransactionModal/TransactionModa
 import Motion from "../../../partials/Motion/Motion";
 import DeleteDialogue from "../../../partials/DeleteDialogue/DeleteDialogue";
 import TransactionsTable from "../../../partials/TransactionTables/TransactionsTable";
+import Filter from "../../../partials/Filter/Filter";
+import useCategories from "../../../core/hooks/useCategories";
+import useAccounts from "../../../core/hooks/useAccounts";
 
 
 const Transactions = React.memo(() => {
-    const { setTransactions, transactions } = useTransactions(state => state);
+    const { setTransactions, transactions } = useTransactions();
+    const { categories } = useCategories();
+    const { accounts } = useAccounts();
 
     const [state, setState] = React.useState({
         editing: undefined as Transaction | undefined,
@@ -51,6 +56,8 @@ const Transactions = React.memo(() => {
 
     return <Motion.Main className="transactions">
         <div className="display-6 mb-3">Transactions</div>
+
+        <Filter data={{ accounts: accounts!, categories: categories! }} />
 
         <TransactionsTable
             items={transactions}

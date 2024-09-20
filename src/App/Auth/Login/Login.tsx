@@ -13,6 +13,11 @@ import randomString from "../../../core/helpers/randomString";
 import sessionAuthActions from "../../../core/helpers/sessionAuthActions";
 import toast from "react-hot-toast";
 
+import * as Models from "../../../core/config/types/models";
+
+const models = Object.keys(Models);
+console.log(models);
+
 const Login = React.memo(() => {
     const [state, setState] = React.useState({
         validationMessages: null as JsObject | null,

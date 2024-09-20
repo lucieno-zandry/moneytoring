@@ -43,7 +43,7 @@ const FloatingInput = (props: Props & FormControlProps) => {
         id={id}
         labelProps={labelProps}
         error={error}>
-        <Input {...inputProps} isInvalid={Boolean(error)}/>
+        <Input {...inputProps} isInvalid={Boolean(error)} />
     </FloatingWrapper>
 }
 
@@ -54,7 +54,7 @@ const FloatingSelect = (props: Props & SelectProps<any>) => {
         id={id}
         labelProps={labelProps}
         error={error}>
-        <Select {...selectProps} isInvalid={Boolean(error)}/>
+        <Select {...selectProps} isInvalid={Boolean(error)} />
     </FloatingWrapper>
 }
 
@@ -72,10 +72,16 @@ const FloatingTextArea = (props: Props & React.DetailedHTMLProps<React.TextareaH
     </FloatingWrapper>
 }
 
-const FormFloating = {
-    Input: FloatingInput,
-    Select: FloatingSelect,
-    TextArea: FloatingTextArea,
+const FormFloating: React.FC<Props & FormControlProps> & {
+    Input: typeof FloatingInput,
+    Select: typeof FloatingSelect,
+    TextArea: typeof FloatingTextArea
+} = (props: Props & FormControlProps) => {
+    return <FloatingInput {...props} />
 }
+
+FormFloating.Input = FloatingInput;
+FormFloating.Select = FloatingSelect;
+FormFloating.TextArea = FloatingTextArea;
 
 export default FormFloating;
