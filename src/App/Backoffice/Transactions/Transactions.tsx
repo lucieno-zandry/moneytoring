@@ -22,12 +22,12 @@ const Transactions = React.memo(() => {
         editing: undefined as Transaction | undefined,
         creating: false,
         deleting: [] as Transaction[],
+        filtering: false,
     });
 
     const handleEdit = React.useCallback((editing: Transaction) => {
         setState(s => ({ ...s, editing, creating: false }));
     }, []);
-
 
     const handleSubmit = React.useCallback((transaction: Transaction) => {
         if (state.creating) {
@@ -36,6 +36,10 @@ const Transactions = React.memo(() => {
 
         }
     }, [state.creating]);
+
+    const toggleFiltering = React.useCallback(() => {
+        setState(s => ({ ...s, filtering: !s.filtering }));
+    }, []);
 
     const toggleCreating = React.useCallback(() => {
         setState(s => ({ ...s, creating: !s.creating, editing: undefined }));
@@ -57,7 +61,9 @@ const Transactions = React.memo(() => {
     return <Motion.Main className="transactions">
         <div className="display-6 mb-3">Transactions</div>
 
-        <Filter data={{ accounts: accounts!, categories: categories! }} />
+        <Button className="mb-3" variant="outline-light" onClick={toggleFiltering}>
+            <Icon variant="filter" /> Filter
+        </Button>
 
         <TransactionsTable
             items={transactions}
@@ -73,6 +79,11 @@ const Transactions = React.memo(() => {
             onSubmit={handleSubmit}
             onClose={handleClose}
             transaction={state.editing} />
+
+        <Filter
+            data={{ accounts: accounts!, categories: categories! }}
+            show={state.filtering}
+            onClose={() => setState(s => ({ ...s, filtering: false }))} />
 
         <DeleteDialogue
             body={<TransactionsTable items={state.deleting} />}

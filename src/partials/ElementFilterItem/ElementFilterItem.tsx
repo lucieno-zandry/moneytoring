@@ -4,9 +4,9 @@ import Checkbox, { CheckboxProps } from "../Checkbox/Checkbox";
 import Icon from "../Icon/Icon";
 import { Model } from "../../core/config/types/models";
 
-type ModelWithName = Model & { name: string }
+type COmponentElement = Model & { name: string, icon: string }
 
-type Props<T extends ModelWithName> = {
+type Props<T extends COmponentElement> = {
     items: T[],
     icon: string,
     eventKey: string,
@@ -18,7 +18,7 @@ type Props<T extends ModelWithName> = {
     checked: (item: T) => boolean
 } & Omit<CheckboxProps, 'onChange' | 'checked' | 'label'>;
 
-export default React.memo(<T extends ModelWithName>(props: Props<T>) => {
+export default React.memo(<T extends COmponentElement>(props: Props<T>) => {
     const { items, eventKey, icon, buttonLabel, checked, onChange, accordionButtonProps, accordionCollapseProps, accordionItemProps, ...checkboxProps } = props;
 
     return <Accordion.Item {...accordionItemProps} eventKey={eventKey} >
@@ -33,7 +33,7 @@ export default React.memo(<T extends ModelWithName>(props: Props<T>) => {
                     return <Checkbox
                         className="my-3"
                         {...checkboxProps}
-                        label={item.name}
+                        label={<span><Icon variant={item.icon}/> {item.name} </span>}
                         key={item.id}
                         onChange={(e) => onChange(e, item)}
                         checked={checked(item)}
