@@ -16,13 +16,14 @@ jobs:
         run: npm install  # Or yarn install, depending on your project
 
       - name: Build for production
-        run: npm run build  # Or yarn build, adjust the script name     
-        
-      - name: Upload from root dir via FTP
-        uses: airvzxf/ftp-deployment-action@latest
+        run: npm run build  # Or yarn build, adjust the script name  
+      
+      - name: Fast FTP Action
+        uses: anvil-solutions/Fast-FTP-Action@2.1.0
         with:
           server: ${{ secrets.FTP_SERVER }}
-          user: ${{ secrets.FTP_USERNAME }}
+          port: 21
+          username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
           local_dir: "./dist"
           remote_dir: "/htdocs"
