@@ -18,12 +18,17 @@ export const CURRENCIES = {
 
 export const MODELS_DATA = {
   categories: {
-    icon: 'stream',
+    icon: "icons",
   },
   accounts: {
-    icon: 'book',
+    icon: "book",
   },
   transactions: {
-    icon: 'cash-register',
-  }
-}
+    icon: "cash-register",
+  },
+};
+
+export const AUTHORIZATION_TOKEN_PREFIX = "Bearer ";
+export const AUTHORIZATION_TOKEN_NAME = "authToken";
+export const STORAGE_USER_NAME = "user";
+export const STORAGE_SETTING_NAME = "setting";

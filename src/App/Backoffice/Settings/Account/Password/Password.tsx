@@ -37,7 +37,8 @@ export default React.memo(() => {
             <p>Password</p>
             <Modal.Toggle
                 onClick={() => setEditing(true)}
-                className="btn">
+                className="btn"
+                show={editing}>
                 <Icon variant="chevron-right" />
             </Modal.Toggle>
         </div>

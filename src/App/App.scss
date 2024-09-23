@@ -17,3 +17,7 @@
 .dropdown-menu {
   margin-top: 0.5rem;
 }
+
+.bg-secondary-dark{
+  background-color: darken($secondary, 35%);
+}

@@ -2,7 +2,7 @@ import { CURRENCIES, LANGUAGES } from "../constants/constants";
 import { DateString } from "./variables";
 
 export type Model = {
-  id: number | string,
+  id: number,
   created_at: DateString,
   updated_at: DateString,
 }

@@ -1,10 +1,9 @@
+import { STORAGE_USER_NAME } from "../config/constants/constants";
 import { User } from "../config/types/models";
 import validateObject from "./validateObject";
 
-export const storageName = "user";
-
 export function get(): null | User {
-  const userString = sessionStorage.getItem(storageName);
+  const userString = sessionStorage.getItem(STORAGE_USER_NAME);
   if (!userString) return null;
 
   const user: User = JSON.parse(userString);
@@ -14,16 +13,15 @@ export function get(): null | User {
 }
 
 export function set(user: User) {
-  sessionStorage.setItem(storageName, JSON.stringify(user));
+  sessionStorage.setItem(STORAGE_USER_NAME, JSON.stringify(user));
 }
 
 export function remove() {
-  sessionStorage.removeItem(storageName);
+  sessionStorage.removeItem(STORAGE_USER_NAME);
 }
 
 export default {
   get,
   set,
   remove,
-  storageName,
 };

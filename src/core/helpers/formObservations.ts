@@ -3,14 +3,14 @@ import getFormData, { Attribute } from "./getFormData";
 import getValidationMessages from "./getValidationMessages";
 import unPrefixKeys from "./unPrefixKeys";
 
-export default (e: React.FormEvent<HTMLFormElement>, attribute: Attribute = 'id') => {
+export default <T extends JsObject = JsObject>(e: React.FormEvent<HTMLFormElement>, attribute: Attribute = 'id') => {
   e.preventDefault();
   
-  const formData = getFormData(e, attribute);
-  let validationMessages = getValidationMessages<JsObject>(formData);
+  const formData = getFormData<T>(e, attribute);
+  let validationMessages = getValidationMessages<T>(formData);
 
   return {
-    validationMessages: validationMessages ? unPrefixKeys(validationMessages) : null,
+    validationMessages: validationMessages ? unPrefixKeys<T>(validationMessages) : null,
     formData: unPrefixKeys(formData),
   }
 };

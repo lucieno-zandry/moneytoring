@@ -1,10 +1,9 @@
+import { STORAGE_SETTING_NAME } from "../config/constants/constants";
 import { Setting } from "../config/types/models";
 import validateObject from "./validateObject";
 
-export const sessionName = "setting";
-
 export function get(): Setting | null {
-  const settingString = sessionStorage.getItem(sessionName);
+  const settingString = sessionStorage.getItem(STORAGE_SETTING_NAME);
   if (!settingString) return null;
 
   const setting: Setting = JSON.parse(settingString);
@@ -12,11 +11,11 @@ export function get(): Setting | null {
 }
 
 export function set(setting: Setting) {
-  sessionStorage.setItem(sessionName, JSON.stringify(setting));
+  sessionStorage.setItem(STORAGE_SETTING_NAME, JSON.stringify(setting));
 }
 
 export default {
   get,
   set,
-  sessionName,
+  STORAGE_SETTING_NAME,
 };

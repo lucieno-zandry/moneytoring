@@ -41,7 +41,8 @@ export default React.memo(() => {
             <div className="text-muted d-flex align-items-center gap-2">
                 {user.firstname} <Modal.Toggle
                     onClick={() => setEditing(true)}
-                    className="btn">
+                    className="btn"
+                    show={editing}>
                     <Icon variant="chevron-right" />
                 </Modal.Toggle>
             </div>

@@ -8,7 +8,7 @@ type UseTransactions = {
 
 const useTransactions = create<UseTransactions>(set => ({
     transactions: null,
-    setTransactions: (transactions) => set(state => ({ ...state, transactions }))
+    setTransactions: (transactions) => set(state => ({ ...state, transactions })),
 }))
 
 export default useTransactions;

@@ -1,7 +1,7 @@
 import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
 import { getUserApi, loginApi, signupApi } from "../config/links/api";
 import { loginPage } from "../config/links/pages";
-import { API_URL } from "../config/constants/constants";
+import { API_URL, AUTHORIZATION_TOKEN_NAME, AUTHORIZATION_TOKEN_PREFIX } from "../config/constants/constants";
 
 type Headers = {
   Authorization?: string;
@@ -14,9 +14,6 @@ const UNAUTHORIZED_REDIRECTION_EXCLUSION: string[] = [
   loginApi,
   signupApi,
 ];
-
-const AUTHORIZATION_TOKEN_PREFIX = "Bearer ";
-const TOKEN_SUFFIX = "Token";
 
 async function execute(action: () => Promise<AxiosResponse>, url: string) {
   try {
@@ -50,8 +47,7 @@ function createInstance(headers: Headers): AxiosInstance {
 }
 
 function authorizationToken(): string | null {
-  const prefix = 'Auth';
-  const token = localStorage.getItem(`${prefix}${TOKEN_SUFFIX}`);
+  const token = localStorage.getItem(AUTHORIZATION_TOKEN_NAME);
   return token;
 }
 

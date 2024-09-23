@@ -6,7 +6,7 @@ import getValidationMessage from "./getValidationMessage"
  * @param formData l'objet qui contient les données de formulaire
  * @returns l'objet qui contient les données de validation
  */
-function getValidationMessages<Obj>(formData: JsObject): Obj | null {
+function getValidationMessages<T extends JsObject>(formData: T): T | null {
     let messages = {} as JsObject;
     
     for (let id in formData) {
@@ -16,7 +16,7 @@ function getValidationMessages<Obj>(formData: JsObject): Obj | null {
         }
     }
 
-    return (Object.keys(messages).length) ? messages as Obj : null;
+    return (Object.keys(messages).length) ? messages as T : null;
 }
 
 export default getValidationMessages;

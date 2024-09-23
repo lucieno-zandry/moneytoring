@@ -3,41 +3,53 @@ import Icon from "../../../partials/Icon/Icon";
 import { Link } from "react-router-dom";
 import { signupPage } from "../../../core/config/links/pages";
 import FloatingForm from "../../../partials/FormFloating/FormFloating";
-import { JsObject } from "../../../core/config/types/variables";
 import formObservations from "../../../core/helpers/formObservations";
 import Button from "../../../partials/Button/Button";
 import AuthForm from "../../../partials/AuthForm/AuthForm";
 import useAuth from "../../../core/hooks/useAuth";
-import { fakeUser } from "../../../core/config/constants/fakes";
-import randomString from "../../../core/helpers/randomString";
 import sessionAuthActions from "../../../core/helpers/sessionAuthActions";
 import toast from "react-hot-toast";
+import { login } from "../../../core/api/actions";
+import { AxiosError } from "axios";
 
-import * as Models from "../../../core/config/types/models";
-
-const models = Object.keys(Models);
-console.log(models);
+export type LoginData = { email: string, password: string };
 
 const Login = React.memo(() => {
     const [state, setState] = React.useState({
-        validationMessages: null as JsObject | null,
+        validationMessages: null as LoginData | null,
         isLoading: false,
     });
 
     const { setAuth } = useAuth();
 
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = React.useCallback((e) => {
-        const { formData, validationMessages } = formObservations(e);
+        const { formData, validationMessages } = formObservations<LoginData>(e);
 
         if (!validationMessages) {
-            const user = { ...fakeUser, ...formData };
-            sessionAuthActions.store(user, randomString());
-            toast.success('Log in success');
-            setAuth(user);
+            const newState = { ...state };
+            login(formData)
+                .then(response => {
+                    const { token, user } = response.data;
+                    sessionAuthActions.store(user, token);
+                    setAuth(user);
+                    toast.success('Log in success');
+                })
+                .catch((error: AxiosError) => {
+                    if (error.status === 422) {
+                        const { errors } = error.response?.data as { errors: LoginData };
+                        newState.validationMessages = errors;
+                    } else {
+                        toast.error(error.message);
+                    }
+                })
+                .finally(() => {
+                    newState.isLoading = false;
+                    setState(newState);
+                });
         }
 
         setState(s => ({ ...s, validationMessages, isLoading: !validationMessages }))
-    }, []);
+    }, [state]);
 
     return <AuthForm
         className="login-page"

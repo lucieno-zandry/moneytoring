@@ -8,34 +8,47 @@ import TransactionModal from "../../../partials/TransactionModal/TransactionModa
 import Motion from "../../../partials/Motion/Motion";
 import DeleteDialogue from "../../../partials/DeleteDialogue/DeleteDialogue";
 import TransactionsTable from "../../../partials/TransactionTables/TransactionsTable";
-import Filter from "../../../partials/Filter/Filter";
+import Filter, { FilterData } from "../../../partials/Filter/Filter";
 import useCategories from "../../../core/hooks/useCategories";
 import useAccounts from "../../../core/hooks/useAccounts";
+import { createTransactions, getTransactions } from "../../../core/api/actions";
+import toast from "react-hot-toast";
+import useRefreshTransactions from "../../../core/hooks/useRefreshTransactions";
 
+const defaultState = {
+    editing: undefined as Transaction | undefined,
+    creating: false,
+    deleting: [] as Transaction[],
+    filtering: false,
+}
 
 const Transactions = React.memo(() => {
     const { setTransactions, transactions } = useTransactions();
     const { categories } = useCategories();
     const { accounts } = useAccounts();
+    const refreshTransactions = useRefreshTransactions();
 
-    const [state, setState] = React.useState({
-        editing: undefined as Transaction | undefined,
-        creating: false,
-        deleting: [] as Transaction[],
-        filtering: false,
-    });
+    const [state, setState] = React.useState(defaultState);
 
     const handleEdit = React.useCallback((editing: Transaction) => {
         setState(s => ({ ...s, editing, creating: false }));
     }, []);
 
     const handleSubmit = React.useCallback((transaction: Transaction) => {
-        if (state.creating) {
-
+        if (state.creating && !state.editing) {
+            createTransactions([transaction])
+                .then(() => {
+                    refreshTransactions();
+                    setState(defaultState);
+                    toast.success('Transaction created!');
+                })
+                .catch(() => {
+                    toast.error('An error occured when trying to create the transaction');
+                });
         } else {
 
         }
-    }, [state.creating]);
+    }, [state.creating, refreshTransactions]);
 
     const toggleFiltering = React.useCallback(() => {
         setState(s => ({ ...s, filtering: !s.filtering }));
@@ -58,8 +71,20 @@ const Transactions = React.memo(() => {
 
     }, [state.deleting]);
 
+    const handleFilter = React.useCallback((filter: FilterData) => {
+        getTransactions(filter)
+            .then(response => {
+                setTransactions(response.data.transactions);
+                toast.success('Filter applied');
+                setState(defaultState);
+            })
+            .catch(() => {
+                toast.error('Failed to apply filter');
+            });
+    }, [])
+
     return <Motion.Main className="transactions">
-        <div className="display-6 mb-3">Transactions</div>
+        <div className="display-4 mb-3">Transactions</div>
 
         <Button className="mb-3" variant="outline-light" onClick={toggleFiltering}>
             <Icon variant="filter" /> Filter
@@ -83,7 +108,8 @@ const Transactions = React.memo(() => {
         <Filter
             data={{ accounts: accounts!, categories: categories! }}
             show={state.filtering}
-            onClose={() => setState(s => ({ ...s, filtering: false }))} />
+            onClose={() => setState(s => ({ ...s, filtering: false }))}
+            onSubmit={handleFilter} />
 
         <DeleteDialogue
             body={<TransactionsTable items={state.deleting} />}

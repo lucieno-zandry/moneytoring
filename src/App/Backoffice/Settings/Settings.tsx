@@ -28,7 +28,7 @@ const navItems: NavItemProps[] = [
 export default React.memo(() => {
 
     return <main className="settings">
-        <h2 className="display-6">Settings</h2>
+        <h2 className="display-4">Settings</h2>
         <Nav centered>
             {navItems}
         </Nav>

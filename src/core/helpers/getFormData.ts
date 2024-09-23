@@ -1,7 +1,4 @@
-
-type formData = {
-    [key: string]: string
-};
+import { JsObject } from "../config/types/variables";
 
 export type Attribute = 'id' | 'name';
 
@@ -10,8 +7,8 @@ export type Attribute = 'id' | 'name';
  * @param {*} event l'évenement qui résulte de la submission du formulaire
  * @returns {Object} les données du formulaire formatées en {[key]: value}
  */
-const getFormData = (event: any, attribute: Attribute = 'id') => {
-    let formData: formData = {};
+const getFormData = <T = JsObject>(event: any, attribute: Attribute = 'id') => {
+    let formData: JsObject = {};
 
     const inputsCount = event.target?.length;
 
@@ -26,7 +23,7 @@ const getFormData = (event: any, attribute: Attribute = 'id') => {
         }
     }
 
-    return formData;
+    return formData as T;
 }
 
 export default getFormData;

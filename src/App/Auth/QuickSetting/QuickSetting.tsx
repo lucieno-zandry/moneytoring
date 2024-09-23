@@ -45,7 +45,7 @@ export default React.memo(() => {
 
     return <>
         <CornerButtons top>
-            <Toggle className="btn btn-outline-secondary btn-sm" onClick={() => setShow(true)}>
+            <Toggle className="btn btn-outline-secondary btn-sm" onClick={() => setShow(true)} show={show}>
                 {LANGUAGES[setting.language]} - {setting.currency} <Icon variant="chevron-down" />
             </Toggle>
         </CornerButtons>

@@ -11,13 +11,20 @@ import { MODELS_DATA } from "../../core/config/constants/constants";
 import classList from "../../core/helpers/classList";
 import type from "../../core/helpers/type";
 import { ModalContainerProps } from "../Modal/Container/Container";
+import formObservations from "../../core/helpers/formObservations";
 
-type FilterProps = {
+export type FilterData = {
+    date_from: string,
+    date_to: string
+} & FilterProps['data']
+
+export type FilterProps = {
     data: { categories?: Category[], accounts?: Account[] },
-} & ModalContainerProps<'form'>
+    onSubmit: (filterData: FilterData) => void,
+} & Omit<ModalContainerProps<'form'>, 'onSubmit'>
 
 export default React.memo((props: FilterProps) => {
-    const { data, ...modalProps } = props;
+    const { data, onSubmit, ...modalProps } = props;
     const [state, setState] = React.useState(data);
 
     const addToSelected = React.useCallback((key: keyof FilterProps['data'], item: unknown) => {
@@ -55,9 +62,15 @@ export default React.memo((props: FilterProps) => {
 
     const models = React.useMemo(() => Object.keys(data), [data]) as (keyof FilterProps['data'])[];
 
+    const handleSubmit: React.FormEventHandler<HTMLFormElement> = React.useCallback((e) => {
+        const { formData } = formObservations(e);
+        const filterData: FilterData = { ...state, date_from: formData.date_from, date_to: formData.date_to };
+        onSubmit(filterData);
+    }, [state, onSubmit]);
+
     if (models.length === 0) return;
 
-    return <Modal {...modalProps}>
+    return <Modal {...modalProps} as="form" onSubmit={handleSubmit} size="sm">
         <Modal.Header withCloseButton>
             <ModalTitle>Filter Transactions</ModalTitle>
         </Modal.Header>
@@ -66,12 +79,14 @@ export default React.memo((props: FilterProps) => {
                 <FormFloating
                     type="date"
                     id="date_from"
-                    labelProps={{ label: <><Icon variant="calendar-minus" /> Date from</>, className: "col-12 col-sm-6" }} />
+                    labelProps={{ label: <><Icon variant="calendar-minus" /> Date from</>, className: "col-12 col-sm-6" }}
+                    placeholder="date from" />
 
                 <FormFloating
                     type="date"
                     id="date_to"
-                    labelProps={{ label: <><Icon variant="calendar-plus" /> Date to</>, className: "col-12 col-sm-6" }} />
+                    labelProps={{ label: <><Icon variant="calendar-plus" /> Date to</>, className: "col-12 col-sm-6" }}
+                    placeholder="date to" />
             </div>
 
             <Accordion className="col-12">

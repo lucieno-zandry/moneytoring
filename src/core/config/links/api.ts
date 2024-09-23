@@ -1,3 +1,11 @@
 export const loginApi = "/auth/login";
 export const signupApi = "/auth/signup";
 export const getUserApi = "/auth/user";
+export const allNotificationsApi = "/notification/all";
+export const unreadNotificationsApi = "/notification/unread";
+export const readNotificationApi = "/notification/read/";
+export const getWstokenApi = "/wstoken/get";
+export const getTransactionsApi = "/transactions/get";
+export const createTransactionsApi = "/transactions/create";
+export const updateTransactionApi = "/transactions/update";
+export const emailCheckApi = "/auth/email-check";

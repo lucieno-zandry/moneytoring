@@ -40,6 +40,7 @@ export default React.memo(() => {
             <p>Email adress</p>
             <div className="text-muted d-flex align-items-center gap-2">
                 {user.email} <Modal.Toggle
+                    show={editing}
                     onClick={() => setEditing(true)}
                     className="btn">
                     <Icon variant="chevron-right" />

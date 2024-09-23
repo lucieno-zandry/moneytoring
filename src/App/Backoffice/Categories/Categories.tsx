@@ -48,7 +48,7 @@ const Categories = React.memo(() => {
     }, [state.deleting]);
 
     return <Motion.Main className="categories">
-        <div className="display-6 mb-3">Categories</div>
+        <div className="display-4 mb-3">Categories</div>
 
         <CategoriesTable
             items={categories}

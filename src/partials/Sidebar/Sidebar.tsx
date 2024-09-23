@@ -10,22 +10,22 @@ import { MODELS_DATA } from "../../core/config/constants/constants";
 const sidebarItems: NavItemProps[] = [
     {
         icon: "home",
-        children: <span className="d-none d-md-block">Dashboard</span>,
+        children: <span>Dashboard</span>,
         href: dashboard,
     },
     {
         icon: MODELS_DATA.transactions.icon,
-        children: <span className="d-none d-md-block">Transactions</span>,
+        children: <span>Transactions</span>,
         href: transactions,
     },
     {
         icon: MODELS_DATA.categories.icon,
-        children: <span className="d-none d-md-block">Categories</span>,
+        children: <span>Categories</span>,
         href: categories,
     },
     {
         icon: MODELS_DATA.accounts.icon,
-        children: <span className="d-none d-md-block">Accounts</span>,
+        children: <span>Accounts</span>,
         href: accounts,
     },
 ];
@@ -33,7 +33,7 @@ const sidebarItems: NavItemProps[] = [
 const Sidebar = React.memo(() => {
     const { show } = useSidebar();
 
-    return <aside className={`sidebar d-sm-block col-2 col-md-3 col-lg-2 ${classList(!show, 'hidden')}`}>
+    return <aside className={`sidebar d-sm-block ${classList(!show, 'hidden')}`}>
         <Logo className="sidebar-logo" />
         <Nav vertical>
             {sidebarItems}  

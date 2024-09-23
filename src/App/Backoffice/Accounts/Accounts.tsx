@@ -48,7 +48,7 @@ const Accounts = React.memo(() => {
     }, [state.deleting]);
 
     return <Motion.Main className="accounts">
-        <div className="display-6 mb-3">Accounts</div>
+        <div className="display-4 mb-3">Accounts</div>
 
         <AccountsTable
             items={accounts}

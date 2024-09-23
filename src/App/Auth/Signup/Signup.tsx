@@ -11,9 +11,18 @@ import { JsObject } from "../../../core/config/types/variables";
 import AuthForm from "../../../partials/AuthForm/AuthForm";
 import useSteps from "../../../core/hooks/useSteps";
 import useAuth from "../../../core/hooks/useAuth";
-import { fakeUser } from "../../../core/config/constants/fakes";
-import randomString from "../../../core/helpers/randomString";
 import sessionAuthActions from "../../../core/helpers/sessionAuthActions";
+import { AxiosError } from "axios";
+import toast from "react-hot-toast";
+import { emailCheck, signup } from "../../../core/api/actions";
+
+export type SignupData = {
+    email: string,
+    name: string,
+    firstname: string,
+    password: string,
+    password_confirm: string,
+}
 
 export type StepProps = {
     errors: JsObject | null,
@@ -50,7 +59,7 @@ const getInitialForm = () => {
         form = { ...form, ...Step.form }
     })
 
-    return form;
+    return form as SignupData;
 }
 
 const initialForm = getInitialForm();
@@ -58,7 +67,7 @@ const initialForm = getInitialForm();
 const Signup = React.memo(() => {
     const [state, setState] = React.useState({
         form: initialForm,
-        validationMessages: null as JsObject | null,
+        validationMessages: null as SignupData | null,
         isLoading: false,
     });
 
@@ -68,25 +77,60 @@ const Signup = React.memo(() => {
     const isFirstStep = React.useMemo(() => active === 0, [active]);
     const isLastStep = React.useMemo(() => active === (Steps.length - 1), [active]);
 
+    const initSignup = React.useCallback((formData: SignupData) => {
+        const newState = { ...state };
+        signup(formData)
+            .then(response => {
+                const { token, user } = response.data;
+                sessionAuthActions.store(user, token);
+                setAuth(user);
+                toast.success('Log in success');
+            })
+            .catch((error: AxiosError) => {
+                if (error.status === 422) {
+                    const { errors } = error.response?.data as { errors: SignupData };
+                    newState.validationMessages = errors;
+                }
+
+                toast.error(error.message);
+            })
+            .finally(() => {
+                newState.isLoading = false;
+                setState(newState);
+            });
+    }, [state]);
+
+    const initEmailCheck = React.useCallback((email: string) => {
+        const newState = { ...state };
+        emailCheck(email)
+            .then(() => {
+                next();
+            })
+            .catch((error: AxiosError) => {
+                if (error.status === 422) {
+                    const { errors } = error.response?.data as { errors: SignupData }
+                    newState.validationMessages = errors;
+                } else {
+                    newState.validationMessages = null;
+                    toast.error(error.message);
+                }
+            })
+            .finally(() => {
+                newState.isLoading = false;
+                setState(newState);
+            })
+    }, [state]);
+
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = React.useCallback((e) => {
         e.preventDefault();
-        const { formData, validationMessages } = formObservations(e);
-
+        const { formData, validationMessages } = formObservations<SignupData>(e);
         if (!validationMessages) {
-            if (isLastStep) {
-                const user = { ...fakeUser, ...state.form };
-                sessionAuthActions.store(user, randomString());
-                setAuth(user);
-            } else {
-                setTimeout(() => {
-                    next();
-                    setState(s => ({ ...s, isLoading: false }));
-                });
-            }
+            if (isFirstStep) initEmailCheck(formData.email);
+            if (isLastStep) initSignup(formData);
         }
 
         setState(s => ({ ...s, form: { ...s.form, ...formData }, validationMessages, isLoading: !validationMessages }))
-    }, [active, isLastStep]);
+    }, [active, isLastStep, initSignup, isFirstStep, initEmailCheck]);
 
     return <AuthForm className="signup-page" onSubmit={handleSubmit}>
         <Container

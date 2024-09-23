@@ -1,6 +1,6 @@
 import React from "react";
 import ModalContainer, { ModalContainerProps } from "./Container/Container";
-import ModalButton from "./Button/Button";
+import ModalButton, { ModalButtonProps } from "./Button/Button";
 import ModalHeader, { ModalHeaderProps } from "./Header/Header";
 import ModalBody from "./Body/Body";
 import ModalFooter, { ModalFooterProps } from "./Footer/Footer";
@@ -12,10 +12,7 @@ export type ModalBundle = {
         props: ModalContainerProps<T>
     ) => JSX.Element;
     Toggle: (
-        props: React.DetailedHTMLProps<
-            React.ButtonHTMLAttributes<HTMLButtonElement>,
-            HTMLButtonElement
-        >
+        props: ModalButtonProps
     ) => JSX.Element;
     Header: (
         props: ModalHeaderProps &
@@ -70,10 +67,7 @@ export const useModal = (): ModalBundle => {
 
     const Toggle = React.useCallback(
         (
-            props: React.DetailedHTMLProps<
-                React.ButtonHTMLAttributes<HTMLButtonElement>,
-                HTMLButtonElement
-            >
+            props: ModalButtonProps
         ) => <ModalButton setPosition={setPosition} {...props} />,
         [setPosition]
     );
