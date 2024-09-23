@@ -25,7 +25,8 @@ const Categories = React.memo(() => {
 
     const handleSubmit = React.useCallback((category: Category) => {
         if (state.creating) {
-
+            setCategories;
+            category;
         } else {
 
         }

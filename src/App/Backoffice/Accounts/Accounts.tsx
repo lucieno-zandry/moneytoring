@@ -28,7 +28,8 @@ const Accounts = React.memo(() => {
 
     const handleSubmit = React.useCallback((account: Account) => {
         if (state.creating) {
-
+            setAccounts;
+            account;
         } else {
 
         }

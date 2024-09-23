@@ -19,7 +19,7 @@ const PasswordReset = React.memo(() => {
         const { formData, validationMessages } = formObservations(e);
 
         if (!validationMessages) {
-
+            formData
         }
 
         setState(s => ({ ...s, validationMessages, isLoading: !validationMessages }));

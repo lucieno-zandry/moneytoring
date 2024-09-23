@@ -14,7 +14,7 @@ const Confirmation = React.memo(() => {
     const user = useAuth(state => state.user) as User;
 
     const handleOnComplete = React.useCallback(() => {
-
+        setState;
     }, []);
 
     return <AuthForm
@@ -27,10 +27,10 @@ const Confirmation = React.memo(() => {
             </small>
         </label>
 
-        <CodeInput onComplete={handleOnComplete} error={state.validationMessages?.code}/>
+        <CodeInput onComplete={handleOnComplete} error={state.validationMessages?.code} />
 
-        <ResendEmailCountdown initConfirmation={() => {}}/>
-        
+        <ResendEmailCountdown initConfirmation={() => { }} />
+
     </AuthForm>
 });
 

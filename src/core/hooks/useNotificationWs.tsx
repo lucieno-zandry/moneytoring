@@ -37,7 +37,7 @@ export default function (actions: {
 
     const handleMessage = React.useCallback((e: MessageEvent<string>) => {
         // const { title, line } = JSON.parse(e.data);
-
+        e;
         actions.refreshUnreadNotifications();
         actions.refreshAllNotifications();
 
