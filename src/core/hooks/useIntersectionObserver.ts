@@ -1,37 +1,57 @@
 import React from "react";
+import debounce from "../helpers/debounce";
 
-const defaultOptions: IntersectionObserverInit = {
-  threshold: 1,
+const defaultRatio = 0.6;
+
+const getDefaultOptions = (
+  ratio: number = defaultRatio
+): IntersectionObserverInit => {
+  const y = window.innerHeight * ratio;
+  const zoneHeight = 1;
+
+  return {
+    rootMargin: `-${window.innerHeight - y - zoneHeight}px 0px -${y}px 0px`,
+  };
 };
 
-const useIntersectionObserver = <T extends HTMLElement>(
-  options: IntersectionObserverInit = defaultOptions
-) => {
+export default function <T extends Element>(
+  options?: IntersectionObserverInit
+) {
+  options = options || getDefaultOptions();
+  const ref = React.createRef<T>();
   const [isIntersecting, setIsIntersecting] = React.useState(false);
-  const ref: React.LegacyRef<T> = React.createRef();
 
-  const callback: IntersectionObserverCallback = React.useCallback((entries) => {
-    entries.forEach((entry) => {
-      const threshold = options.threshold as number;
+  const callback = React.useCallback(
+    (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (isIntersecting === entry.isIntersecting) return;
+        setIsIntersecting(entry.isIntersecting);
+      });
+    },
+    [isIntersecting]
+  );
 
-      setIsIntersecting(
-        entry.isIntersecting && entry.intersectionRatio >= threshold
-      );
-    });
-  }, [options.threshold]);
+  const observe = React.useCallback((element: Element) => {
+    const observer = new IntersectionObserver(callback, options);
+    observer.observe(element);
+  }, [callback]);
+
+  let windowH = React.useMemo(() => window.innerHeight, []);
 
   React.useEffect(() => {
     if (!ref.current) return;
 
-    const observer = new IntersectionObserver(callback, options);
-    observer.observe(ref.current);
+    observe(ref.current);
+    window.addEventListener(
+      "resize",
+      debounce(() => {
+        if (window.innerHeight !== windowH) {
+          observe(ref.current!);
+          windowH = window.innerHeight;
+        }
+      }, 500)
+    );
+  }, [ref]);
 
-    return () => {
-      if (ref.current) observer.unobserve(ref.current);
-    };
-  }, [options, callback]);
-
-  return { ref, isIntersecting };
-};
-
-export default useIntersectionObserver;
+  return { isIntersecting, ref };
+}

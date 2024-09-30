@@ -8,7 +8,7 @@ type Auth = {
 };
 
 const useAuth = create<Auth>((set) => ({
-  user: fakeUser,
+  user: false,
   // user: getDefaultAuth(),
   setAuth: (auth: false | User) => set({ user: auth }),
 }));

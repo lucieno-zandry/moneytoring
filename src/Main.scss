@@ -11,10 +11,12 @@
 // Components
 
 @import "./App/App.scss";
+@import "./App/LandingPage/LangingPage.scss";
 @import "./App/Auth/Auth.scss";
 @import "./App/Auth/Signup/Signup.scss";
 @import "./App/Setup/Setup.scss";
 @import "./App/Backoffice/Backoffice.scss";
+@import "./App/LandingPage/Section1/Section1.scss";
 
 // Partials 
 @import "./partials/CodeInput/CodeInput.scss";

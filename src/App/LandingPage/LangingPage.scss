@@ -1,0 +1,79 @@
+.landing-page {
+  overflow-x: hidden;
+
+  .lp-nav {
+    position: fixed;
+    height: 6rem;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background-color: inherit;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 4rem;
+    background: linear-gradient(to bottom, $dark, transparent);
+
+    .left-side,
+    .right-side {
+      display: flex;
+      gap: 1rem;
+    }
+
+    .lp-nav-link {
+      text-decoration: none;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: $light;
+    }
+  }
+
+  .lp-logo {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(
+      to bottom right,
+      $primary,
+      $secondary,
+      $warning
+    );
+    background-clip: text;
+    color: transparent;
+    z-index: 2;
+    padding: 2rem;
+    font-size: 2rem;
+  }
+
+  .lp-hero {
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+    /* margin-bottom: 4rem; */
+  }
+
+  .lp-container {
+    width: 100ù;
+    height: 100vh;
+    background: inherit;
+    position: relative;
+    padding: 0 4rem;
+  }
+
+  .lp-video {
+    width: 100%;
+    height: 100vh;
+    background-image: url("./App/LandingPage/video1.webp");
+    background-size: cover;
+    background-position: top;
+  }
+
+  .spacer {
+    height: 100vh;
+    width: 100%;
+  }
+}
+

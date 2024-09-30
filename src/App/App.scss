@@ -18,6 +18,18 @@
   margin-top: 0.5rem;
 }
 
-.bg-secondary-dark{
+.bg-secondary-dark {
   background-color: darken($secondary, 35%);
+}
+
+// Assuming Bootstrap variables and mixins are available
+
+// Custom column for extra-small screens
+@media screen and (max-width: $screen-sm) {
+  @for $i from 1 through 12 {
+    .col-xs-#{$i} {
+      flex: 0 0 100%;
+      width: ($i * 100%) / 12;
+    }
+  }
 }
