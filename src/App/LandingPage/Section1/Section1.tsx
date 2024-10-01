@@ -1,8 +1,9 @@
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import React from "react";
-import useIntersectionObserver from "../../../core/hooks/useIntersectionObserver";
 import classList from "../../../core/helpers/classList";
+import useSectionIntersectionObserver from "../../../core/hooks/useSectionIntersectionObserver";
+import Button from "../../../partials/Button/Button";
 
 type ImageSequenceConfig = {
   urls: string[]; // Array of image URLs
@@ -103,29 +104,39 @@ const setCanvasPosition = (active: boolean = false) => {
 }
 
 const ImageSequenceComponent: React.FC = () => {
-  const { isIntersecting, ref } = useIntersectionObserver<HTMLDivElement>({
-    rootMargin: `0px 0px -${window.innerHeight - 1}px 0px`,
-  });
+  const { isIntersecting, ref } = useSectionIntersectionObserver<HTMLDivElement>();
 
   React.useEffect(() => {
     if (!ref.current) return;
     // console.log(isIntersecting);
     if (!sequence) {
       sequence = getSequence();
-      // sequence?.eventCallback('onComplete', () => setCanvasPosition('relative'));
     };
+
     if (!sequence) return;
+    if (isIntersecting) sequence.progress(.7);
 
     setCanvasPosition(isIntersecting);
   }, [isIntersecting, ref, sequence]);
 
   return (
-    <div className="section1-container" ref={ref}>
+    <div className={`section1-container ${classList(isIntersecting, 'active')}`} ref={ref}>
       <canvas
         id="section1-canvas"
         width={window.screen.width}
-        height={window.screen.height}
-        className={classList(isIntersecting, 'active')} />
+        height={window.screen.height} />
+
+      <div className="gradient"></div>
+
+      <div
+        className="section1 py-5 d-flex flex-column align-items-center justify-content-center gap-4 text-align-center">
+        <h2 className="display-2">How It Works</h2>
+        <p>
+          Discover how simple it is to start managing your finances with MoneyToring. <br />
+          Our intuitive app guides you through every step.
+        </p>
+        <Button variant="primary" className="col-3">Get started</Button>
+      </div>
     </div>
   );
 };

@@ -7,9 +7,7 @@
 @import "./assets/bootstrap/scss/bootstrap.scss";
 @import "./assets/fontawesome/css/all.min.css";
 
-
 // Components
-
 @import "./App/App.scss";
 @import "./App/LandingPage/LangingPage.scss";
 @import "./App/Auth/Auth.scss";
@@ -17,6 +15,8 @@
 @import "./App/Setup/Setup.scss";
 @import "./App/Backoffice/Backoffice.scss";
 @import "./App/LandingPage/Section1/Section1.scss";
+@import "./App/LandingPage/Section2/Section2.scss";
+@import "./App/LandingPage/Header/Header.scss";
 
 // Partials 
 @import "./partials/CodeInput/CodeInput.scss";

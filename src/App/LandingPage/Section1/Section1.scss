@@ -1,16 +1,39 @@
 .section1-container {
-  height: 400vh;
+  height: 200vh;
   width: 100%;
   position: relative;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+
+  .gradient {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 100%;
+    z-index: 5;
+    background: linear-gradient(
+      to bottom left,
+      rgba($dark, 0.9),
+      rgba($danger, 0.9)
+    );
+  }
+
+  .section1 {
+    position: absolute;
+    top: 100vh;
+    width: 100%;
+    left: 0;
+    z-index: 10;
+  }
+
+  &.active {
+    opacity: 1;
+  }
 
   #section1-canvas {
     top: 0;
     left: 0;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-
-    &.active {
-      opacity: 1;
-    }
+    width: 100%;
   }
 }

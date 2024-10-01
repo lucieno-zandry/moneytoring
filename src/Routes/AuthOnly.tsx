@@ -20,7 +20,7 @@ export default React.memo(() => {
     return <Routes location={location} key={location.key}>
         <Route element={<Member />}>
             <Route element={<Backoffice />}>
-                <Route element={<Dashboard />} path="/" />
+                <Route element={<Dashboard />} path="dashboard" />
                 <Route element={<Transactions />} path="transactions" />
                 <Route element={<Categories />} path="categories" />
                 <Route element={<Accounts />} path="accounts" />

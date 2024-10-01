@@ -1,7 +1,8 @@
 import React from "react";
-import Hero from './Hero.jpg';
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Section from "../../../partials/Section/Section";
+import Button from "../../../partials/Button/Button";
 
 export default React.memo(() => {
     const logoRef = React.createRef<HTMLHeadingElement>();
@@ -15,6 +16,7 @@ export default React.memo(() => {
                 y: "50vh",
                 fontSize: "14vw",
                 yPercent: -50,
+                color: 'transparent',
             }),
             scrub: true,
             trigger: ".lp-content",
@@ -30,8 +32,16 @@ export default React.memo(() => {
             <h1 className="lp-logo" ref={logoRef}>MoneyToring</h1>
         </div>
         <div className="lp-container"></div>
-        <div className="lp-content">
-            <img className="lp-hero" src={Hero} />
-        </div>
+        <Section className="lp-content">
+            <div
+                className="section3 py-5 d-flex flex-column align-items-center justify-content-center gap-4 text-align-center">
+                <h2 className="display-2">Take Control of <br /> Your Finances</h2>
+                <p>
+                    Welcome to MoneyToring, where managing your budget becomes effortless.<br />
+                    Track your expenses, set goals, and achieve financial freedom with ease.
+                </p>
+                <Button variant="primary" className="col-3">Get started</Button>
+            </div>
+        </Section>
     </>
 })
