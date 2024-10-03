@@ -12,22 +12,11 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Use Node.js 18
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install dependencies
-        run: npm install  # Or yarn install, depending on your project
-
-      - name: Build for production
-        run: npm run build  # Or yarn build, adjust the script name
-
       - name: Upload files to FTP server
         uses: radenpioneer/astro-ftp-deploy@v0.1.0
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          directory: htdocs/. # The path to upload to, on your FTP server, relative to your FTP root. Must end with trailing slash. (optional)
+          directory: htdocs/ # The path to upload to, on your FTP server, relative to your FTP root. Must end with trailing slash. (optional)
           path: dist/. 
