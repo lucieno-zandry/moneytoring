@@ -24,11 +24,10 @@ jobs:
         run: npm run build  # Or yarn build, adjust the script name
 
       - name: Upload files to FTP server
-        uses: ./ # Path to your FTP Uploader action
+        uses: radenpioneer/astro-ftp-deploy@v0.1.0
         with:
-          files: ./dist  # The directory containing files to upload
-          ftpUsername: ${{ secrets.FTP_USERNAME }}  # Fetching username from GitHub Secrets
-          ftpPassword: ${{ secrets.FTP_PASSWORD }}  # Fetching password from GitHub Secrets
-          ftpHostname: ${{ secrets.FTP_SERVER }}  # Fetching FTP server from GitHub Secrets
-          src: './dist'  # The source folder (build output directory)
-          dest: '/htdocs'  # The remote directory on the FTP server
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          directory: htdocs/. # The path to upload to, on your FTP server, relative to your FTP root. Must end with trailing slash. (optional)
+          path: dist/. 
