@@ -11,10 +11,10 @@ import { JsObject } from "../../../core/config/types/variables";
 import AuthForm from "../../../partials/AuthForm/AuthForm";
 import useSteps from "../../../core/hooks/useSteps";
 import useAuth from "../../../core/hooks/useAuth";
-import sessionAuthActions from "../../../core/helpers/sessionAuthActions";
 import { AxiosError } from "axios";
 import toast from "react-hot-toast";
 import { emailCheck, signup } from "../../../core/api/actions";
+import storageTokenActions from "../../../core/helpers/storageTokenActions";
 
 export type SignupData = {
     email: string,
@@ -82,7 +82,7 @@ const Signup = React.memo(() => {
         signup(formData)
             .then(response => {
                 const { token, user } = response.data;
-                sessionAuthActions.store(user, token);
+                storageTokenActions.set(token);
                 setAuth(user);
                 toast.success('Log in success');
             })

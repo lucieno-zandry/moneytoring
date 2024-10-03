@@ -7,10 +7,11 @@ import formObservations from "../../../core/helpers/formObservations";
 import Button from "../../../partials/Button/Button";
 import AuthForm from "../../../partials/AuthForm/AuthForm";
 import useAuth from "../../../core/hooks/useAuth";
-import sessionAuthActions from "../../../core/helpers/sessionAuthActions";
 import toast from "react-hot-toast";
 import { login } from "../../../core/api/actions";
 import { AxiosError } from "axios";
+import storageTokenActions from "../../../core/helpers/storageTokenActions";
+import { Translate } from "react-i18nify";
 
 export type LoginData = { email: string, password: string };
 
@@ -30,7 +31,7 @@ const Login = React.memo(() => {
             login(formData)
                 .then(response => {
                     const { token, user } = response.data;
-                    sessionAuthActions.store(user, token);
+                    storageTokenActions.set(token);
                     setAuth(user);
                     toast.success('Log in success');
                 })
@@ -84,7 +85,7 @@ const Login = React.memo(() => {
             Log in
         </Button>
 
-        <small>Don't have an acount? Try to <Link to={signupPage}>register.</Link></small>
+        <small><Translate value="application.have_no_account" /> <Link to={signupPage}><Translate value="application.register" />.</Link></small>
     </AuthForm>
 });
 

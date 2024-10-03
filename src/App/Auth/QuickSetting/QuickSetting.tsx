@@ -10,7 +10,6 @@ import Button from "../../../partials/Button/Button";
 import formObservations from "../../../core/helpers/formObservations";
 import { JsObject } from "../../../core/config/types/variables";
 import { Setting } from "../../../core/config/types/models";
-import sessionSettingActions from "../../../core/helpers/sessionSettingActions";
 
 export default React.memo(() => {
     const { Container, Toggle } = useModal();
@@ -35,13 +34,11 @@ export default React.memo(() => {
 
         if (!validationMessages) {
             const newSetting = { ...setting, language: formData.language as Setting['language'], currency: formData.currency as Setting['currency'] }
-            sessionSettingActions.set(newSetting);
             setSetting(newSetting);
         }
 
         setState(s => ({ ...s, validationMessages, show: Boolean(validationMessages) }))
     }, [setting]);
-
 
     return <>
         <CornerButtons top>

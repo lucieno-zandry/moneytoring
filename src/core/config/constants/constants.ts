@@ -7,7 +7,6 @@ export const NOTIFICATION_WS_URL = "http://localhost:5000";
 export const LANGUAGES = {
   "en-EN": "English",
   "fr-FR": "Français",
-  "mg-MG": "Malagasy",
 };
 
 export const CURRENCIES = {
