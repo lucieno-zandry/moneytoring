@@ -32,16 +32,16 @@ export default React.memo(() => {
             <h1 className="lp-logo" ref={logoRef}>MoneyToring</h1>
         </div>
         <div className="lp-container"></div>
-        <Section className="lp-content">
-            <div
-                className="section3 py-5 d-flex flex-column align-items-center justify-content-center gap-4 text-align-center">
-                <h2 className="display-2">Take Control of <br /> Your Finances</h2>
+        
+        <div className="gradient-container">
+            <Section className="lp-content activable py-5 px-3 d-flex flex-column align-items-center justify-content-center gap-4 text-align-center">
+                <h2 className="display-2 text-primary">Take Control of <br /> Your Finances</h2>
                 <p>
                     Welcome to MoneyToring, where managing your budget becomes effortless.<br />
                     Track your expenses, set goals, and achieve financial freedom with ease.
                 </p>
-                <Button variant="primary" className="col-3">Get started</Button>
-            </div>
-        </Section>
+                <Button variant="primary" className="col-6 col-sm-3">Get started</Button>
+            </Section>
+        </div>
     </>
 })

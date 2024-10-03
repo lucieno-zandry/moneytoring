@@ -17,7 +17,6 @@
 
     .left-side,
     .right-side {
-      display: flex;
       gap: 1rem;
     }
 
@@ -29,10 +28,13 @@
       color: $light;
     }
   }
-
-  .spacer {
-    height: 100vh;
-    width: 100%;
-  }
 }
 
+.activable {
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+
+  &.active {
+    opacity: 1;
+  }
+}

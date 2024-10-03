@@ -3,26 +3,32 @@ on:
   push:
     branches: [ Frontend ]
   workflow_dispatch:
+  
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-      
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
       - name: Use Node.js 18
         uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
       - name: Install dependencies
         run: npm install  # Or yarn install, depending on your project
 
       - name: Build for production
-        run: npm run build  # Or yarn build, adjust the script name     
-        
-      - name: Upload from root dir via FTP
-        uses: airvzxf/ftp-deployment-action@latest
+        run: npm run build  # Or yarn build, adjust the script name
+
+      - name: Upload files to FTP server
+        uses: ./ # Path to your FTP Uploader action
         with:
-          server: ${{ secrets.FTP_SERVER }}
-          user: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          local_dir: "./dist"
-          remote_dir: "/htdocs"
+          files: ./dist  # The directory containing files to upload
+          ftpUsername: ${{ secrets.FTP_USERNAME }}  # Fetching username from GitHub Secrets
+          ftpPassword: ${{ secrets.FTP_PASSWORD }}  # Fetching password from GitHub Secrets
+          ftpHostname: ${{ secrets.FTP_SERVER }}  # Fetching FTP server from GitHub Secrets
+          src: './dist'  # The source folder (build output directory)
+          dest: '/htdocs'  # The remote directory on the FTP server

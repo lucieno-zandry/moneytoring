@@ -19,29 +19,17 @@
   padding: 0 4rem;
 }
 
-.lp-hero {
-  width: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-
 .lp-content {
-  background-image: url(./App/LandingPage/Header/Hero.jpg);
-  height: 100vh;
+  background: linear-gradient(to bottom right, rgba($dark, 0.9), rgba($dark, .5));
   width: 100%;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  opacity: 0;
-  transition: opacity 0.3s ease-in-out;
-  
-  &.active {
-    opacity: 1;
-  }
+  height: 100vh;
 }
 
-.section3 {
-  background: linear-gradient(to bottom right, rgba($secondary, 0.7), $dark);
-  width: 100%;
+.gradient-container {
   height: 100%;
+  width: 100%;
+  background-image: url(./App/LandingPage/Header/Hero.jpg);
+  background-size: cover;
+  background-position: left;
+  background-attachment: fixed;
 }

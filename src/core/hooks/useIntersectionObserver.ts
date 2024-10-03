@@ -31,27 +31,32 @@ export default function <T extends Element>(
     [isIntersecting]
   );
 
-  const observe = React.useCallback((element: Element) => {
-    const observer = new IntersectionObserver(callback, options);
-    observer.observe(element);
-  }, [callback]);
+  const observe = React.useCallback(
+    (element: Element) => {
+      const observer = new IntersectionObserver(callback, options);
+      observer.observe(element);
+    },
+    [callback]
+  );
 
   let windowH = React.useMemo(() => window.innerHeight, []);
 
-  React.useEffect(() => {
+  const reObserve = React.useCallback(() => {
     if (!ref.current) return;
 
-    observe(ref.current);
-    window.addEventListener(
-      "resize",
-      debounce(() => {
-        if (window.innerHeight !== windowH) {
-          observe(ref.current!);
-          windowH = window.innerHeight;
-        }
-      }, 500)
-    );
+    debounce(() => {
+      if (window.innerHeight !== windowH && ref.current) {
+        observe(ref.current);
+        windowH = window.innerHeight;
+      }
+    }, 500);
   }, [ref]);
+
+  React.useEffect(() => {
+    if (!ref.current) return;
+    observe(ref.current);
+    window.addEventListener("resize", reObserve);
+  }, [ref, reObserve]);
 
   return { isIntersecting, ref };
 }

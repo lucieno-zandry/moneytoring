@@ -19,7 +19,7 @@ export default React.memo(() => {
                 <Route element={<PasswordForgotten />} path="password-forgotten" />
                 <Route element={<PasswordReset />} path="password-reset/:token" />
             </Route>
+            <Route element={<LandingPage />} path="/" />
         </Route>
-        <Route element={<LandingPage />} path="/" />
     </Routes>
 })

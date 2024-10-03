@@ -32,3 +32,21 @@ export const AUTHORIZATION_TOKEN_PREFIX = "Bearer ";
 export const AUTHORIZATION_TOKEN_NAME = "authToken";
 export const STORAGE_USER_NAME = "user";
 export const STORAGE_SETTING_NAME = "setting";
+
+export const COLOR_PRIMARY = "#a6bbcc";
+export const COLOR_LIGHT = "#f4f4f4";
+export const COLOR_DARK = "#211f20";
+export const COLOR_SECONDARY = "#8798a1";
+export const COLOR_SUCCESS = "#65b36e";
+export const COLOR_WARNING = "#f1c453";
+export const COLOR_DANGER = "#e56d6d";
+
+export const COLORS = [
+  COLOR_PRIMARY,
+  COLOR_LIGHT,
+  COLOR_SECONDARY,
+  COLOR_SUCCESS,
+  COLOR_WARNING,
+  COLOR_DANGER,
+  COLOR_DARK,
+];

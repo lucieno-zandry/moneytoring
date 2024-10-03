@@ -4,11 +4,11 @@ import { about, loginPage, signupPage } from "../../../core/config/links/pages";
 
 export default React.memo(() => {
     return <nav className="lp-nav">
-        <div className="left-side">
+        <div className="left-side d-none d-md-flex">
             <a href="#" className="lp-nav-link">services</a>
             <Link to={about} className="lp-nav-link">about</Link>
         </div>
-        <div className="right-side">
+        <div className="right-side d-none d-md-flex">
             <Link to={loginPage} className="lp-nav-link">log in</Link>
             <Link to={signupPage} className="lp-nav-link">register</Link>
         </div>

@@ -20,6 +20,7 @@ const Steps = [
 const Setup = () => {
     const location = useLocation();
     const navigate = useNavigate();
+    const ref = React.createRef<HTMLDivElement>();
 
     const defaultActive: number = React.useMemo(() => {
         const index = Steps.findIndex(item => item.path === location.pathname);
@@ -28,19 +29,36 @@ const Setup = () => {
 
     const { Container, active, next } = useSteps(Steps, { defaultActive });
 
+    const nextStep = React.useCallback(() => {
+        if (ref.current) {
+            ref.current.style.overflowX = 'hidden';
+
+            setTimeout(() => {
+                ref.current!.style.overflowX = 'auto';
+            }, 2000)
+        }
+
+        next();
+    }, [ref, next]);
+
     const handleDone = React.useCallback(() => {
         if (active < (Steps.length - 1)) {
-            next();
+            nextStep();
             window.history.replaceState({}, '', Steps[active + 1].path);
         } else {
             navigate(dashboard);
         }
-    }, [active, next]);
+    }, [active, nextStep]);
 
-    
-    return <div className="setup">
+    React.useEffect(() => {
+
+    }, []);
+
+    return <div className="setup" ref={ref}>
         <Logo isStatic={false} />
-        <Container predicate={(Step) => <Step.element onDone={handleDone} />} className="container" />
+        <Container
+            predicate={(Step) => <Step.element onDone={handleDone} />}
+            className="container" />
     </div>
 }
 

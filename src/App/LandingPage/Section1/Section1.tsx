@@ -120,7 +120,7 @@ const ImageSequenceComponent: React.FC = () => {
   }, [isIntersecting, ref, sequence]);
 
   return (
-    <div className={`section1-container ${classList(isIntersecting, 'active')}`} ref={ref}>
+    <div className={`section1-container activable ${classList(isIntersecting, 'active')}`} ref={ref}>
       <canvas
         id="section1-canvas"
         width={window.screen.width}
@@ -130,12 +130,13 @@ const ImageSequenceComponent: React.FC = () => {
 
       <div
         className="section1 py-5 d-flex flex-column align-items-center justify-content-center gap-4 text-align-center">
-        <h2 className="display-2">How It Works</h2>
+        <h2 className="display-2">
+          Ready to Transform <br />
+          Your Finances?</h2>
         <p>
-          Discover how simple it is to start managing your finances with MoneyToring. <br />
-          Our intuitive app guides you through every step.
+          Start managing your money smarter today with MoneyToring.
         </p>
-        <Button variant="primary" className="col-3">Get started</Button>
+        <Button variant="light" className="col-6 col-sm-3">Sign Up Now</Button>
       </div>
     </div>
   );

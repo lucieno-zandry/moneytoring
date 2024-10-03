@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { User } from "../config/types/models";
-// import { fakeUser } from "../config/constants/fakes";
-import getDefaultAuth from "../helpers/getDefaultAuth";
+import { fakeUser } from "../config/constants/fakes";
+// import getDefaultAuth from "../helpers/getDefaultAuth";
 
 type Auth = {
   user: false | User;
@@ -9,8 +9,8 @@ type Auth = {
 };
 
 const useAuth = create<Auth>((set) => ({
-  // user: false,
-  user: getDefaultAuth(),
+  user: fakeUser,
+  // user: getDefaultAuth(),
   setAuth: (auth: false | User) => set({ user: auth }),
 }));
 

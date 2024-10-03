@@ -3,8 +3,8 @@ import { HTMLMotionProps, motion } from "framer-motion";
 import { motionStatic } from "../../core/config/variants/variants";
 
 export type ButtonProps = {
-    variant?: 'primary' | 'secondary' | 'danger' | 'warning' | 'info' | 'light' | 'dark' |
-    'outline-primary' | 'outline-secondary' | 'outline-danger' | 'outline-warning' | 'outline-info' | 'outline-light' | 'outline-dark',
+    variant?: 'primary' | 'secondary' | 'danger' | 'warning' | 'info' | 'light' | 'dark' | 'success' |
+    'outline-primary' | 'outline-secondary' | 'outline-danger' | 'outline-warning' | 'outline-info' | 'outline-light' | 'outline-dark' | 'outline-success',
     size?: 'sm' | 'lg',
     isLoading?: boolean,
 } 

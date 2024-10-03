@@ -1,0 +1,10 @@
+.charts-container {
+  height: 13rem;
+  width: 100%;
+}
+
+.recharts-pie {
+  path {
+    stroke: none!important;
+  }
+}

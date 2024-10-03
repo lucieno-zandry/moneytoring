@@ -1,0 +1,24 @@
+.timeline-section {
+  pointer-events: none;
+  position: fixed;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  width: 100%;
+  background-color: rgba($dark, 0.4);
+
+  &.active {
+    pointer-events: all;
+  }
+}
+
+.timeline-container {
+  position: relative;
+
+  .timeline-sections {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+  }
+}

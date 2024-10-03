@@ -1,4 +1,4 @@
-export const dashboard = "dashboard";
+export const dashboard = "/dashboard";
 export const authPage = dashboard;
 export const emailConfirmation = "/auth/confirmation";
 export const loginPage = "/auth/login";
