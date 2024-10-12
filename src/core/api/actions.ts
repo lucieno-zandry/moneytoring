@@ -1,22 +1,46 @@
 import { LoginData } from "../../App/Auth/Login/Login";
+import { PasswordResetData } from "../../App/Auth/PasswordReset/PasswordReset";
 import { SignupData } from "../../App/Auth/Signup/Signup";
 import { FilterData } from "../../partials/Filter/Filter";
 import {
   allNotificationsApi,
+  confirmationApi,
+  createAccountsApi,
+  createCategoriesApi,
+  createSettingApi,
   createTransactionsApi,
+  deleteAccountsApi,
+  deleteCategoriesApi,
   emailCheckApi,
+  getAccountsApi,
+  getCategoriesApi,
+  getSettingApi,
   getTransactionsApi,
   getUserApi,
   getWstokenApi,
   loginApi,
+  logoutApi,
   readNotificationApi,
+  requestConfirmationApi,
+  requestResetPasswordApi,
+  resetPasswordApi,
+  signupApi,
   unreadNotificationsApi,
+  updateAccountApi,
+  updateCategoryApi,
+  updateSettingApi,
   updateTransactionApi,
 } from "../config/links/api";
-import { Transaction } from "../config/types/models";
+import {
+  Account,
+  Category,
+  Setting,
+  Transaction,
+} from "../config/types/models";
 import toParams from "../helpers/toParams";
 import api from "./api";
 
+// Auth
 export const getAuth = () => {
   return api.get(getUserApi);
 };
@@ -26,12 +50,38 @@ export const login = (payload: LoginData) => {
 };
 
 export const signup = (payload: SignupData) => {
-  return api.post(loginApi, payload);
+  return api.post(signupApi, payload);
 };
 
 export const emailCheck = (email: string) => {
   return api.post(emailCheckApi, { email });
 };
+
+export const resetPassword = (
+  data: PasswordResetData & {
+    token: string;
+  }
+) => {
+  return api.post(resetPasswordApi, data);
+};
+
+export const requestResetPassword = (email: string) => {
+  return api.post(requestResetPasswordApi, { email });
+};
+
+export const logout = () => {
+  return api.delete(logoutApi);
+};
+
+export const requestConfirmation = () => {
+  return api.get(requestConfirmationApi);
+};
+
+export const confirm = (code: number) => {
+  return api.post(confirmationApi, { code });
+};
+
+// Notifications
 
 export const allNotifications = () => {
   return api.get(allNotificationsApi);
@@ -61,4 +111,59 @@ export const createTransactions = (transactions: Transaction[]) => {
 
 export const updateTransaction = (transaction: Transaction[]) => {
   return api.put(updateTransactionApi, transaction);
+};
+
+export const createAccounts = (accounts: Account[]) => {
+  return api.post(
+    createAccountsApi,
+    accounts.map(({ id, created_at, updated_at, ...account }) => account)
+  );
+};
+
+export const updateAccount = (account: Account) => {
+  return api.put(updateAccountApi, account);
+};
+
+export const getAccounts = () => {
+  return api.get(getAccountsApi);
+};
+
+export const deleteAccounts = (accounts: Account[]) => {
+  return api.post(deleteAccountsApi, {
+    accounts: accounts.map((account) => account.id),
+  });
+};
+
+export const createCategories = (categories: Category[]) => {
+  return api.post(createCategoriesApi, categories);
+};
+
+export const updateCategory = (category: Category) => {
+  return api.put(updateCategoryApi, category);
+};
+
+export const getCategories = () => {
+  return api.get(getCategoriesApi);
+};
+
+export const deleteCategories = (categories: Category[]) => {
+  return api.post(deleteCategoriesApi, {
+    categories: categories.map((account) => account.id),
+  });
+};
+
+export const createSetting = (
+  setting: Pick<Setting, "currency" | "language">
+) => {
+  return api.post(createSettingApi, setting);
+};
+
+export const updateSetting = (
+  setting: Pick<Setting, "currency" | "language">
+) => {
+  return api.put(updateSettingApi, setting);
+};
+
+export const getSetting = () => {
+  return api.get(getSettingApi);
 };

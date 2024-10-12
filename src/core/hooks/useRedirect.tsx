@@ -1,96 +1,100 @@
-import React, { useCallback, useEffect } from "react";
+import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import * as links from "../config/links/pages";
-import useAuth from "./useAuth";
-import useAccounts from "./useAccounts";
-import useCategories from "./useCategories";
+import throttle from "../helpers/throttle";
+import { dashboard, loginPage } from "../config/links/pages";
 
-type SessionIntended = { target: null | boolean, path: string }
-const { authPage, emailConfirmation, loginPage } = links;
+type Intended = {
+    pathname: string;
+    condition: boolean;
+};
 
-const notApplicablePaths = [
-    loginPage,
-    authPage,
-    emailConfirmation,
-    links.accountsSetup,
-    links.categoriesSetup,
-    links.transactionsSetup,
-];
-
-function setSessionIntended(pathname: string, target: boolean) {
-    const intended = {
-        path: pathname,
-        target
-    }
-
-    sessionStorage.setItem('intended', JSON.stringify(intended));
+type RedirectOptions = {
+    otherRedirections: { pathname: string, condition: boolean, target: boolean }[],
 }
 
-function getSessionIntended(): SessionIntended | null {
-    const existingIntended: null | string = sessionStorage.getItem('intended');
-    const sessionIntended: SessionIntended = existingIntended && JSON.parse(existingIntended);
+const PATHNAMEINTENDED = "PATHNAMEINTENDED";
 
-    return sessionIntended;
+const DEFAULT_REDIRECT_OPTIONS: RedirectOptions = {
+    otherRedirections: []
 }
 
-export function useRedirect(target: boolean): Function {
-    const location = useLocation();
+const pages = {
+    authenticatedHomepage: dashboard,
+    loginPage
+}
+
+const clearIntended = () => {
+    sessionStorage.removeItem(PATHNAMEINTENDED);
+};
+
+const setIntended = (condition: boolean, pathname?: string) => {
+    sessionStorage.setItem(
+        PATHNAMEINTENDED,
+        JSON.stringify({ condition, pathname })
+    );
+};
+
+const getIntended = (): Intended | null => {
+    const intended = sessionStorage.getItem(PATHNAMEINTENDED);
+    if (!intended) return null;
+    return JSON.parse(intended);
+};
+
+export default function (target: boolean, authState: boolean, options: RedirectOptions = DEFAULT_REDIRECT_OPTIONS) {
+    const { pathname } = useLocation();
+    const { otherRedirections } = options;
+
     const navigate = useNavigate();
 
-    const { user } = useAuth();
-    const { accounts } = useAccounts();
-    const { categories } = useCategories();
+    const redirect = React.useCallback(
+        (pathname?: string) =>
+            throttle(() => {
+                pathname = pathname || getIntended()!.pathname;
+                clearIntended();
+                navigate(pathname);
+            }, 1000),
+        []
+    );
 
-    const customRedirections = React.useMemo(() => [
-        {
-            condition: user && user.email_verified_at === null,
-            pathname: emailConfirmation,
-        },
-        {
-            condition: accounts && accounts.length === 0,
-            pathname: links.accountsSetup,
-        },
-        {
-            condition: categories && categories.length === 0,
-            pathname: links.categoriesSetup,
-        }
-    ], [user, accounts, categories]);
-
-    const sessionIntended = getSessionIntended();
-
-    const goToIntended = React.useCallback((path: string) => {
-        sessionStorage.removeItem('intended');
-        navigate(path);
-    }, [navigate]);
-
-    const redirect = useCallback(() => {
-        if (sessionIntended?.target === !!user) {
-            goToIntended(sessionIntended.path);
-        } else {
-            target ? navigate(loginPage) : navigate(authPage);
-        }
-    }, [sessionIntended, navigate, target, goToIntended]);
-
-    useEffect(() => {
-        if (!!user !== target && !notApplicablePaths.includes(location.pathname)) {
-            setSessionIntended(location.pathname, target);
-        }
-    }, [target, location.pathname]);
-
-    useEffect(() => {
-        if (user) {
-            for (let customRedirection of customRedirections) {
-                if (customRedirection.condition && location.pathname !== customRedirection.pathname) {
-                    navigate(customRedirection.pathname);
-                    return;
+    const otherRedirection = React.useMemo(() => {
+        if (otherRedirections.length > 0) {
+            for (let otherRedirection of otherRedirections) {
+                if (otherRedirection.target === target && otherRedirection.condition && otherRedirection.pathname !== pathname) {
+                    return otherRedirection;
                 }
             }
         }
 
-        if (!!user !== target) {
-            redirect();
+        return null;
+    }, [otherRedirections, target, pathname]);
+
+    React.useEffect(() => {
+        if (target !== authState) {
+            setIntended(target, pathname);
+
+            if (otherRedirection) {
+                redirect(otherRedirection.pathname);
+            } else {
+                const destination = target ? pages.loginPage : pages.authenticatedHomepage;
+                redirect(destination);
+            }
         }
-    }, [user, location.pathname, customRedirections, redirect]);
+    }, [target, authState, pathname, otherRedirection]);
+
+    React.useEffect(() => {
+        const intended = getIntended();
+
+        if (intended && intended.pathname !== pathname) {
+            redirect(intended.pathname);
+            return;
+        }
+
+        if (otherRedirection) {
+            redirect(otherRedirection.pathname);
+            return;
+        }
+
+    }, [pathname, authState, otherRedirection]);
 
     return redirect;
 }

@@ -10,6 +10,10 @@ import Button from "../../../partials/Button/Button";
 import formObservations from "../../../core/helpers/formObservations";
 import { JsObject } from "../../../core/config/types/variables";
 import { Setting } from "../../../core/config/types/models";
+import { Translate } from "react-i18nify";
+
+const languages = Object.keys(LANGUAGES);
+const currencies = Object.keys(CURRENCIES);
 
 export default React.memo(() => {
     const { Container, Toggle } = useModal();
@@ -25,9 +29,6 @@ export default React.memo(() => {
     const setShow = React.useCallback((show: boolean) => {
         setState(s => ({ ...s, show }))
     }, []);
-
-    const languages = React.useMemo(() => Object.keys(LANGUAGES), []);
-    const currencies = React.useMemo(() => Object.keys(CURRENCIES), []);
 
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = React.useCallback(e => {
         const { formData, validationMessages } = formObservations(e);
@@ -49,15 +50,15 @@ export default React.memo(() => {
 
         <Container show={show} size="sm" onClose={() => setShow(false)} as="form" onSubmit={handleSubmit}>
             <ModalHeader className="d-block">
-                <ModalTitle>Set up your preferences</ModalTitle>
-                <small className="text-muted">You can choose to display the application in your language, the currency you specify will be used by the app. </small>
+                <ModalTitle><Translate value="application.set_up_preference" /></ModalTitle>
+                <small className="text-muted"><Translate value="application.set_up_preference_description" /></small>
             </ModalHeader>
             <ModalBody className="d-flex gap-3 justify-content-center flex-wrap">
                 <FormFloating.Select
                     id="setting.language"
                     options={languages}
                     predicate={(language: keyof typeof LANGUAGES) => ({ title: LANGUAGES[language], value: language })}
-                    labelProps={{ label: <><Icon variant="language" /> Language</>, className: "col-12 col-sm-4" }}
+                    labelProps={{ label: <><Icon variant="language" /> <Translate value="application.Language" /></>, className: "col-12 col-sm-4" }}
                     defaultValue={setting.language}
                 />
 
@@ -65,13 +66,13 @@ export default React.memo(() => {
                     id="setting.currency"
                     options={currencies}
                     predicate={(currency: keyof typeof CURRENCIES) => ({ title: CURRENCIES[currency], value: currency })}
-                    labelProps={{ label: <><Icon variant="dollar-sign" /> Currency</>, className: "col-12 col-sm-4" }}
+                    labelProps={{ label: <><Icon variant="dollar-sign" /> <Icon variant="language" /> <Translate value="application.currency" /></>, className: "col-12 col-sm-4" }}
                     defaultValue={setting.currency}
                 />
             </ModalBody>
             <ModalFooter>
-                <Button variant="outline-secondary" size="sm" onClick={() => setShow(false)}>cancel</Button>
-                <Button variant="primary" size="sm" type="submit">save <Icon variant="check-circle" /></Button>
+                <Button variant="outline-secondary" size="sm" onClick={() => setShow(false)}><Translate value="application.cancel" /></Button>
+                <Button variant="primary" size="sm" type="submit"><Translate value="application.save" /> <Icon variant="check-circle" /></Button>
             </ModalFooter>
         </Container>
     </>

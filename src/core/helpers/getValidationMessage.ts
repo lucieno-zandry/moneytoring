@@ -1,10 +1,16 @@
+import { JsObject } from "../config/types/variables";
+
 /**
  * Applique une vérification sur la valeur d'un `name` défini et retourne le message de validation qui correspond
  * @param type la valeur de l'attribut `name`
  * @param value la valeur du champ
  * @returns Le message d'erreur trouvé ou null s'il n'y en a pas
  */
-const getValidationMessage = (type: string, value: string): string | null => {
+const getValidationMessage = (
+  type: string,
+  value: string,
+  data: JsObject = {}
+): string | null => {
   let message = null;
   let regexPattern = null;
 
@@ -73,11 +79,9 @@ const getValidationMessage = (type: string, value: string): string | null => {
       }
       break;
 
-    case "password_confirmation":
-      if (!value) {
-        message = "The password is required";
-      } else if (value.length < 6) {
-        message = "The password length should be at least 6 caracters";
+    case "user.password_confirmation":
+      if (data["user.password"] !== value) {
+        message = "The passwords don't match";
       }
       break;
 

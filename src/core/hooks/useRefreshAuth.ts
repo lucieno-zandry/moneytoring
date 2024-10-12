@@ -1,11 +1,11 @@
 import { AxiosError } from "axios";
 import { getAuth } from "../api/actions";
-import sessionAuthActions from "../helpers/sessionAuthActions";
 import useAuth from "./useAuth";
 import toast from "react-hot-toast";
+import storageTokenActions from "../helpers/storageTokenActions";
 
 export default () => {
-  const { setAuth } = useAuth();
+  const { user, setAuth } = useAuth();
 
   return () => {
     getAuth()
@@ -14,10 +14,14 @@ export default () => {
         setAuth(user);
       })
       .catch((error: AxiosError) => {
-        if (error.status === 401) {
-          sessionAuthActions.clear();
-          setAuth(false);
-        } else {
+        storageTokenActions.remove();
+        setAuth(false);
+
+        if (user) {
+          location.reload();
+        }
+        
+        if (error.status !== 401) {
           toast.error(`Failed to authenticate: ${error.message}`);
         }
       });

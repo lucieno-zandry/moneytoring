@@ -1,16 +1,17 @@
 import React from "react";
 import Button from "../Button/Button";
 import MotionFade from "../MotionFade/MotionFade";
+import { Translate } from "react-i18nify";
 
 type Props = {
-    initConfirmation: Function
+    resendEmail: Function
 };
 
 let interval: null | number;
 const DEFAULTCOUNTDOWN = 60;
 
 const ResendEmailCountdown = React.memo((props: Props) => {
-    const { initConfirmation } = props;
+    const { resendEmail } = props;
 
     const [countdown, setCountdown] = React.useState(DEFAULTCOUNTDOWN);
 
@@ -33,23 +34,23 @@ const ResendEmailCountdown = React.memo((props: Props) => {
     }, [countdown]);
 
     const handleResendCode = React.useCallback(() => {
-        initConfirmation();
+        resendEmail();
         setCountdown(DEFAULTCOUNTDOWN);
-    }, [initConfirmation]);
+    }, [resendEmail]);
 
     return <div>
         Didn't receive any email? <br />
         <MotionFade
             hidden={countdown < 1}
             className="text-dark text-muted">
-            We can send another code in <span >{countdown}</span>
+            <Translate value="application.can_send_new_code"/> <span>{countdown}</span>
         </MotionFade>
         <MotionFade
             hidden={countdown > 0}>
             <Button
                 type="button"
                 className="btn-primary mt-2"
-                onClick={handleResendCode}>Resend code</Button>
+                onClick={handleResendCode}><Translate value="application.resend_code"/></Button>
         </MotionFade>
     </div>
 });

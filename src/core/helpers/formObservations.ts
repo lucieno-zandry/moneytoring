@@ -10,7 +10,7 @@ export default <T extends JsObject = JsObject>(e: React.FormEvent<HTMLFormElemen
   let validationMessages = getValidationMessages<T>(formData);
 
   return {
-    validationMessages: validationMessages ? unPrefixKeys<T>(validationMessages) : null,
+    validationMessages,
     formData: unPrefixKeys(formData),
   }
 };

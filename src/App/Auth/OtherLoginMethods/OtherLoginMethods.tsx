@@ -1,15 +1,12 @@
 import React from "react"
-import useAuth from "../../../core/hooks/useAuth"
 import Button from "../../../partials/Button/Button";
 import Icon from "../../../partials/Icon/Icon";
+import { Translate } from "react-i18nify";
 
 export default React.memo(() => {
 
-    const { user } = useAuth();
-
-    return !user &&
-        <div className="col-8 text-align-center ">
-            <h6>Or authentify using</h6>
+    return <div className="col-8 text-align-center ">
+            <h6><Translate value="application.or_authentify" /></h6>
             <div className="mt-3 d-flex gap-2 justify-content-center">
                 <Button size="sm">
                     <Icon type="brands" variant="facebook" size={2} />

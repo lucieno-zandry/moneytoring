@@ -8,6 +8,13 @@ import { JsObject } from "../../../../../core/config/types/variables";
 import { ModalTitle } from "react-bootstrap";
 import useSetting from "../../../../../core/hooks/useSetting";
 import { LANGUAGES } from "../../../../../core/config/constants/constants";
+import { Setting } from "../../../../../core/config/types/models";
+import { updateSetting } from "../../../../../core/api/actions";
+import toast from "react-hot-toast";
+
+type LanguageData = {
+    language: Setting['language']
+}
 
 const defaultState = {
     editing: false,
@@ -16,7 +23,7 @@ const defaultState = {
 
 export default React.memo(() => {
     const [state, setState] = React.useState(defaultState);
-    const { setting } = useSetting();
+    const { setting, setSetting } = useSetting();
 
     const { editing, validationMessages } = state;
 
@@ -25,13 +32,20 @@ export default React.memo(() => {
     }, []);
 
     const handleSubmit: React.FormEventHandler<HTMLFormElement> = React.useCallback((e) => {
-        const { formData, validationMessages } = formObservations(e);
-        console.log(formData, validationMessages);
+        const { formData, validationMessages } = formObservations<LanguageData>(e);
         if (!validationMessages) {
-
+            updateSetting({ currency: setting.currency, language: formData.language })
+                .then((response) => {
+                    toast.success('Language changed!');
+                    const newSetting = response.data.setting as Setting;
+                    setSetting(newSetting);
+                })
+                .catch(() => {
+                    toast.error('Failed to change language.');
+                })
         }
-        setState(s => ({ ...s, validationMessages }))
-    }, []);
+        setState(s => ({ ...s, validationMessages, editing: !!validationMessages }))
+    }, [setting]);
 
     const Modal = useModal();
 
@@ -66,7 +80,7 @@ export default React.memo(() => {
                     options={Object.keys(LANGUAGES)}
                     predicate={(option: keyof typeof LANGUAGES) => ({ title: LANGUAGES[option], value: option })}
                     error={validationMessages?.language}
-                    defaultValue={setting.language}/>
+                    defaultValue={setting.language} />
             </ModalBody>
             <ModalFooter>
                 <Button variant="secondary" size="sm" onClick={() => setState(defaultState)}>cancel</Button>

@@ -1,5 +1,5 @@
 import { JsObject } from "../config/types/variables";
-import getName from "./getName";
+import getName from "./unPrefix";
 
 export default <T>(obj: T) => {
   const formated: JsObject = {};

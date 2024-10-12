@@ -14,8 +14,8 @@ export const defaultAccounts: Account[] = [
 ];
 
 const useAccounts = create<UseAccounts>(set => ({
-    accounts: [],
+    accounts: null,
     setAccounts: (accounts) => set(state => ({ ...state, accounts })),
-}))
+}));
 
 export default useAccounts;

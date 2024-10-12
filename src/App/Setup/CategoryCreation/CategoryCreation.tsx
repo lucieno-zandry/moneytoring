@@ -5,22 +5,26 @@ import Icon from "../../../partials/Icon/Icon";
 import { Category } from "../../../core/config/types/models";
 import CategoryModal from "../../../partials/CategoryModal/CategoryModal";
 import arrayUpdate from "../../../core/helpers/arrayUpdate";
-import { StepProps } from "../Setup";
 import useCategories from "../../../core/hooks/useCategories";
 import useAccounts from "../../../core/hooks/useAccounts";
 import CategoriesTable from "../../../partials/CategoriesTable/CategoriesTable";
 import generateCategories from "../../../core/helpers/generateCategories";
+import Motion from "../../../partials/Motion/Motion";
+import { slideNext } from "../../../core/config/variants/variants";
+import { createCategories } from "../../../core/api/actions";
+import { AxiosError } from "axios";
+import toast from "react-hot-toast";
 
-const CategoryCreation = React.memo((props: StepProps) => {
-    const { onDone } = props;
+const CategoryCreation = React.memo(() => {
     const { setCategories } = useCategories();
 
     const { accounts } = useAccounts();
 
     const [state, setState] = React.useState({
         creationMode: false,
-        categories: generateCategories(accounts!),
+        categories: generateCategories(accounts),
         editingCategory: undefined as Category | undefined,
+        isLoading: false,
     });
 
     const { categories, creationMode, editingCategory } = state;
@@ -64,12 +68,23 @@ const CategoryCreation = React.memo((props: StepProps) => {
 
     const handleSubmit = React.useCallback(() => {
         if (state.categories.length === 0) return;
-        setCategories(state.categories);
-        onDone();
-    }, [setCategories, onDone]);
+        setState(s => ({ ...s, isLoading: true }));
+
+        createCategories(state.categories)
+            .then(response => {
+                const categories: Category[] = response.data.categories;
+                setCategories(categories);
+            })
+            .catch((error: AxiosError) => {
+                toast.error(`An error occurred: ${error.message}`)
+            })
+            .finally(() => {
+                setState(s => ({ ...s, isLoading: false }));
+            })
+    }, [setCategories, state.categories]);
 
     return <>
-        <div className="category-creation col-12">
+        <Motion.Div className="container category-creation col-12" variants={slideNext}>
             <h3 className="display-6">Setup your categories</h3>
             <p className="text-muted">
                 Categories allow you to configure a budget for a specific purpose.
@@ -79,17 +94,20 @@ const CategoryCreation = React.memo((props: StepProps) => {
                     items={categories}
                     onDelete={handleDelete}
                     onEdit={setEditingCategory} />}
-        </div>
+        </Motion.Div>
 
         <CornerButtons className="container">
             <Button
                 variant="secondary"
-                onClick={toggleCreationMode}><Icon variant="plus" /> Category</Button>
+                onClick={toggleCreationMode}
+                size="sm"><Icon variant="plus" /> Category</Button>
 
             <Button
                 variant="primary"
                 disabled={!categories || categories.length < 1}
-                onClick={handleSubmit}>
+                onClick={handleSubmit}
+                size="sm"
+                isLoading={state.isLoading}>
                 Done <Icon variant="check-circle" />
             </Button>
         </CornerButtons>

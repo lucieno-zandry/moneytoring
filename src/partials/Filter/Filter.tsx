@@ -91,8 +91,10 @@ export default React.memo((props: FilterProps) => {
 
             <Accordion className="col-12">
                 {models.map((model, key) => {
-                    const items = data[model]!;
-                    const selected = state[model]!;
+                    const items = data[model];
+                    const selected = state[model];
+                    if (!items || !selected) return;
+
                     const buttonLabel = `${classList(selected.length === items.length, 'All')} ${ucFirst(model)} ${classList(selected.length !== items.length, `(${selected.length}) selected`)}`
 
                     return <ElementFilterItem

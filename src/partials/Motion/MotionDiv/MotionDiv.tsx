@@ -7,7 +7,7 @@ const MotionDiv = React.memo((props: HTMLMotionProps<"div">) => {
         variants={motionStatic}
         initial="hidden"
         animate="visible"
-        exit="hidden"
+        exit="exit"
         {...props} />
 });
 

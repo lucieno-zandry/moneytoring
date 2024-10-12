@@ -29,9 +29,11 @@ const samples = [
 ];
 
 export default (
-  accounts: Account[],
-  categories: Category[]
+  accounts: Account[] | null,
+  categories: Category[] | null
 ): Transaction[] => {
+  if (!accounts || !categories) return [];
+  
   const transactions = samples.map((sample) => {
     const numberOfAccounts = accounts.length;
     const numberOfCategories = categories.length;

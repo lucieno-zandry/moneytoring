@@ -22,7 +22,7 @@ const PasswordCreationForm = React.memo((props: Props) => {
         />
 
         <FloatingForm.Input
-            id="password_confirmation"
+            id="user.password_confirmation"
             labelProps={{ label: <><Icon variant="user-lock" type="solid" /> Confirm password</>, className: "col-10 col-sm-8" }}
             type="password"
             placeholder="confirm password"

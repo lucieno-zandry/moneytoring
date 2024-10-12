@@ -26,7 +26,9 @@ const samples = [
   },
 ];
 
-export default (accounts: Account[]): Category[] => {
+export default (accounts: Account[] | null): Category[] => {
+  if (!accounts) return [];
+  
   const categories = samples.map((sample) => {
     const balance = arraySum(accounts, (account) => account.balance);
 

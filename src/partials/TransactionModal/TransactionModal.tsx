@@ -6,13 +6,13 @@ import FloatingForm from "../FormFloating/FormFloating";
 import React from "react";
 import formObservations from "../../core/helpers/formObservations";
 import { Account, Category, Transaction, TransactionRecurrence } from "../../core/config/types/models";
-import { fakeTransaction, fakeTransactionRecurrence } from "../../core/config/constants/fakes";
+import { fakeAccount, fakeTransaction, fakeTransactionRecurrence } from "../../core/config/constants/fakes";
 import { JsObject } from "../../core/config/types/variables";
 import ModalContainer, { ModalContainerProps } from "../Modal/Container/Container";
 import IconsDrawer, { icons } from "../IconsDrawer/IconsDrawer";
 import IconButton from "../IconInput/IconInput";
 import getValidationMessage from "../../core/helpers/getValidationMessage";
-import getName from "../../core/helpers/getName";
+import getName from "../../core/helpers/unPrefix";
 import Datum from "../../core/helpers/Datum";
 import { HTMLTag } from "../HTMLElement/HTMLElement";
 import useNumberFormat from "../../core/hooks/useNumberFormat";
@@ -26,12 +26,12 @@ interface TransactionModalProps extends Omit<ModalContainerProps<HTMLTag>, 'onSu
     editMode?: boolean,
 }
 
-const getDefaultTransaction = (account: Account): Transaction => ({
+const getDefaultTransaction = (account: Account | null): Transaction => ({
     ...fakeTransaction,
     id: 0,
     icon: '',
     description: '',
-    account,
+    account: account || fakeAccount,
 })
 
 const recurrencePatterns: TransactionRecurrence['pattern'][] = ['YEARLY', 'MONTHLY', 'WEEKLY', 'ONCE'];
@@ -46,7 +46,7 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
 
     const {
         onSubmit,
-        transaction = getDefaultTransaction(accounts![0]),
+        transaction = getDefaultTransaction(accounts && accounts[0]),
         editMode = false,
         show = false,
         ...modalProps

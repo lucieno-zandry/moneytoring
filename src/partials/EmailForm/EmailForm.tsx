@@ -5,7 +5,7 @@ import { JsObject } from "../../core/config/types/variables";
 
 type Props = {
     errors: JsObject | null,
-    defaultValue: JsObject,
+    defaultValue?: JsObject,
 }
 
 const EmailForm = React.memo((props: Props) => {
@@ -18,7 +18,7 @@ const EmailForm = React.memo((props: Props) => {
             type="email"
             placeholder="username@example.com"
             error={props.errors?.email}
-            defaultValue={props.defaultValue.email}
+            defaultValue={props.defaultValue?.email}
         />
     </>
 });

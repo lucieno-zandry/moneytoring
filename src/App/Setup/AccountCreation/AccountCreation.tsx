@@ -5,14 +5,19 @@ import Icon from "../../../partials/Icon/Icon";
 import { Account } from "../../../core/config/types/models";
 import AccountModal from "../../../partials/AccountModal/AccountModal";
 import arrayUpdate from "../../../core/helpers/arrayUpdate";
-import { StepProps } from "../Setup";
 import useAccounts, { defaultAccounts } from "../../../core/hooks/useAccounts";
 import AccountsTable from "../../../partials/AccountsTable/AccountsTable";
+import { createAccounts } from "../../../core/api/actions";
+import toast from "react-hot-toast";
+import { AxiosError } from "axios";
+import useScreenLoader from "../../../partials/ScreenLoader/hooks/useScreenLoader";
+import Motion from "../../../partials/Motion/Motion";
+import { slideNext } from "../../../core/config/variants/variants";
 
 
-const AccountCreation = React.memo((props: StepProps) => {
-    const { onDone } = props;
+const AccountCreation = React.memo(() => {
     const { setAccounts } = useAccounts();
+    const { toggle } = useScreenLoader();
 
     const [state, setState] = React.useState({
         creationMode: false,
@@ -59,12 +64,22 @@ const AccountCreation = React.memo((props: StepProps) => {
 
     const handleSubmit = React.useCallback(() => {
         if (state.accounts.length === 0) return;
-        setAccounts(state.accounts);
-        onDone();
-    }, [state.accounts, onDone]);
+        toggle();
+        createAccounts(state.accounts)
+            .then(response => {
+                const newAccounts = response.data.created as Account[];
+                setAccounts(newAccounts);
+            })
+            .catch(error => {
+                if (error instanceof AxiosError) {
+                    toast.error('Failed to create transaction');
+                }
+            })
+            .finally(toggle);
+    }, [state.accounts]);
 
     return <>
-        <div className="account-creation col-12">
+        <Motion.Div className="container account-creation col-12" variants={slideNext}>
             <h3 className="display-6">Establish your balance.</h3>
             <p className="text-muted">
                 At least one (1) account is mandatory to get started. <br />
@@ -79,7 +94,7 @@ const AccountCreation = React.memo((props: StepProps) => {
                     onDelete={handleDelete}
                     onEdit={setEditingAccount}
                 />}
-        </div>
+        </Motion.Div>
 
         <CornerButtons className="container">
             <Button

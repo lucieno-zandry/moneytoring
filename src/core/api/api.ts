@@ -2,6 +2,7 @@ import axios, { AxiosError, AxiosInstance, AxiosRequestConfig, AxiosResponse } f
 import { getUserApi, loginApi, signupApi } from "../config/links/api";
 import { loginPage } from "../config/links/pages";
 import { API_URL, AUTHORIZATION_TOKEN_NAME, AUTHORIZATION_TOKEN_PREFIX } from "../config/constants/constants";
+import sessionAuthActions from "../helpers/sessionAuthActions";
 
 type Headers = {
   Authorization?: string;
@@ -24,6 +25,7 @@ async function execute(action: () => Promise<AxiosResponse>, url: string) {
       switch (e.response?.status) {
         case 401:
           if (!UNAUTHORIZED_REDIRECTION_EXCLUSION.includes(url)) {
+            sessionAuthActions.clear();
             location.pathname = loginPage;
           }
           break;

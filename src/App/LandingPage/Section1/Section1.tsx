@@ -3,7 +3,8 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import React from "react";
 import classList from "../../../core/helpers/classList";
 import useSectionIntersectionObserver from "../../../core/hooks/useSectionIntersectionObserver";
-import Button from "../../../partials/Button/Button";
+import { Link } from "react-router-dom";
+import { signupPage } from "../../../core/config/links/pages";
 
 type ImageSequenceConfig = {
   urls: string[]; // Array of image URLs
@@ -136,7 +137,7 @@ const ImageSequenceComponent: React.FC = () => {
         <p>
           Start managing your money smarter today with MoneyToring.
         </p>
-        <Button variant="light" className="col-6 col-sm-3">Sign Up Now</Button>
+        <Link to={signupPage} className="btn btn-light col-6 col-sm-3">Sign Up Now</Link>
       </div>
     </div>
   );

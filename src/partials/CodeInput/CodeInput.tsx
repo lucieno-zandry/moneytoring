@@ -1,8 +1,9 @@
 import React from "react";
 import generateArray from "../../core/helpers/generateArray";
+import throttle from "../../core/helpers/throttle";
 
 type Props = {
-    length?: number | 6,
+    length?: number,
     onComplete: (value: string) => void,
     error?: string,
     className?: string
@@ -48,7 +49,7 @@ const idPrefix = 'code-input-';
 
 
 const CodeInput = (props: Props) => {
-    const { length, className = '', onComplete, error } = props;
+    const { length = 6, className = '', onComplete, error } = props;
 
     const defaultValues = React.useMemo(() => generateArray(length), [length]);
 
@@ -73,7 +74,9 @@ const CodeInput = (props: Props) => {
     React.useEffect(() => {
         const code = state.values.join('');
         if (code.length === length) {
-            onComplete(code);
+            throttle(() => {
+                onComplete(code);
+            }, 500);
         }
     }, [state.values, length, onComplete]);
 

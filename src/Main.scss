@@ -14,7 +14,7 @@
 @import "./App/Auth/Signup/Signup.scss";
 @import "./App/Setup/Setup.scss";
 @import "./App/Backoffice/Backoffice.scss";
-// @import "./App/LandingPage/Section1/Section1.scss";
+@import "./App/LandingPage/Section1/Section1.scss";
 @import "./App/LandingPage/Section2/Section2.scss";
 @import "./App/LandingPage/Header/Header.scss";
 @import "./App/Backoffice/Dashboard/Charts/Charts.scss";
@@ -37,3 +37,4 @@
 @import "./partials/Sidebar/Sidebar.scss";
 @import "./partials/TablePlaceholder/TablePlaceholder.scss";
 @import "./partials/Nav/Nav.scss";
+@import "./partials/ScreenLoader/ScreenLoader.scss";

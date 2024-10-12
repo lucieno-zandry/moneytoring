@@ -1,7 +1,7 @@
 import React from "react";
 import Icon from "../../../partials/Icon/Icon";
 import { Link } from "react-router-dom";
-import { signupPage } from "../../../core/config/links/pages";
+import { passwordForgotten, signupPage } from "../../../core/config/links/pages";
 import FloatingForm from "../../../partials/FormFloating/FormFloating";
 import formObservations from "../../../core/helpers/formObservations";
 import Button from "../../../partials/Button/Button";
@@ -11,7 +11,7 @@ import toast from "react-hot-toast";
 import { login } from "../../../core/api/actions";
 import { AxiosError } from "axios";
 import storageTokenActions from "../../../core/helpers/storageTokenActions";
-import { Translate } from "react-i18nify";
+import { translate, Translate } from "react-i18nify";
 
 export type LoginData = { email: string, password: string };
 
@@ -33,7 +33,7 @@ const Login = React.memo(() => {
                     const { token, user } = response.data;
                     storageTokenActions.set(token);
                     setAuth(user);
-                    toast.success('Log in success');
+                    toast.success(translate('application.log_in_success'));
                 })
                 .catch((error: AxiosError) => {
                     if (error.status === 422) {
@@ -58,7 +58,7 @@ const Login = React.memo(() => {
         <FloatingForm.Input
             id="user.email"
             name="email"
-            labelProps={{ className: "col-10 col-sm-8", label: <><Icon variant="envelope" /> Email</> }}
+            labelProps={{ className: "col-10 col-sm-8", label: <><Icon variant="envelope" /> <Translate value="application.Email" /></> }}
             type="email"
             placeholder="username@example.com"
             autoComplete="email"
@@ -69,9 +69,9 @@ const Login = React.memo(() => {
         <FloatingForm.Input
             id="user.password"
             name="password"
-            labelProps={{ className: "col-10 col-sm-8", label: <><Icon variant="lock" /> Password</> }}
+            labelProps={{ className: "col-10 col-sm-8", label: <><Icon variant="lock" /> <Translate value="application.Password" /></> }}
             type="password"
-            placeholder="your password"
+            placeholder={translate('application.your_password')}
             autoComplete="current_password"
             error={state.validationMessages?.password}
             required
@@ -82,10 +82,18 @@ const Login = React.memo(() => {
             className="col-6"
             type="submit"
             isLoading={state.isLoading}>
-            Log in
+            <Translate value="application.log_in" />
         </Button>
 
-        <small><Translate value="application.have_no_account" /> <Link to={signupPage}><Translate value="application.register" />.</Link></small>
+        <small>
+            <Link to={passwordForgotten}>Forgot your password?</Link>
+        </small>
+
+        <small>
+            <Translate value="application.have_no_account" /> <Link to={signupPage}>
+                <Translate value="application.register" />
+            </Link>
+        </small>
     </AuthForm>
 });
 

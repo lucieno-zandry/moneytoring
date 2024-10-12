@@ -4,28 +4,70 @@ import EmailForm from "../../../partials/EmailForm/EmailForm";
 import Button from "../../../partials/Button/Button";
 import useSteps from "../../../core/hooks/useSteps";
 import ResendEmailCountdown from "../../../partials/ResendEmailCountdown/ResendEmailCountdown";
+import { Translate } from "react-i18nify";
+import formObservations from "../../../core/helpers/formObservations";
+import { requestResetPassword } from "../../../core/api/actions";
+import toast from "react-hot-toast";
+import { AxiosError } from "axios";
 
-const PasswordForgotten = React.memo(() => {
+type PasswordForgottenData = {
+    email: string,
+}
 
-    const Steps = React.useMemo(() => [
-        <>
-            <p>We will send a password reset link to your email adress.</p>
-            <EmailForm defaultValue={{ email: '' }} errors={{ email: '' }} />
-        </>,
-        <>
-            <h5 className="display-6">Password reset link sent!</h5>
-            <p className="col-10  ">An email was sent to <strong></strong>, we invite you to verify your inbox.</p>
-            <ResendEmailCountdown initConfirmation={() => { }} />
-        </>
-    ], []);
+const PasswordForgotten = () => {
+    const { Container, next } = useSteps([0, 1]);
 
-    const { active, Container, next } = useSteps(Steps);
-    
-    return <AuthForm className="password-forgotten">
-        <Container predicate={(Step: React.JSX.Element) => Step} />
-        {active === 0 &&
-            <Button type="button" variant="primary" onClick={next}>Reset Password</Button>}
+    const [state, setState] = React.useState({
+        validationMessages: null as PasswordForgottenData | null,
+        email: "",
+    })
+
+    const { email, validationMessages } = state;
+
+    const sendPasswordResetEmail = React.useCallback((email: string) => {
+        requestResetPassword(email)
+            .then(() => {
+                next();
+            })
+            .catch((error: AxiosError<{ errors: PasswordForgottenData }>) => {
+                if (error.response?.status === 422) {
+                    return setState(s => ({ ...s, validationMessages: error.response!.data.errors }));
+                }
+
+                toast.error("Failed to send email");
+            })
+    }, [next]);
+
+    const handleSubmit: React.FormEventHandler<HTMLFormElement> = React.useCallback((e) => {
+        const { formData, validationMessages } = formObservations<PasswordForgottenData>(e);
+        if (!validationMessages) {
+            sendPasswordResetEmail(formData.email);
+        }
+        setState(s => ({ ...s, validationMessages, email: formData.email }))
+    }, [next, sendPasswordResetEmail]);
+
+    const Form = <>
+        <p>
+            <Translate value="application.will_send_reset_link" />
+        </p>
+        <EmailForm errors={validationMessages} defaultValue={{ email }} />
+        <Button type="submit" variant="primary" size="sm">
+            <Translate value="application.reset_password" />
+        </Button>
+    </>
+
+    const Message = <>
+        <h5 className="display-6">Password reset link sent!</h5>
+        <p className="col-10  ">
+            <Translate value="application.email_sent_to" /> <strong>{email}</strong>, <Translate value="application.check_inbox" /></p>
+        <ResendEmailCountdown resendEmail={sendPasswordResetEmail} />
+    </>
+
+    const Steps = [Form, Message];
+
+    return <AuthForm className="password-forgotten" onSubmit={handleSubmit}>
+        <Container predicate={(key) => Steps[key]} className="d-flex align-items-center gap-3 col-12 flex-column" />
     </AuthForm>
-});
+};
 
 export default PasswordForgotten;
