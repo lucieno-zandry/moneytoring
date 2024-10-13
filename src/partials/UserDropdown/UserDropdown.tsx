@@ -2,7 +2,7 @@ import React from "react";
 import { Dropdown } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import useAuth from "../../core/hooks/useAuth";
-import useLogout from "../../core/hooks/useLogout";
+import useIsLoggingOut from "../../core/hooks/useIsLoggingLogout";
 import Button from "../Button/Button";
 import { accountSettings } from "../../core/config/links/pages";
 import SmallText from "../SmallText/SmallText";
@@ -10,7 +10,7 @@ import appImage from "../../core/helpers/appImage";
 import Icon from "../Icon/Icon";
 
 const Actions = React.memo(() => {
-    const logout = useLogout();
+    const logout = useIsLoggingOut();
 
     return <>
         <Dropdown.Item as={Link} to={accountSettings} className="btn"><Icon variant="cog" /> Settings</Dropdown.Item>

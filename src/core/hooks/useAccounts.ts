@@ -5,7 +5,7 @@ import { Account } from "../config/types/models";
 
 type UseAccounts = {
     accounts: Account[] | null,
-    setAccounts: (accounts: Account[]) => void,
+    setAccounts: (accounts: UseAccounts['accounts']) => void,
 }
 
 export const defaultAccounts: Account[] = [

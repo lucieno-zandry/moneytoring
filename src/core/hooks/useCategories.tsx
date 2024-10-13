@@ -3,7 +3,7 @@ import { Category } from "../config/types/models";
 
 type UseCategories = {
     categories: Category[] | null,
-    setCategories: (categories: Category[]) => void,
+    setCategories: (categories: UseCategories['categories']) => void,
 }
 
 

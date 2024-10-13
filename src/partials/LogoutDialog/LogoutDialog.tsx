@@ -1,23 +1,21 @@
 import React from "react";
-import useAuth from "../../core/hooks/useAuth";
 import Button from "../Button/Button";
-import useLogout from "../../core/hooks/useLogout";
+import useIsLoggingOut from "../../core/hooks/useIsLoggingLogout";
 import ModalContainer, { ModalFooter } from "../Modal/Modal";
 import { ModalHeader, ModalTitle } from "react-bootstrap";
-import { logout } from "../../core/api/actions";
-import storageTokenActions from "../../core/helpers/storageTokenActions";
+import * as actions from "../../core/api/actions";
+import useLogout from "../../core/hooks/useLogout";
 
 const LogoutDialog = React.memo(() => {
-    const { isLoggingOut, toggleLoggingOut } = useLogout();
-    const { setAuth } = useAuth();
+    const { isLoggingOut, toggleLoggingOut } = useIsLoggingOut();
+    const logout = useLogout();
     const [isLoading, setIsLoading] = React.useState(false);
 
     const handleLogout = React.useCallback(() => {
         setIsLoading(true);
-        logout()
+        actions.logout()
             .finally(() => {
-                setAuth(false);
-                storageTokenActions.remove();
+                logout();
                 toggleLoggingOut();
                 setIsLoading(false);
             })

@@ -3,7 +3,7 @@ import { Transaction } from "../config/types/models";
 
 type UseTransactions = {
     transactions: null | Transaction[],
-    setTransactions: (transactions: Transaction[]) => void,
+    setTransactions: (transactions: UseTransactions['transactions']) => void,
 }
 
 const useTransactions = create<UseTransactions>(set => ({
