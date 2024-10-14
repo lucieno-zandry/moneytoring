@@ -1,4 +1,4 @@
-export const API_BASE_URL = "http://localhost:3000";
+export const API_BASE_URL = "https://moneytoring-k6h4.onrender.com/";
 export const API_URL = API_BASE_URL;
 export const DEFAULT_LOCALES = "en-EN";
 export const DEFAULT_CURRENCY = "USD";
