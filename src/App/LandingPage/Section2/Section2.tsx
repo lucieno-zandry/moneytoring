@@ -1,4 +1,5 @@
-import Button from "../../../partials/Button/Button";
+import { loginPage } from "../../../core/config/links/pages";
+import { ButtonLink } from "../../../partials/Button/Button";
 import Section from "../../../partials/Section/Section";
 
 export default function () {
@@ -9,6 +10,9 @@ export default function () {
             From real-time expense tracking to detailed financial insights,<br />
             MoneyToring offers all the tools you need to stay on top of your finances.
         </p>
-        <Button variant="outline-light" className="col-6 col-sm-3">Learn more</Button>
+        <ButtonLink
+            variant="outline-light"
+            className="col-6 col-sm-3"
+            to={loginPage}>Learn more</ButtonLink>
     </Section>
 }

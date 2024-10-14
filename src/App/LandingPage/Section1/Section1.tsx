@@ -3,8 +3,9 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import React from "react";
 import classList from "../../../core/helpers/classList";
 import useSectionIntersectionObserver from "../../../core/hooks/useSectionIntersectionObserver";
-import { Link } from "react-router-dom";
 import { signupPage } from "../../../core/config/links/pages";
+import images from "./images/images";
+import { ButtonLink } from "../../../partials/Button/Button";
 
 type ImageSequenceConfig = {
   urls: string[]; // Array of image URLs
@@ -73,7 +74,7 @@ const getSequence = () => {
   const frameCount = 78;
   const urls = new Array(frameCount)
     .fill(null)
-    .map((_, i) => `/src/App/LandingPage/Section1/images/image-${(i + 1).toString().padStart(2, '0')}.jpg`);
+    .map((_, i) => images[i]);
 
   const sequence = imageSequence({
     urls,
@@ -137,7 +138,10 @@ const ImageSequenceComponent: React.FC = () => {
         <p>
           Start managing your money smarter today with MoneyToring.
         </p>
-        <Link to={signupPage} className="btn btn-light col-6 col-sm-3">Sign Up Now</Link>
+        <ButtonLink
+          to={signupPage}
+          variant="light"
+          className="col-6 col-sm-3">Sign Up Now</ButtonLink>
       </div>
     </div>
   );

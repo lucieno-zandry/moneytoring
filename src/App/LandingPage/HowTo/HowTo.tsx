@@ -1,28 +1,29 @@
 import gsap from "gsap";
 import { MotionPathPlugin, ScrollTrigger } from "gsap/all";
 import React from "react"
-import Button from "../../../partials/Button/Button";
+import Button, { ButtonLink } from "../../../partials/Button/Button";
 import Section from "../../../partials/Section/Section";
 import Icon from "../../../partials/Icon/Icon";
+import { loginPage, signupPage } from "../../../core/config/links/pages";
 // import Spacer from "../../../partials/Spacer/Spacer";
 
 interface PathEaseConfig {
     axis?: 'x' | 'y';        // Specify axis as "x" or "y"
     precision?: number;       // Precision is a number, default is 1
     smooth?: boolean | number; // Smooth can be boolean or a number
-  }
-  
-  function pathEase(
-    path: string | SVGElement | Element | null, 
+}
+
+function pathEase(
+    path: string | SVGElement | Element | null,
     config: PathEaseConfig
-  ): (p: number) => number {
+): (p: number) => number {
     // Type guard to ensure path is valid for gsap.utils.toArray
     const validPath = gsap.utils.toArray(path)[0] as SVGPathElement | null;
-  
+
     if (!validPath) {
-      throw new Error("Invalid path provided.");
+        throw new Error("Invalid path provided.");
     }
-  
+
     let axis = config.axis || "y",
         precision = config.precision || 1,
         // Cast validPath to a type compatible with MotionPathPlugin
@@ -46,17 +47,17 @@ interface PathEaseConfig {
             smoothRange && a.length > smoothRange && (a[a.length - 1] - a[a.length - 2] < minChange) && smooth.push(a.length - smoothRange);
         },
         i = 1;
-  
+
     for (; i < l; i++) {
         positions[i] = (MotionPathPlugin.getPositionOnPath(rawPath, i / l)[axis] - start) / range;
     }
     positions[l] = 1;
-  
+
     for (i = 0; i < l; i++) {
         getClosest(i / l);
     }
     a.push(1); // must end at 1.
-  
+
     if (smoothRange) { // smooth at the necessary indexes where a small difference was sensed
         smooth.push(l - fullSmoothRange + 1);
         smooth.forEach(i => {
@@ -70,14 +71,14 @@ interface PathEaseConfig {
             }
         });
     }
-  
+
     return (p: number): number => {
         let i = p * l,
             s = a[i | 0];
         return i ? s + (a[Math.ceil(i)] - s) * (i % 1) : 0;
     };
-  }
-  
+}
+
 
 let timelineSections: NodeListOf<HTMLDivElement>;
 let previousSection: HTMLDivElement;
@@ -186,7 +187,7 @@ export default function () {
                     <p className="text-muted">
                         Create your account in seconds.
                     </p>
-                    <Button variant="outline-light" className="col-6 col-sm-3">Register</Button>
+                    <ButtonLink variant="outline-light" className="col-6 col-sm-3" to={signupPage}>Register</ButtonLink>
                 </div>
                 <div
                     className="activable timeline-section p-5 d-flex flex-column justify-content-center gap-4">
@@ -194,7 +195,9 @@ export default function () {
                     <p>
                         Define your money accounts, <br /> configure your categories and optionnally enter your reccurent transactions.
                     </p>
-                    <Button variant="outline-info" className="cool-6 col-sm-3">Take me</Button>
+                    <ButtonLink
+                        variant="outline-info"
+                        className="cool-6 col-sm-3" to={loginPage}>Take me</ButtonLink>
                 </div>
                 <div
                     className="activable timeline-section p-5 d-flex flex-column justify-content-center align-items-end gap-4">
@@ -202,7 +205,10 @@ export default function () {
                     <p>
                         Monitor your spending watch your goals progress.
                     </p>
-                    <Button variant="outline-success" className="colol-6 col-sm-3">Take me</Button>
+                    <ButtonLink
+                        variant="outline-success"
+                        className="colol-6 col-sm-3"
+                        to={signupPage}>Take me</ButtonLink>
                 </div>
                 <div
                     className="activable timeline-section p-5 d-flex flex-column justify-content-center gap-4">
@@ -210,7 +216,10 @@ export default function () {
                     <p>
                         Sync your bank accounts for automatic tracking. (Under development)
                     </p>
-                    <Button variant="outline-secondary" className="col-6 col-sm-3">Learn more</Button>
+                    <ButtonLink
+                        variant="outline-secondary"
+                        className="col-6 col-sm-3"
+                        to={loginPage}>Learn more</ButtonLink>
                 </div>
             </div>
         </div>
