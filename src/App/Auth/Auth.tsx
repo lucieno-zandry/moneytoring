@@ -2,7 +2,7 @@ import React from "react";
 import { Outlet } from "react-router-dom";
 import Logo from "../../partials/Logo/Logo";
 import QuickSetting from "./QuickSetting/QuickSetting";
-import OtherLoginMethods from "./OtherLoginMethods/OtherLoginMethods";
+// import OtherLoginMethods from "./OtherLoginMethods/OtherLoginMethods";
 import useAuth from "../../core/hooks/useAuth";
 
 const Auth = React.memo(() => {
@@ -15,8 +15,8 @@ const Auth = React.memo(() => {
                 && <QuickSetting />}
             <Logo />
             <Outlet />
-            {!user &&
-                <OtherLoginMethods />}
+            {/* {!user &&
+                <OtherLoginMethods />} */}
         </div>
     </div>
 });
