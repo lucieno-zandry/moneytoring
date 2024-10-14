@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "Node16",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "noImplicitAny": true,
+    "resolveJsonModule": true,
+    "outDir": "./dist",
+    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "Node16",
+    "forceConsistentCasingInFileNames": true,
+  },
+  "include": ["**/*.ts", "node_modules/@prisma/client"],
+  "exclude": ["node_modules", "dist"]
+}
