@@ -11,21 +11,21 @@ const category = Router();
 
 category.use(AuthMiddleware);
 
-category.get("/category/all", CategoryController.all);
+category.get("/all", CategoryController.all);
 
 category.post(
-  "/category/create",
+  "/create",
   CategoryCreateRequest,
   CategoryController.create
 );
 category.put(
-  "/category/update",
+  "/update",
   CategoryUpdateRequest,
   CategoryController.update
 );
 
 category.post(
-  "/category/delete",
+  "/delete",
   CategoryDeleteRequest,
   CategoryController.delete
 );

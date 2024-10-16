@@ -5,14 +5,14 @@ import AccountRequest from "../../app/http/requests/AccountRequest";
 
 const account = Router();
 
-account.get("/account/all", AuthMiddleware, AccountController.all);
-account.post("/account/create", AuthMiddleware, AccountController.create);
+account.get("/all", AuthMiddleware, AccountController.all);
+account.post("/create", AuthMiddleware, AccountController.create);
 account.put(
-  "/account/update",
+  "/update",
   AuthMiddleware,
   AccountRequest,
   AccountController.update
 );
-account.post("/account/delete", AuthMiddleware, AccountController.destroy);
+account.post("/delete", AuthMiddleware, AccountController.destroy);
 
 export default account;

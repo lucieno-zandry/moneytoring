@@ -8,21 +8,23 @@ datasource db {
 }
 
 model User {
-  id                 Int                  @id @default(autoincrement())
-  name               String
-  firstname          String
-  email              String               @unique
-  password           String
-  email_verified_at  DateTime?
-  image              String?
-  created_at         DateTime             @default(now())
-  updated_at         DateTime             @default(now())
-  AuthorizationToken AuthorizationToken[]
-  PasswordResetToken PasswordResetToken[]
-  Account            Account[]
-  Setting            Setting[]
-  Category           Category[]
-  ConfirmationCode   ConfirmationCode[]
+  id                    Int                     @id @default(autoincrement())
+  name                  String
+  firstname             String
+  email                 String                  @unique
+  password              String
+  email_verified_at     DateTime?
+  image                 String?
+  created_at            DateTime                @default(now())
+  updated_at            DateTime                @default(now())
+  AuthorizationToken    AuthorizationToken[]
+  PasswordResetToken    PasswordResetToken[]
+  Account               Account[]
+  Setting               Setting[]
+  Category              Category[]
+  ConfirmationCode      ConfirmationCode[]
+  Transaction           Transaction[]
+  TransactionRecurrence TransactionRecurrence[]
 
   @@map("users")
 }
@@ -52,14 +54,15 @@ model PasswordResetToken {
 }
 
 model Account {
-  id         Int      @id @default(autoincrement())
-  user_id    Int
-  user       User     @relation(fields: [user_id], references: [id])
-  name       String
-  balance    Float    @default(0)
-  icon       String?
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  id          Int           @id @default(autoincrement())
+  user_id     Int
+  user        User          @relation(fields: [user_id], references: [id])
+  name        String
+  balance     Float         @default(0)
+  icon        String?
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @default(now())
+  Transaction Transaction[]
 
   @@map("accounts")
 }
@@ -77,14 +80,15 @@ model Setting {
 }
 
 model Category {
-  id         Int      @id @default(autoincrement())
-  user_id    Int
-  user       User     @relation(fields: [user_id], references: [id])
-  name       String
-  icon       String?
-  budget     Float    @default(0)
-  created_at DateTime @default(now())
-  updated_at DateTime @default(now())
+  id          Int           @id @default(autoincrement())
+  user_id     Int
+  user        User          @relation(fields: [user_id], references: [id])
+  name        String
+  icon        String?
+  budget      Float         @default(0)
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @default(now())
+  Transaction Transaction[]
 
   @@map("categories")
 }
@@ -99,4 +103,33 @@ model ConfirmationCode {
   updated_at DateTime @default(now())
 
   @@map("confirmation_codes")
+}
+
+model TransactionRecurrence {
+  id             Int         @id @default(autoincrement())
+  transaction_id Int         @unique
+  transaction    Transaction @relation(fields: [transaction_id], references: [id])
+  pattern        String
+  next_occurence DateTime
+  created_at     DateTime    @default(now())
+  updated_at     DateTime    @default(now())
+  User           User?       @relation(fields: [user_id], references: [id])
+  user_id        Int?
+}
+
+model Transaction {
+  id                    Int                    @id @default(autoincrement())
+  user_id               Int
+  account_id            Int
+  category_id           Int
+  amount                Float
+  description           String
+  icon                  String
+  type                  String
+  user                  User                   @relation(fields: [user_id], references: [id])
+  account               Account                @relation(fields: [account_id], references: [id])
+  category              Category               @relation(fields: [category_id], references: [id])
+  created_at            DateTime               @default(now())
+  updated_at            DateTime               @default(now())
+  transaction_recurrence TransactionRecurrence?
 }

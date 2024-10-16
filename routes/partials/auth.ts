@@ -9,17 +9,17 @@ import UserEmailRequest from "../../app/http/requests/UserEmailRequest";
 
 const auth = Router();
 
-auth.post("/auth/login", LoginRequest, AuthController.login);
-auth.post("/auth/signup", SignupRequest, AuthController.signup);
-auth.post("/auth/validate/email", AuthController.validateEmail);
+auth.post("/login", LoginRequest, AuthController.login);
+auth.post("/signup", SignupRequest, AuthController.signup);
+auth.post("/validate/email", AuthController.validateEmail);
 auth.post(
-  "/auth/request/reset-password",
+  "/request/reset-password",
   UserEmailRequest,
   AuthController.sendResetPasswordEmail
 );
 
 auth.post(
-  "/auth/reset-password",
+  "/reset-password",
   ResetPasswordRequest,
   AuthController.resetPassword
 );
@@ -27,15 +27,15 @@ auth.post(
 // Routes hereby requires auth
 auth.use(AuthMiddleware);
 
-auth.delete("/auth/logout", AuthController.logout);
-auth.get("/auth/user", AuthController.user);
+auth.delete("/logout", AuthController.logout);
+auth.get("/user", AuthController.user);
 auth.get(
-  "/auth/request/confirmation",
+  "/request/confirmation",
   AuthController.sendConfirmationEmail
 );
 
 auth.post(
-  "/auth/confirmation",
+  "/confirmation",
   ConfirmEmailRequest,
   AuthController.confirmEmail
 );

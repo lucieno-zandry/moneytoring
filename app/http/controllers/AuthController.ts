@@ -25,10 +25,11 @@ import {
 import randomInt from "../../helpers/randomInt";
 import { ResetPasswordData } from "../requests/ResetPasswordRequest";
 import ConfirmationCodeMail from "../../mail/ConfirmationCodeMail";
+import emailIsEmailable from "../../helpers/emailIsEmailable";
 
 export default {
   login: async (request: Request, response: Response) => {
-    const user = auth(response);
+    const user = auth(response).user();
 
     const authorizationToken = await createAuthorizationToken({
       token: randomString(32),
@@ -51,11 +52,20 @@ export default {
     response.json({ user, token: authorizationToken.token });
   },
   user: (request: Request, response: Response) => {
-    response.json({ user: auth(response) });
+    response.json({ user: auth(response).user() });
   },
-  validateEmail: (request: Request, response: Response) => {
-    const {isValid} = validate({ email: request.body.email }, response, "User");
-    if (!isValid) return;
+  validateEmail: async (request: Request, response: Response) => {
+    const { isValid, validated } = validate(
+      { email: request.body.email },
+      response,
+      "User"
+    );
+
+    if (!isValid || !validated) return;
+
+    const emailable = await emailIsEmailable(validated.email, response);
+
+    if (!emailable) return;
     response.sendStatus(200);
   },
   logout: async (request: Request, response: Response) => {
@@ -82,9 +92,13 @@ export default {
   sendConfirmationEmail: async (request: Request, response: Response) => {
     const user_id = auth(response).id;
     const existingConfirmationCode = await findConfirmationCodeByUser(user_id);
-    const hasNotExpired = existingConfirmationCode && existingConfirmationCode.expires_at > new Date();
-    
-    const code = hasNotExpired && existingConfirmationCode!.code || randomInt(CODE_MIN, CODE_MAX);
+    const hasNotExpired =
+      existingConfirmationCode &&
+      existingConfirmationCode.expires_at > new Date();
+
+    const code =
+      (hasNotExpired && existingConfirmationCode!.code) ||
+      randomInt(CODE_MIN, CODE_MAX);
 
     if (!existingConfirmationCode || !hasNotExpired) {
       const expires_at = addMinutes(15);
@@ -97,14 +111,17 @@ export default {
       await createConfirmationCode(confirmationCodeData);
     }
 
-    const Email = new ConfirmationCodeMail().code(code).to(auth(response).email);
+    const Email = new ConfirmationCodeMail()
+      .from("example")
+      .code(code)
+      .to(auth(response).user().email);
     const sent = await Email.send();
 
     response.sendStatus(sent ? 200 : 500);
   },
   confirmEmail: async (request: Request, response: Response) => {
     const user = await updateUser({
-      ...auth(response),
+      ...auth(response).user(),
       email_verified_at: new Date(),
     });
 

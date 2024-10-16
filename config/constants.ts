@@ -9,13 +9,15 @@ export const COLOR_DANGER = "#e56d6d";
 export const BORDER_RADIUS = ".5rem";
 
 export const LANGUAGES = {
-    "en-EN": "English",
-    "fr-FR": "Français",
-  };
-  
-  export const CURRENCIES = {
-    EUR: "Euro",
-    MGA: "Ariary",
-    USD: "Usd",
-  };
-  
+  "en-EN": "English",
+  "fr-FR": "Français",
+};
+
+export const CURRENCIES = {
+  EUR: "Euro",
+  MGA: "Ariary",
+  USD: "Usd",
+};
+
+export const TRANSACTION_TYPES = ["INCOME", "EXPENSE"];
+export const RECURRENCE_PATTERNS = ["ONCE", "WEEKLY", "MONTHLY", "YEARLY"];

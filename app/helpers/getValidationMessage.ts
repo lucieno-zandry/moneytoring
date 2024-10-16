@@ -1,3 +1,5 @@
+import { Prisma } from "@prisma/client";
+import { RECURRENCE_PATTERNS, TRANSACTION_TYPES } from "../../config/constants";
 import { KeyValueObject } from "../../config/types";
 import { CODE_MAX, CODE_MIN } from "../models/ConfirmationCode";
 
@@ -97,7 +99,7 @@ const getValidationMessage = (
       if (!data["LANGUAGES"].includes(value)) {
         message = "This language is not available.";
       }
- 
+
       break;
 
     case "Setting.currency":
@@ -131,6 +133,53 @@ const getValidationMessage = (
       }
       break;
 
+    case "Transaction.amount":
+      if (!isNumber(value) || value < 0) {
+        message = "The amount should be a positive number.";
+      }
+
+    case "Transaction.description":
+      break;
+
+    case "Transaction.icon":
+      if (!isString(value)) {
+        message = "The icon should be a string.";
+      }
+      break;
+
+    case "Transaction.type":
+      if (!isString(value) || !TRANSACTION_TYPES.includes(value)) {
+        message = "This type of transaction is not available.";
+      }
+      break;
+
+    case "Transaction.account_id":
+      if (!isId(value)) {
+        message = "The account is not valid.";
+      }
+
+      break;
+
+    case "Transaction.category_id":
+      if (!isId(value)) {
+        message = "The category is not valid";
+      }
+      break;
+
+    case "TransactionRecurrence.pattern":
+      if (!isString(value) || !RECURRENCE_PATTERNS.includes(value)) {
+        message = "The pattern is not valid";
+      }
+      break;
+
+    case "TransactionRecurrence.next_occurence":
+      if (!isDate(value)) {
+        message = "The next occurence should be a date.";
+      } else if (value < new Date()) {
+        message = "The next occurence should not be in the past";
+      }
+      break;
+
     default:
       return null;
   }
@@ -140,12 +189,28 @@ const getValidationMessage = (
 
 export default getValidationMessage;
 
+export async function exists<T extends { findFirst: Function }>(
+  model: T,
+  id: number
+) {
+  const exists = await model.findFirst({ where: { id } });
+  return Boolean(exists);
+}
+
+function isDate(value: unknown) {
+  return value instanceof Date;
+}
+
 function isString(value: unknown) {
   return typeof value === "string";
 }
 
 function isNumber(value: unknown) {
   return typeof value === "number";
+}
+
+function isId(value: unknown) {
+  return isNumber(value) && value > 0;
 }
 
 function isName(value: string) {
