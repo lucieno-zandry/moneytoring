@@ -1,3 +1,7 @@
+interface ImportMeta {
+  readonly env: ImportMetaEnv;
+}
+
 // Image files
 declare module '*.png' {
   const value: string;

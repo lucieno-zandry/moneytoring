@@ -101,7 +101,6 @@ export const getWstoken = () => {
 
 export const getTransactions = (filter?: FilterData) => {
   const params = toParams(filter);
-  console.log(params);
   return api.get(getTransactionsApi, { params });
 };
 

@@ -17,7 +17,7 @@ export const requestConfirmationApi = '/auth/request/confirmation';
 export const confirmationApi = '/auth/confirmation';
 
 // transactions
-export const getTransactionsApi = "/transactions/get";
+export const getTransactionsApi = "/transaction/get";
 export const createTransactionsApi = "/transaction/create";
 export const updateTransactionApi = "/transaction/update";
 

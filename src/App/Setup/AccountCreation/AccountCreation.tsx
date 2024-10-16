@@ -10,19 +10,18 @@ import AccountsTable from "../../../partials/AccountsTable/AccountsTable";
 import { createAccounts } from "../../../core/api/actions";
 import toast from "react-hot-toast";
 import { AxiosError } from "axios";
-import useScreenLoader from "../../../partials/ScreenLoader/hooks/useScreenLoader";
 import Motion from "../../../partials/Motion/Motion";
 import { slideNext } from "../../../core/config/variants/variants";
 
 
 const AccountCreation = React.memo(() => {
     const { setAccounts } = useAccounts();
-    const { toggle } = useScreenLoader();
 
     const [state, setState] = React.useState({
         creationMode: false,
         accounts: defaultAccounts,
         editingAccount: undefined as Account | undefined,
+        isLoading: false,
     });
 
     const { editingAccount, accounts, creationMode } = state;
@@ -64,7 +63,7 @@ const AccountCreation = React.memo(() => {
 
     const handleSubmit = React.useCallback(() => {
         if (state.accounts.length === 0) return;
-        toggle();
+        setState(s => ({ ...s, isLoading: true }));
         createAccounts(state.accounts)
             .then(response => {
                 const newAccounts = response.data.created as Account[];
@@ -75,7 +74,8 @@ const AccountCreation = React.memo(() => {
                     toast.error('Failed to create transaction');
                 }
             })
-            .finally(toggle);
+            .finally(() => setState(s => ({ ...s, isLoading: true })));
+
     }, [state.accounts]);
 
     return <>
@@ -108,7 +108,8 @@ const AccountCreation = React.memo(() => {
                 variant="primary"
                 disabled={state.accounts.length < 1}
                 onClick={handleSubmit}
-                size="sm">
+                size="sm"
+                isLoading={state.isLoading}>
                 Done <Icon variant="check-circle" />
             </Button>
         </CornerButtons>

@@ -1,5 +1,5 @@
 import React from "react";
-import { fakeTransactionRecurrence } from "../../core/config/constants/fakes";
+import { fakeAccount, fakeCategory, fakeTransactionRecurrence } from "../../core/config/constants/fakes";
 import { Transaction } from "../../core/config/types/models"
 import capitalize from "../../core/helpers/capitalize";
 import useNumberFormat from "../../core/hooks/useNumberFormat";
@@ -11,7 +11,8 @@ type Props = {
 }
 
 export default React.memo((props: Props) => {
-    const { icon, amount, description, transaction_recurrence = fakeTransactionRecurrence, type, account, category } = props.item;
+    console.log(props.item);
+    const { icon, amount, description, transaction_recurrence = fakeTransactionRecurrence, type, account = fakeAccount, category = fakeCategory } = props.item;
     const { next_occurence, pattern } = transaction_recurrence;
     const { toAmount } = useNumberFormat();
 

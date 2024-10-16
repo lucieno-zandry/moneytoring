@@ -23,8 +23,8 @@ export const fakeUser: User = {
 
 export const fakeAccount: Account = {
   id: 0,
-  balance: 20.05,
-  name: "Bank",
+  balance: 0,
+  name: "Unavailable",
   created_at: fakeDate,
   updated_at: fakeDate,
   user_id: fakeUser.id,
@@ -33,8 +33,8 @@ export const fakeAccount: Account = {
 
 export const fakeCategory: Category = {
   id: 0,
-  budget: randomNumber(),
-  name: "Bank",
+  budget: 0,
+  name: "Unavailable",
   created_at: fakeDate,
   updated_at: fakeDate,
   user_id: fakeUser.id,

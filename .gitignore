@@ -23,5 +23,4 @@ dist-ssr
 *.sln
 *.sw?
 
-
-src/core/config/constants/constants.ts
+.env.development

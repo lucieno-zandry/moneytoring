@@ -62,7 +62,6 @@ const TransactionCreation = React.memo(() => {
 
     const handleEditSubmit = React.useCallback((transaction: Transaction) => {
         if (!editingTransaction) return;
-        console.log(editingTransaction);
         const newTransactions = arrayUpdate(transactions, transaction, (transaction) => transaction.id === editingTransaction?.id);
         setState(s => ({ ...s, transactions: newTransactions, editingTransaction: undefined }));
     }, [editingTransaction]);
@@ -76,7 +75,6 @@ const TransactionCreation = React.memo(() => {
             .then(response => {
                 const newTransactions = response.data.transactions as Transaction[];
                 setTransactions(newTransactions);
-                setState(s => ({ ...s, transactions: newTransactions }));
             })
             .catch(error => {
                 if (error instanceof AxiosError) {

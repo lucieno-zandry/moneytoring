@@ -7,7 +7,7 @@ type Props = {
     resendEmail: Function
 };
 
-let interval: null | number;
+let interval: null | NodeJS.Timeout;
 const DEFAULTCOUNTDOWN = 60;
 
 const ResendEmailCountdown = React.memo((props: Props) => {

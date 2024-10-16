@@ -1,4 +1,3 @@
-import React from "react"
 import TransactionsTable from "../../../../partials/TransactionTables/TransactionsTable";
 import useTransactions from "../../../../core/hooks/useTransactions";
 import Button from "../../../../partials/Button/Button";
@@ -6,7 +5,7 @@ import Icon from "../../../../partials/Icon/Icon";
 import { useNavigate } from "react-router-dom";
 import * as links from '../../../../core/config/links/pages';
 
-export default React.memo(() => {
+export default () => {
     const { transactions } = useTransactions();
     const navigate = useNavigate();
 
@@ -25,4 +24,4 @@ export default React.memo(() => {
             <TransactionsTable items={transactions?.slice(0, 10) || null} />
         </div>
     </div>
-})
+}

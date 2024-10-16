@@ -9,22 +9,23 @@ import useCategories from '../core/hooks/useCategories';
 import useRefreshAccounts from '../core/hooks/useRefreshAccounts';
 import useRefreshCategories from '../core/hooks/useRefreshCategories';
 import useTransactions from '../core/hooks/useTransactions';
-// import useRefreshTransactions from '../core/hooks/useRefreshTransactions';
+import useRefreshTransactions from '../core/hooks/useRefreshTransactions';
 import { isFirstTime } from '../core/helpers/firstTimeActions';
 import useSetting from '../core/hooks/useSetting';
 import useRefreshSetting from '../core/hooks/useRefreshSetting';
+import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const App = (props: PropsWithChildren) => {
     const { user } = useAuth();
     const { setting } = useSetting();
     const { accounts } = useAccounts();
     const { categories } = useCategories();
-    const { transactions, setTransactions } = useTransactions();
+    const { transactions } = useTransactions();
 
     const refreshAuth = useRefreshAuth();
     const refreshAccounts = useRefreshAccounts();
     const refreshCategories = useRefreshCategories();
-    // const refreshTransactions = useRefreshTransactions();
+    const refreshTransactions = useRefreshTransactions();
     const refreshSetting = useRefreshSetting();
 
     React.useEffect(refreshAuth, []);
@@ -38,17 +39,17 @@ const App = (props: PropsWithChildren) => {
         } else if (!categories) {
             refreshCategories();
         } else if (!transactions && !isFirstTime()) {
-            setTransactions([]);
-            // refreshTransactions();
+            refreshTransactions();
         }
-    }, [user, accounts, categories, setting]);
+    }, [user, accounts, categories, setting, transactions]);
 
-    return <>
+
+    return <GoogleOAuthProvider clientId={import.meta.env.VITE_APP_GOOGLE_CLIENT_ID}>
         <LogoutDialog />
         <Toaster />
         <ScreenLoader />
         {props.children}
-    </>
+    </GoogleOAuthProvider>
 };
 
 export default App;
