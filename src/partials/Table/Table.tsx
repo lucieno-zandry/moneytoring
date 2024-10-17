@@ -3,7 +3,6 @@ import Checkbox from "../Checkbox/Checkbox";
 import { Dropdown } from "react-bootstrap";
 import Button from "../Button/Button";
 import Icon from "../Icon/Icon";
-import { AnimatePresence, motion, Variants } from "framer-motion";
 import useSearch from "../../core/hooks/useSearch";
 import hasMatched from "../../core/helpers/hasMatched";
 import TablePlaceholder from "../TablePlaceholder/TablePlaceholder";
@@ -19,30 +18,6 @@ export type TableProps<T extends Model> = {
     onDelete?: (items: T[]) => void,
     onEdit?: (item: T) => void,
 } & React.DetailedHTMLProps<React.TableHTMLAttributes<HTMLTableElement>, HTMLTableElement>
-
-const fadeAnimationDuration = .6;
-
-const variants = (key: number): Variants => {
-    return {
-        hidden: {
-            y: '-3rem',
-            opacity: 0,
-        },
-        visible: {
-            y: 0,
-            opacity: 1,
-            transition: {
-                delay: (.2 * key) + fadeAnimationDuration,
-                type: 'spring',
-                duration: .3
-            }
-        },
-        exit: {
-            y: '3rem',
-            opacity: 0,
-        }
-    }
-}
 
 export default <T extends Model>(props: TableProps<T>) => {
     const { items, headers, TDs, onDelete, className = '', onEdit, ...tableProps } = props;
@@ -145,51 +120,43 @@ export default <T extends Model>(props: TableProps<T>) => {
             </tr>
         </thead>
         <tbody>
-            <AnimatePresence>
-                {items.map((item: T, key) => {
-                    const checked = selection?.some(selected => selected.id === item.id);
-                    const element = <motion.tr
-                        key={key}
-                        variants={variants(key)}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit">
+            {items.map((item: T, key) => {
+                const checked = selection?.some(selected => selected.id === item.id);
+                const element = <tr key={key}>
+                    {selection && <td>
+                        <Checkbox
+                            label=''
+                            checked={checked}
+                            onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSelection(e, item)}
+                        />
+                    </td>}
 
-                        {selection && <td>
-                            <Checkbox
-                                label=''
-                                checked={checked}
-                                onChange={(e: React.ChangeEvent<HTMLInputElement>) => handleSelection(e, item)}
-                            />
+                    <TDs item={item} />
+
+                    {hasActions &&
+                        <td className="text-align-center">
+                            <Dropdown className="actions-dropdown">
+                                <Dropdown.Toggle variant="">
+                                    <i className="fa fa-ellipsis-v"></i>
+                                </Dropdown.Toggle>
+                                <Dropdown.Menu>
+                                    <Dropdown.Item onClick={() => handleEdit(item)}>
+                                        <Icon variant="pencil" /> Edit
+                                    </Dropdown.Item>
+                                    <Dropdown.Item className="text-danger" onClick={() => handleDeleteUnique(item)}>
+                                        <Icon variant="trash" /> Delete
+                                    </Dropdown.Item>
+                                </Dropdown.Menu>
+                            </Dropdown>
                         </td>}
+                </tr>
 
-                        <TDs item={item} />
+                if (!search) return element;
 
-                        {hasActions &&
-                            <td className="text-align-center">
-                                <Dropdown className="actions-dropdown">
-                                    <Dropdown.Toggle variant="">
-                                        <i className="fa fa-ellipsis-v"></i>
-                                    </Dropdown.Toggle>
-                                    <Dropdown.Menu>
-                                        <Dropdown.Item onClick={() => handleEdit(item)}>
-                                            <Icon variant="pencil" /> Edit
-                                        </Dropdown.Item>
-                                        <Dropdown.Item className="text-danger" onClick={() => handleDeleteUnique(item)}>
-                                            <Icon variant="trash" /> Delete
-                                        </Dropdown.Item>
-                                    </Dropdown.Menu>
-                                </Dropdown>
-                            </td>}
-                    </motion.tr>
-
-                    if (!search) return element;
-
-                    const values: unknown[] = Object.values(item);
-                    if (hasMatched(values, search)) return element;
-                }
-                )}
-            </AnimatePresence>
+                const values: unknown[] = Object.values(item);
+                if (hasMatched(values, search)) return element;
+            }
+            )}
         </tbody>
     </table>
 }
