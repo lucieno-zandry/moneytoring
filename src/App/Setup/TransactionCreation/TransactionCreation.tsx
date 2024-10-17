@@ -27,6 +27,7 @@ const TransactionCreation = React.memo(() => {
         creationMode: false,
         transactions: generateTransactions(accounts, categories),
         editingTransaction: undefined as Transaction | undefined,
+        isLoading: false,
     });
 
     const { transactions, creationMode, editingTransaction } = state;
@@ -70,7 +71,7 @@ const TransactionCreation = React.memo(() => {
 
     const handleSubmit = React.useCallback(() => {
         if (state.transactions.length === 0) return;
-
+        setState(s => ({ ...s, isLoading: true }));
         createTransactions(state.transactions)
             .then(response => {
                 const newTransactions = response.data.transactions as Transaction[];
@@ -81,6 +82,7 @@ const TransactionCreation = React.memo(() => {
                     toast.error('Failed to create transaction');
                 }
             })
+            .finally(() => setState(s => ({ ...s, isLoading: false })));
     }, [setTransactions, state.transactions]);
 
     React.useEffect(() => {

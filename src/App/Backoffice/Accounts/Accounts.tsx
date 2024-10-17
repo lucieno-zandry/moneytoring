@@ -8,15 +8,24 @@ import Motion from "../../../partials/Motion/Motion";
 import useAccounts from "../../../core/hooks/useAccounts";
 import DeleteDialogue from "../../../partials/DeleteDialogue/DeleteDialogue";
 import AccountsTable from "../../../partials/AccountsTable/AccountsTable";
+import { createAccounts, deleteAccounts, updateAccount } from "../../../core/api/actions";
+import toast from "react-hot-toast";
+import arrayUpdate from "../../../core/helpers/arrayUpdate";
+import useRefreshAccounts from "../../../core/hooks/useRefreshAccounts";
+import useScreenLoader from "../../../partials/ScreenLoader/hooks/useScreenLoader";
+
+const defaultState = {
+    editing: undefined as Account | undefined,
+    creating: false,
+    deleting: [] as Account[],
+}
 
 const Accounts = React.memo(() => {
     const { setAccounts, accounts } = useAccounts(state => state);
+    const refreshAccounts = useRefreshAccounts();
+    const screenLoader = useScreenLoader();
 
-    const [state, setState] = React.useState({
-        editing: undefined as Account | undefined,
-        creating: false,
-        deleting: [] as Account[],
-    });
+    const [state, setState] = React.useState(defaultState);
 
     const handleEdit = React.useCallback((editing: Account) => {
         setState(s => ({ ...s, editing, creating: false }));
@@ -27,13 +36,34 @@ const Accounts = React.memo(() => {
     }, []);
 
     const handleSubmit = React.useCallback((account: Account) => {
+        if (!accounts) return;
+
+        screenLoader.toggle();
+
         if (state.creating) {
-            setAccounts;
+            createAccounts([account])
+                .then((response) => {
+                    setAccounts([...accounts, ...response.data.accounts]);
+                    setState(defaultState)
+                }).catch(() => {
+                    toast.error("Failed to create account!")
+                })
+                .finally(screenLoader.toggle)
             account;
         } else {
 
+            updateAccount(account)
+                .then(response => {
+                    const updated: Account = response.data.account;
+                    setAccounts(arrayUpdate(accounts, updated, (item) => item.id === updated.id));
+                    setState(defaultState)
+                })
+                .catch(() => {
+                    toast.error("Failed to update account!");
+                })
+                .finally(screenLoader.toggle)
         }
-    }, [state.creating]);
+    }, [state.creating, accounts]);
 
     const toggleCreating = React.useCallback(() => {
         setState(s => ({ ...s, creating: !s.creating, editing: undefined }));
@@ -43,8 +73,21 @@ const Accounts = React.memo(() => {
         setState(s => ({ ...s, creating: false, editing: undefined }));
     }, []);
 
-    const handleDelete = React.useCallback(() => {
+    const handleDelete: React.FormEventHandler<HTMLFormElement> = React.useCallback((e) => {
+        e.preventDefault();
         if (state.deleting.length === 0) return;
+
+        screenLoader.toggle();
+        deleteAccounts(state.deleting)
+            .then(() => {
+                toast.success("Accounts deleted!");
+                refreshAccounts();
+                setState(defaultState);
+            })
+            .catch(() => {
+                toast.error('failed to delete accounts');
+            })
+            .finally(screenLoader.toggle);
 
     }, [state.deleting]);
 

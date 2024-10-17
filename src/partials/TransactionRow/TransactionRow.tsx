@@ -12,8 +12,15 @@ type Props = {
 
 export default React.memo((props: Props) => {
     console.log(props.item);
-    const { icon, amount, description, transaction_recurrence = fakeTransactionRecurrence, type, account = fakeAccount, category = fakeCategory } = props.item;
-    const { next_occurence, pattern } = transaction_recurrence;
+    const { icon,
+        amount,
+        description,
+        type,
+    } = props.item;
+    const { next_occurence, pattern } = props.item.transaction_recurrence || fakeTransactionRecurrence;
+    const account = props.item.account || fakeAccount;
+    const category = props.item.category || fakeCategory;
+    
     const { toAmount } = useNumberFormat();
 
     return <>

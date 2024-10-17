@@ -11,9 +11,10 @@ import TransactionsTable from "../../../partials/TransactionTables/TransactionsT
 import Filter, { FilterData } from "../../../partials/Filter/Filter";
 import useCategories from "../../../core/hooks/useCategories";
 import useAccounts from "../../../core/hooks/useAccounts";
-import { createTransactions, getTransactions } from "../../../core/api/actions";
+import { createTransactions, getTransactions, updateTransaction } from "../../../core/api/actions";
 import toast from "react-hot-toast";
-import useRefreshTransactions from "../../../core/hooks/useRefreshTransactions";
+import useScreenLoader from "../../../partials/ScreenLoader/hooks/useScreenLoader";
+import arrayUpdate from "../../../core/helpers/arrayUpdate";
 
 const defaultState = {
     editing: undefined as Transaction | undefined,
@@ -26,7 +27,7 @@ const Transactions = React.memo(() => {
     const { setTransactions, transactions } = useTransactions();
     const { categories } = useCategories();
     const { accounts } = useAccounts();
-    const refreshTransactions = useRefreshTransactions();
+    const screenLoader = useScreenLoader();
 
     const [state, setState] = React.useState(defaultState);
 
@@ -35,20 +36,36 @@ const Transactions = React.memo(() => {
     }, []);
 
     const handleSubmit = React.useCallback((transaction: Transaction) => {
+        if (!transactions) return;
+
+        screenLoader.toggle();
+
         if (state.creating && !state.editing) {
             createTransactions([transaction])
-                .then(() => {
-                    refreshTransactions();
+                .then((response) => {
+                    const createds: Transaction[] = response.data.transactions;
+                    setTransactions([...transactions, ...createds]);
                     setState(defaultState);
                     toast.success('Transaction created!');
                 })
                 .catch(() => {
                     toast.error('An error occured when trying to create the transaction');
-                });
-        } else {
-
+                })
+                .finally(screenLoader.toggle)
+        } else if (state.editing && !state.creating) {
+            updateTransaction(state.editing)
+                .then((response) => {
+                    const updated: Transaction = response.data.transaction;
+                    setState(defaultState);
+                    toast.success('Transaction updated!');
+                    setTransactions(arrayUpdate(transactions, updated, transaction => transaction.id === updated.id))
+                })
+                .catch(() => {
+                    toast.error('Failed to update transaction.')
+                })
+                .finally(screenLoader.toggle)
         }
-    }, [state.creating, refreshTransactions]);
+    }, [state.creating, state.editing]);
 
     const toggleFiltering = React.useCallback(() => {
         setState(s => ({ ...s, filtering: !s.filtering }));
@@ -68,7 +85,6 @@ const Transactions = React.memo(() => {
 
     const handleDelete = React.useCallback(() => {
         if (state.deleting.length === 0) return;
-
     }, [state.deleting]);
 
     const handleFilter = React.useCallback((filter: FilterData) => {

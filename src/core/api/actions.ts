@@ -108,7 +108,7 @@ export const createTransactions = (transactions: Transaction[]) => {
   return api.post(createTransactionsApi, transactions);
 };
 
-export const updateTransaction = (transaction: Transaction[]) => {
+export const updateTransaction = (transaction: Transaction) => {
   return api.put(updateTransactionApi, transaction);
 };
 
@@ -128,9 +128,10 @@ export const getAccounts = () => {
 };
 
 export const deleteAccounts = (accounts: Account[]) => {
-  return api.post(deleteAccountsApi, {
-    accounts: accounts.map((account) => account.id),
-  });
+  return api.post(
+    deleteAccountsApi,
+    accounts.map((account) => account.id)
+  );
 };
 
 export const createCategories = (categories: Category[]) => {
@@ -146,9 +147,10 @@ export const getCategories = () => {
 };
 
 export const deleteCategories = (categories: Category[]) => {
-  return api.post(deleteCategoriesApi, {
-    categories: categories.map((account) => account.id),
-  });
+  return api.post(
+    deleteCategoriesApi,
+    categories.map((account) => account.id)
+  );
 };
 
 export const createSetting = (
