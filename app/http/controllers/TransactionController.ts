@@ -4,6 +4,8 @@ import {
   createTransaction,
   CreateTransactionData,
   findTransactionsByUser,
+  updateTransaction,
+  UpdateTransactionData,
 } from "../../models/Transaction";
 
 const TransactionController: Controller = {
@@ -21,6 +23,11 @@ const TransactionController: Controller = {
   get: async (request, response) => {
     const transactions = await findTransactionsByUser(auth(response).id);
     return response.json({ transactions });
+  },
+  update: async (request, response) => {
+    const updateData: UpdateTransactionData = request.body;
+    const transaction = await updateTransaction(updateData);
+    return response.json({ transaction });
   },
 };
 

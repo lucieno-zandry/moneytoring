@@ -1,8 +1,10 @@
-import { Transaction, TransactionRecurrence } from "@prisma/client";
+import { Transaction } from "@prisma/client";
 import prisma from "../../prisma/prisma";
 import {
   createRecurrence,
   CreateRecurrenceData,
+  updateRecurrence,
+  UpdateRecurrenceData,
 } from "./TransactionRecurrence";
 
 const Transaction = prisma.transaction;
@@ -20,11 +22,21 @@ export type CreateTransactionData = Pick<
   transaction_recurrence?: CreateRecurrenceData;
 };
 
+export type UpdateTransactionData = Omit<
+  CreateTransactionData,
+  "transaction_recurrence"
+> &
+  Pick<Transaction, "id"> & { transaction_recurrence?: UpdateRecurrenceData };
+
 export const createTransaction = async (data: CreateTransactionData) => {
   const { transaction_recurrence, ...transaction } = data;
-  const created = await Transaction.create({ data: transaction });
+  const created = await Transaction.create({
+    data: transaction,
+    include: { account: true, category: true, transaction_recurrence: true },
+  });
 
-  if (!transaction_recurrence) return created;
+  if (!transaction_recurrence || transaction_recurrence.pattern === "ONCE")
+    return created;
 
   const recurrence = await createRecurrence({
     ...transaction_recurrence,
@@ -39,6 +51,19 @@ export const findTransactionsByUser = async (user_id: number) => {
     where: { user_id },
     include: { transaction_recurrence: true, account: true, category: true },
   });
+};
+
+export const updateTransaction = async (data: UpdateTransactionData) => {
+  const { transaction_recurrence, id, ...transaction } = data;
+
+  const updated = await Transaction.update({
+    data: transaction,
+    where: { id },
+  });
+
+  if (!transaction_recurrence) return updated;
+  const recurrence = await updateRecurrence(transaction_recurrence);
+  return { ...updated, transaction_recurrence: recurrence };
 };
 
 export default Transaction;

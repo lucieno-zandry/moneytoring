@@ -108,28 +108,32 @@ model ConfirmationCode {
 model TransactionRecurrence {
   id             Int         @id @default(autoincrement())
   transaction_id Int         @unique
-  transaction    Transaction @relation(fields: [transaction_id], references: [id])
+  transaction    Transaction @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
   pattern        String
   next_occurence DateTime
   created_at     DateTime    @default(now())
   updated_at     DateTime    @default(now())
   User           User?       @relation(fields: [user_id], references: [id])
   user_id        Int?
+
+  @@map("transaction_recurrences")
 }
 
 model Transaction {
-  id                    Int                    @id @default(autoincrement())
-  user_id               Int
-  account_id            Int
-  category_id           Int
-  amount                Float
-  description           String
-  icon                  String
-  type                  String
-  user                  User                   @relation(fields: [user_id], references: [id])
-  account               Account                @relation(fields: [account_id], references: [id])
-  category              Category               @relation(fields: [category_id], references: [id])
-  created_at            DateTime               @default(now())
-  updated_at            DateTime               @default(now())
+  id                     Int                    @id @default(autoincrement())
+  user_id                Int
+  account_id             Int
+  category_id            Int
+  amount                 Float
+  description            String                 @db.LongText
+  icon                   String
+  type                   String
+  user                   User                   @relation(fields: [user_id], references: [id])
+  account                Account?                @relation(fields: [account_id], references: [id])
+  category               Category?               @relation(fields: [category_id], references: [id])
+  created_at             DateTime               @default(now())
+  updated_at             DateTime               @default(now())
   transaction_recurrence TransactionRecurrence?
+
+  @@map("transactions")
 }

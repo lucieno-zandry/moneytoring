@@ -54,7 +54,7 @@ const TransactionCreateRequest: Types.Request = (request, response, next) => {
       },
     };
 
-    if (transaction_recurrence) {
+    if (transaction_recurrence && transaction_recurrence.pattern !== "ONCE") {
       const newRequest: any = { ...request, body: transaction_recurrence };
 
       const onRecurrenceSuccess = () => {
@@ -97,9 +97,7 @@ const TransactionCreateRequest: Types.Request = (request, response, next) => {
   }
 
   if (!everyIsValid) return;
-
-  console.log(validateds);
-
+  
   request.body = validateds;
   next();
 };

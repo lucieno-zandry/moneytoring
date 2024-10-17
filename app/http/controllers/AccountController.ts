@@ -48,9 +48,9 @@ export default {
     response.json({ updated });
   },
   destroy: (request: Request, response: Response) => {
-    const body: { accounts: number[] } = request.body;
-    if (!body.accounts || body.accounts.length <= 0) return;
-    const deleted = deleteAccounts(body.accounts);
+    const accounts: number[] = request.body;
+    if (!Array.isArray(accounts) || !accounts || accounts.length <= 0) return;
+    const deleted = deleteAccounts(accounts);
     response.json({ deleted });
   },
 };
