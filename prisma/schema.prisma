@@ -20,11 +20,13 @@ model User {
   AuthorizationToken    AuthorizationToken[]
   PasswordResetToken    PasswordResetToken[]
   Account               Account[]
-  Setting               Setting[]
+  Setting               Setting?
   Category              Category[]
   ConfirmationCode      ConfirmationCode[]
   Transaction           Transaction[]
   TransactionRecurrence TransactionRecurrence[]
+  Notification          Notification[]
+  TransactionHistory    TransactionHistory[]
 
   @@map("users")
 }
@@ -108,8 +110,8 @@ model ConfirmationCode {
 model TransactionRecurrence {
   id             Int         @id @default(autoincrement())
   transaction_id Int         @unique
-  transaction    Transaction @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
   pattern        String
+  transaction    Transaction @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
   next_occurence DateTime
   created_at     DateTime    @default(now())
   updated_at     DateTime    @default(now())
@@ -129,11 +131,36 @@ model Transaction {
   icon                   String
   type                   String
   user                   User                   @relation(fields: [user_id], references: [id])
-  account                Account?                @relation(fields: [account_id], references: [id])
-  category               Category?               @relation(fields: [category_id], references: [id])
+  account                Account?               @relation(fields: [account_id], references: [id])
+  category               Category?              @relation(fields: [category_id], references: [id])
   created_at             DateTime               @default(now())
   updated_at             DateTime               @default(now())
   transaction_recurrence TransactionRecurrence?
+  TransactionHistory     TransactionHistory[]
 
   @@map("transactions")
+}
+
+model Notification {
+  id         Int       @id @default(autoincrement())
+  user_id    Int
+  read_at    DateTime?
+  data       Json
+  user       User      @relation(fields: [user_id], references: [id])
+  created_at DateTime  @default(now())
+  updated_at DateTime  @default(now())
+
+  @@map("notifications")
+}
+
+model TransactionHistory {
+  id             Int         @id @default(autoincrement())
+  user_id        Int
+  transaction_id Int
+  created_at     DateTime    @default(now())
+  updated_at     DateTime    @default(now())
+  transaction    Transaction @relation(fields: [transaction_id], references: [id], onDelete: Cascade)
+  user           User        @relation(fields: [user_id], references: [id])
+
+  @@map("transaction_histories")
 }

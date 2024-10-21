@@ -5,11 +5,13 @@ type UserData = Pick<User, "email" | "firstname" | "name" | "password">;
 
 const User = prisma.user;
 
-export const createUser = async (data: UserData) => {
-  return await User.create({ data });
+export const createUser = (data: UserData) => {
+  return User.create({ data });
 };
 
-export const findUser = () => {};
+export const findUser = (id: number) => {
+  return User.findFirst({ where: { id } });
+};
 
 export const updateUser = ({
   id,
@@ -31,9 +33,8 @@ export const resetUserPassword = ({
   });
 };
 
-export const findUserByEmail = async (email: string) => {
-  const user = await User.findFirst({ where: { email } });
-  return user;
+export const findUserByEmail = (email: string) => {
+  return User.findFirst({ where: { email } });
 };
 
 export default User;

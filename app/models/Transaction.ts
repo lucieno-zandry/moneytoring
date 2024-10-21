@@ -66,4 +66,11 @@ export const updateTransaction = async (data: UpdateTransactionData) => {
   return { ...updated, transaction_recurrence: recurrence };
 };
 
+export const findTransaction = (id: number) => {
+  return Transaction.findFirst({
+    where: { id },
+    include: { account: true, category: true },
+  });
+};
+
 export default Transaction;
