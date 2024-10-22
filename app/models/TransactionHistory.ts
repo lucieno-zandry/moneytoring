@@ -16,7 +16,7 @@ export const deleteHistories = (ids: number[]) => {
 export const findHistoriesByUser = (user_id: number) => {
   return TransactionHistory.findMany({
     where: { user_id },
-    include: { transaction: true, user: true },
+    include: { transaction: true },
   });
 };
 

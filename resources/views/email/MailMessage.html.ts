@@ -33,7 +33,7 @@ export default function (data: MailMessageData) {
             <p class="mb-2">Hello, <strong>${data.username}</strong>!</p>
             <p>${data.line}</p>
             <div class="tac mt-4 mb-4">
-                <a href="${process.env.FRONTEND_EMAIL_PASSWORD_RESET_URL}/${data.link}" class="btn btn-primary">${data.action}</a>
+                <a href="${process.env.FRONTEND_URL}/${data.link}" class="btn btn-primary">${data.action}</a>
             </div>
             <p class="text-muted">If you are not the author of this action, just ignore this email.</p>
         </main>
