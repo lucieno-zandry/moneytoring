@@ -11,7 +11,7 @@ const data = [
 ];
 
 export default React.memo(() => {
-    return <div className="bg-dark rounded p-2 col-12 col-sm-5 col-md-4">
+    return <div className="bg-dark rounded p-2 col-xs-12 col-sm">
         <h6 className="display-6"><Icon variant={MODELS_DATA.categories.icon} /> Categories</h6>
         <div className="d-flex justify-content-center">
             <PieChart width={200} height={200}>

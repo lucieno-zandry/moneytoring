@@ -120,7 +120,8 @@ const TransactionCreation = React.memo(() => {
                 variant="primary"
                 disabled={transactions.length < 1}
                 onClick={handleSubmit}
-                size="sm">
+                size="sm"
+                isLoading={state.isLoading}>
                 Done <Icon variant="check-circle" />
             </Button>
         </CornerButtons>

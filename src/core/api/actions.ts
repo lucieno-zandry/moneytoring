@@ -4,6 +4,7 @@ import { SignupData } from "../../App/Auth/Signup/Signup";
 import { FilterData } from "../../partials/Filter/Filter";
 import {
   allNotificationsApi,
+  allTransactionsHistoryApi,
   confirmationApi,
   createAccountsApi,
   createCategoriesApi,
@@ -167,4 +168,8 @@ export const updateSetting = (
 
 export const getSetting = () => {
   return api.get(getSettingApi);
+};
+
+export const allTransactionsHistory = () => {
+  return api.get(allTransactionsHistoryApi);
 };

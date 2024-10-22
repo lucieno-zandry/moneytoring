@@ -49,7 +49,7 @@ const data = [
 ];
 
 export default React.memo(() => {
-    return <div className='p-2 bg-dark rounded col-xs-12 col-sm'>
+    return <div className='p-2 bg-dark rounded col-12 col-md-6'>
         <h6 className="display-6"><Icon variant='arrow-up-arrow-down' /> Incomes and Expenses</h6>
         <ResponsiveContainer width="100%" height={200}>
             <LineChart width={600} height={200} data={data}>
