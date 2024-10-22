@@ -2,9 +2,9 @@
 CREATE TABLE `users` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
-    `firstname` VARCHAR(191) NOT NULL,
+    `firstname` VARCHAR(191) NOT NULL DEFAULT '',
     `email` VARCHAR(191) NOT NULL,
-    `password` VARCHAR(191) NOT NULL,
+    `password` VARCHAR(191) NOT NULL DEFAULT '',
     `email_verified_at` DATETIME(3) NULL,
     `image` VARCHAR(191) NULL,
     `created_at` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),

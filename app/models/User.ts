@@ -1,7 +1,8 @@
 import { User } from "@prisma/client";
 import prisma from "../../prisma/prisma";
 
-type UserData = Pick<User, "email" | "firstname" | "name" | "password">;
+type UserData = Pick<User, "email" | "firstname" | "name"> &
+  Partial<Pick<User, "password" | "image" | "email_verified_at">>;
 
 const User = prisma.user;
 

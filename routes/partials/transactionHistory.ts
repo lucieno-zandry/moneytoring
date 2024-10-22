@@ -5,6 +5,6 @@ import TransactionHistoryController from "../../app/http/controllers/Transaction
 const transactionHistory = Router();
 transactionHistory.use(AuthMiddleware);
 
-transactionHistory.get("all", TransactionHistoryController.all);
+transactionHistory.get("/all", TransactionHistoryController.all);
 
 export default transactionHistory;
