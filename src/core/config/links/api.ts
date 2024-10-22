@@ -15,6 +15,7 @@ export const resetPasswordApi = "/auth/reset-password";
 export const requestResetPasswordApi = "/auth/request/reset-password";
 export const requestConfirmationApi = "/auth/request/confirmation";
 export const confirmationApi = "/auth/confirmation";
+export const googleSigninApi = "/oauth/google";
 
 // transactions
 export const getTransactionsApi = "/transaction/get";

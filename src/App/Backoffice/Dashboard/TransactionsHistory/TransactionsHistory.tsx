@@ -12,10 +12,11 @@ const DISPLAY_HISTORY_COUNT = 5;
 export default () => {
     const navigate = useNavigate();
     const { transactionsHistory } = useTransactionsHistory();
+    const refreshHistory = useRefreshTransactionsHistory();
 
     React.useEffect(() => {
         if (transactionsHistory) return;
-        useRefreshTransactionsHistory();
+        refreshHistory();
     }, [transactionsHistory]);
 
     return <div className="mt-3 bg-dark rounded p-2">

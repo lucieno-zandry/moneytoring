@@ -13,7 +13,6 @@ import useRefreshTransactions from '../core/hooks/useRefreshTransactions';
 import { isFirstTime } from '../core/helpers/firstTimeActions';
 import useSetting from '../core/hooks/useSetting';
 import useRefreshSetting from '../core/hooks/useRefreshSetting';
-import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const App = (props: PropsWithChildren) => {
     const { user } = useAuth();
@@ -44,12 +43,12 @@ const App = (props: PropsWithChildren) => {
     }, [user, accounts, categories, setting, transactions]);
 
 
-    return <GoogleOAuthProvider clientId={import.meta.env.VITE_APP_GOOGLE_CLIENT_ID}>
+    return <>
         <LogoutDialog />
         <Toaster />
         <ScreenLoader />
         {props.children}
-    </GoogleOAuthProvider>
+    </>
 };
 
 export default App;

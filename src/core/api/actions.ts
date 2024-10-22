@@ -1,4 +1,5 @@
 import { LoginData } from "../../App/Auth/Login/Login";
+import { GoogleUserInfo } from "../../App/Auth/OtherLoginMethods/OtherLoginMethods";
 import { PasswordResetData } from "../../App/Auth/PasswordReset/PasswordReset";
 import { SignupData } from "../../App/Auth/Signup/Signup";
 import { FilterData } from "../../partials/Filter/Filter";
@@ -19,6 +20,7 @@ import {
   getTransactionsApi,
   getUserApi,
   getWstokenApi,
+  googleSigninApi,
   loginApi,
   logoutApi,
   readNotificationApi,
@@ -172,4 +174,8 @@ export const getSetting = () => {
 
 export const allTransactionsHistory = () => {
   return api.get(allTransactionsHistoryApi);
+};
+
+export const googleSignin = (data: GoogleUserInfo) => {
+  return api.post(googleSigninApi, data);
 };

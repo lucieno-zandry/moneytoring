@@ -8,11 +8,9 @@ const APP_STORAGE_PATH = `${API_BASE_URL}/storage/`;
  * @returns le chemin complet et approprié de l'image
  */
 const appImage = (image: string | null): string | undefined => {
-    if (image) {
-        return APP_STORAGE_PATH + image;
-    }
-
-    return undefined;
-}
+  if (!image) return;
+  if (image.startsWith("http")) return image;
+  return APP_STORAGE_PATH + image;
+};
 
 export default appImage;
