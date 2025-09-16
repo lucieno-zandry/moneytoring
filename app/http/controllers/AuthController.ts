@@ -62,10 +62,7 @@ export default {
     );
 
     if (!isValid || !validated) return;
-
-    const emailable = await emailIsEmailable(validated.email, response);
-
-    if (!emailable) return;
+    
     response.sendStatus(200);
   },
   logout: async (request: Request, response: Response) => {
