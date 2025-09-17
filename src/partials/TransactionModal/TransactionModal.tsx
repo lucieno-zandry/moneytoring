@@ -19,6 +19,7 @@ import useNumberFormat from "../../core/hooks/useNumberFormat";
 import useSetting from "../../core/hooks/useSetting";
 import useAccounts from "../../core/hooks/useAccounts";
 import useCategories from "../../core/hooks/useCategories";
+import { correctPrediction, getCategoryPrediction } from "../../core/api/actions";
 
 interface TransactionModalProps extends Omit<ModalContainerProps<HTMLTag>, 'onSubmit'> {
     onSubmit: (transaction: Transaction) => void,
@@ -59,6 +60,7 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
         validationMessages: null as JsObject | null,
         showIconDrawer: false,
         paused: false,
+        categoryId: transaction.category_id || 0,
         form: {
             icon: transaction.icon,
             type: 'EXPENSE' as Transaction['type'],
@@ -141,15 +143,29 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
         return show;
     }, [state.paused, show]);
 
-    const handleBlur: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> = React.useCallback(e => {
+    const handleBlur: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement> = React.useCallback(async e => {
         const { id, value } = e.target;
         const name = getName(id);
         const validationMessage = getValidationMessage(id, value)
         const validationObject = { [name]: validationMessage };
 
+        console.log(name);
+
         const validationMessages = validationMessage ? { ...state.validationMessages, ...validationObject } : state.validationMessages
-        setState(s => ({ ...s, form: { ...s.form, [getName(id)]: value, validationMessages } }));
-    }, [state.validationMessages]);
+        const newState = { ...state, form: { ...state.form, [name]: value, validationMessages } };
+
+        if (name === "description" && value) {
+            const predictionResponse = await getCategoryPrediction({ description: value, user_id: setting.user_id.toString() })
+            const predictedCategoryName = predictionResponse.data.predicted_category;
+            const category = categories?.find(c => c.name.toLowerCase() === predictedCategoryName.toLowerCase());
+
+            if (category) {
+                newState.categoryId = category.id;
+            }
+        }
+
+        setState(newState);
+    }, [state, categories]);
 
     return <>
         <ModalContainer
@@ -220,8 +236,21 @@ const TransactionModal = React.memo((props: TransactionModalProps) => {
                         labelProps={{ label: <><Icon variant="stream" /> Category</>, className: 'col' }}
                         options={categories!}
                         predicate={(category: Category) => ({ title: category.name, value: category.id })}
-                        defaultValue={transaction.category_id}
-                        error={state.validationMessages?.category_id} />
+                        value={state.categoryId || undefined}
+                        error={state.validationMessages?.category_id}
+                        
+                        onBlur={e => {
+                            const { value } = e.target;
+                            const category = categories?.find(c => c.id.toString() === value);
+
+                            if (state.form.description && category) {
+                                correctPrediction({ description: state.form.description, category: category.name, user_id: setting.user_id.toString() });
+                            }
+                        }}
+
+                        onChange={e => {
+                            setState(s => ({ ...s, categoryId: parseInt(e.target.value) }))
+                        }} />
                 </div>
 
                 <div className="d-flex gap-3 justify-content-between flex-wrap mt-3">

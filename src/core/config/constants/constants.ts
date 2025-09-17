@@ -3,6 +3,7 @@ export const API_URL = import.meta.env.VITE_APP_API_URL;
 export const DEFAULT_LOCALES = "en-EN";
 export const DEFAULT_CURRENCY = "USD";
 export const NOTIFICATION_WS_URL = "http://localhost:5000";
+export const AI_API_BASE_URL = import.meta.env.VITE_APP_AI_API_BASE_URL;
 
 export const LANGUAGES = {
   "en-EN": "English",

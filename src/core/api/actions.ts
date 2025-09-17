@@ -1,3 +1,4 @@
+import axios from "axios";
 import { LoginData } from "../../App/Auth/Login/Login";
 import { GoogleUserInfo } from "../../App/Auth/OtherLoginMethods/OtherLoginMethods";
 import { PasswordResetData } from "../../App/Auth/PasswordReset/PasswordReset";
@@ -42,6 +43,7 @@ import {
 } from "../config/types/models";
 import toParams from "../helpers/toParams";
 import api from "./api";
+import { AI_API_BASE_URL } from "../config/constants/constants";
 
 // Auth
 export const getAuth = () => {
@@ -179,3 +181,11 @@ export const allTransactionsHistory = () => {
 export const googleSignin = (data: GoogleUserInfo) => {
   return api.post(googleSigninApi, data);
 };
+
+export const getCategoryPrediction = (data: { description: string, user_id: string }) => {
+  return axios.post(`${AI_API_BASE_URL}/predict`, data, { headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' } });
+}
+
+export const correctPrediction = (data: { description: string, category: string, user_id: string }) => {
+  return axios.post(`${AI_API_BASE_URL}/correct`, data, { headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' } });
+}
